@@ -20,12 +20,12 @@ const variants = [
  {id:'creator',name:'Your studio',tag:'Podgląd · nadruk · interakcja',desc:'Własne logo, kolor i położenie nadruku w interaktywnym kreatorze.',image:'preview-creator.jpg',number:'06'}
 ];
 const products = [
- {id:'premium',name:'Papier premium',material:'paper',image:'paper.png',color:'green',format:'medium',desc:'Gładki papier · uchwyt sznurkowy'},
- {id:'cotton',name:'Bawełna naturalna',material:'cotton',image:'cotton.png',color:'natural',format:'large',desc:'Długie uchwyty · naturalny splot'},
- {id:'kraft',name:'Kraft klasyczny',material:'paper',image:'kraft.png',color:'kraft',format:'medium',desc:'Papier kraft · uchwyt skręcany'},
- {id:'white',name:'Papier biały',material:'paper',image:'paper.png',color:'white',format:'small',desc:'Jasna baza pod Twój nadruk',filter:'white-bag'},
- {id:'cotton-green',name:'Bawełna kolorowa',material:'cotton',image:'cotton.png',color:'green',format:'large',desc:'Kolor dopasowany do marki',filter:'green-cotton'},
- {id:'gift',name:'Torba prezentowa',material:'paper',image:'paper.png',color:'silver',format:'small',desc:'Oprawa dla Twojego prezentu',filter:'silver-bag'}
+ {id:'premium',name:'Papier premium',material:'paper',image:'paper.webp',color:'green',format:'medium',desc:'Gładki papier · uchwyt sznurkowy'},
+ {id:'cotton',name:'Bawełna naturalna',material:'cotton',image:'cotton.webp',color:'natural',format:'large',desc:'Długie uchwyty · naturalny splot'},
+ {id:'kraft',name:'Kraft klasyczny',material:'paper',image:'kraft.webp',color:'kraft',format:'medium',desc:'Papier kraft · uchwyt skręcany'},
+ {id:'white',name:'Papier biały',material:'paper',image:'paper.webp',color:'white',format:'small',desc:'Jasna baza pod Twój nadruk',filter:'white-bag'},
+ {id:'cotton-green',name:'Bawełna kolorowa',material:'cotton',image:'cotton.webp',color:'green',format:'large',desc:'Kolor dopasowany do marki',filter:'green-cotton'},
+ {id:'gift',name:'Torba prezentowa',material:'paper',image:'paper.webp',color:'silver',format:'small',desc:'Oprawa dla Twojego prezentu',filter:'silver-bag'}
 ];
 const colors = {green:'#174f3d',natural:'#ece4d4',kraft:'#bb9670',white:'#ffffff',silver:'#b9c3c0',black:'#192b24'};
 let cart = [];
