@@ -21,3 +21,4 @@ dialog{border:1px solid #d0ded4;border-radius:22px;padding:45px;max-width:min(62
 .hero-products{pointer-events:auto}
 @media(max-width:800px){.organic-swoop{top:37%;height:48%;right:-28%;width:50%}}
 @media(max-width:520px){.glassy-hero{min-height:1010px}.glassy-hero .hero-products{top:370px}}
+.organic-products .paper{height:100%}
