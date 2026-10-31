@@ -1,0 +1,600 @@
+{
+  "checkedAt": "2026-10-31",
+  "method": "Public product HTML: data-abn-variants; prices excluded",
+  "products": [
+    {
+      "url": "https://sklep.allbag.pl/products/torba-papierowa-z-nadrukiem-uchwyt-plaski",
+      "variants": [
+        {
+          "sku": "ND-P-180x80x230-BR",
+          "size": "180 × 80 × 230 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 50
+        },
+        {
+          "sku": "ND-P-180x80x230-BI",
+          "size": "180 × 80 × 230 mm",
+          "colour": "Biała",
+          "weight": 50
+        },
+        {
+          "sku": "ND-P-260x140x300-BR",
+          "size": "260 × 140 × 300 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 60
+        },
+        {
+          "sku": "ND-P-260x140x300-BI",
+          "size": "260 × 140 × 300 mm",
+          "colour": "Biała",
+          "weight": 60
+        },
+        {
+          "sku": "ND-P-320x160x420-BR",
+          "size": "320 × 160 × 420 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 60
+        },
+        {
+          "sku": "ND-P-320x160x420-BI",
+          "size": "320 × 160 × 420 mm",
+          "colour": "Biała",
+          "weight": 60
+        },
+        {
+          "sku": "ND-P-320x220x245-BR",
+          "size": "320 × 220 × 245 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 60
+        },
+        {
+          "sku": "ND-P-320x220x245-BI",
+          "size": "320 × 220 × 245 mm",
+          "colour": "Biała",
+          "weight": 60
+        }
+      ]
+    },
+    {
+      "url": "https://sklep.allbag.pl/products/torba-papierowa-z-nadrukiem-uchwyt-skrecany",
+      "variants": [
+        {
+          "sku": "ND-S-180x80x225-BR",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-BI",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Biała",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-CZ",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Czarna",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-GR",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Granatowa",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-CE",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Czerwona",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-ZC",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Ciemnozielona",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-ZJ",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Jasnozielona",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-ZO",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Żółta",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-PN",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Pastelowa niebieska",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-PR",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Pastelowa różowa",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-180x80x225-PZ",
+          "size": "180 × 80 × 225 mm",
+          "colour": "Pastelowa zielona",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-240x100x320-BR",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-BI",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Biała",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-CZ",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Czarna",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-GR",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Granatowa",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-CE",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Czerwona",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-ZC",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Ciemnozielona",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-ZJ",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Jasnozielona",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-ZO",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Żółta",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-PN",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Pastelowa niebieska",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-PR",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Pastelowa różowa",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-240x100x320-PZ",
+          "size": "240 × 100 × 320 mm",
+          "colour": "Pastelowa zielona",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-305x170x340-BR",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-BI",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Biała",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-CZ",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Czarna",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-GR",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Granatowa",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-CE",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Czerwona",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-ZC",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Ciemnozielona",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-ZJ",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Jasnozielona",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x340-ZO",
+          "size": "305 × 170 × 340 mm",
+          "colour": "Żółta",
+          "weight": 80
+        },
+        {
+          "sku": "ND-S-305x170x425-BR",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-BI",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Biała",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-CZ",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Czarna",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-GR",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Granatowa",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-CE",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Czerwona",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-ZC",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Ciemnozielona",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-ZJ",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Jasnozielona",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-305x170x425-ZO",
+          "size": "305 × 170 × 425 mm",
+          "colour": "Żółta",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-160x80x390-BR",
+          "size": "160 × 80 × 390 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-160x80x390-BI",
+          "size": "160 × 80 × 390 mm",
+          "colour": "Biała",
+          "weight": 30
+        },
+        {
+          "sku": "ND-S-330x160x380-BR",
+          "size": "330 × 160 × 380 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-330x160x380-BI",
+          "size": "330 × 160 × 380 mm",
+          "colour": "Biała",
+          "weight": 60
+        },
+        {
+          "sku": "ND-S-350x180x440-BR",
+          "size": "350 × 180 × 440 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-350x180x440-B",
+          "size": "350 × 180 × 440 mm",
+          "colour": "Biała",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-400x180x390-BR",
+          "size": "400 × 180 × 390 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-400x180x390-BI",
+          "size": "400 × 180 × 390 mm",
+          "colour": "Biała",
+          "weight": 100
+        },
+        {
+          "sku": "ND-S-500x180x390-BR",
+          "size": "500 × 180 × 390 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 120
+        },
+        {
+          "sku": "ND-S-500x180x390-BI",
+          "size": "500 × 180 × 390 mm",
+          "colour": "Biała",
+          "weight": 120
+        },
+        {
+          "sku": "ND-S-360x330x320-BR",
+          "size": "360 × 330 × 320 mm",
+          "colour": "Brązowa (kraft)",
+          "weight": 150
+        },
+        {
+          "sku": "ND-S-360x330x320-BI",
+          "size": "360 × 330 × 320 mm",
+          "colour": "Biała",
+          "weight": 150
+        }
+      ]
+    },
+    {
+      "url": "https://sklep.allbag.pl/products/torba-bawelniana-z-nadrukiem",
+      "variants": [
+        {
+          "sku": "NB38x42-145P-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-BI",
+          "size": "380 × 420 mm",
+          "colour": "biała",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-GR",
+          "size": "380 × 420 mm",
+          "colour": "granatowa",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-CE",
+          "size": "380 × 420 mm",
+          "colour": "czerwona",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-ZI",
+          "size": "380 × 420 mm",
+          "colour": "zielona",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-BI",
+          "size": "380 × 420 mm",
+          "colour": "biała",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "ND-B-380x420-260P-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "260 g/m², Polska"
+        },
+        {
+          "sku": "ND-B-380x420-260P-BI",
+          "size": "380 × 420 mm",
+          "colour": "biała",
+          "mat": "260 g/m², Polska"
+        },
+        {
+          "sku": "ND-B-380x420-260P-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "260 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145I-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "145 g/m², import"
+        },
+        {
+          "sku": "NB38x42-145I-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "145 g/m², import"
+        },
+        {
+          "sku": "NB38x42-220I-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "220 g/m², import"
+        }
+      ]
+    },
+    {
+      "url": "https://sklep.allbag.pl/products/torba-bawelniana-z-nadrukiem-krotki-uchwyt",
+      "variants": [
+        {
+          "sku": "NB38x42-145P-U35-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-U35-BI",
+          "size": "380 × 420 mm",
+          "colour": "biała",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-145P-U35-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-U35-EC",
+          "size": "380 × 420 mm",
+          "colour": "ecru",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-U35-BI",
+          "size": "380 × 420 mm",
+          "colour": "biała",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x42-220P-U35-CZ",
+          "size": "380 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², Polska"
+        }
+      ]
+    },
+    {
+      "url": "https://sklep.allbag.pl/products/torba-bawelniana-z-dnem-z-nadrukiem",
+      "variants": [
+        {
+          "sku": "NB38x8x42-145P-EC",
+          "size": "380 × 80 × 420 mm",
+          "colour": "ecru",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-145P-BI",
+          "size": "380 × 80 × 420 mm",
+          "colour": "biała",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-145P-CZ",
+          "size": "380 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-220P-EC",
+          "size": "380 × 80 × 420 mm",
+          "colour": "ecru",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-220P-BI",
+          "size": "380 × 80 × 420 mm",
+          "colour": "biała",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-220P-CZ",
+          "size": "380 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x42-220I-CZ",
+          "size": "380 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², import"
+        },
+        {
+          "sku": "NB45x12x35-280I-EC",
+          "size": "450 × 120 × 350 mm",
+          "colour": "ecru",
+          "mat": "280 g/m², import"
+        }
+      ]
+    },
+    {
+      "url": "https://sklep.allbag.pl/products/torba-bawelniana-z-dnem-i-bokami-z-nadrukiem",
+      "variants": [
+        {
+          "sku": "ND-B-380x80x80x420-145P-EC",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "ecru",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "ND-B-380x80x80x420-145P-BI",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "biała",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x8x42-145P-CZ",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "145 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x8x42-220P-EC",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "ecru",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x8x42-220P-BI",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "biała",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x8x42-220P-CZ",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², Polska"
+        },
+        {
+          "sku": "NB38x8x8x42-220I-CZ",
+          "size": "380 × 80 × 80 × 420 mm",
+          "colour": "czarna",
+          "mat": "220 g/m², import"
+        }
+      ]
+    }
+  ]
+}

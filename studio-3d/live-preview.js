@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {createStudioEnvironment} from './environment.js?v=lighting-30';
+import {createStudioEnvironment} from './environment.js?v=offer-32';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 
 export function createLivePreview({host,scene,contact,invalidate,onExpand}){

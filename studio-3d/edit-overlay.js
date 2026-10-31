@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {BAG,surfacePoint} from './model.js?v=unified-25';
+import {BAG,surfacePoint} from './model.js?v=offer-32';
 
 // DOM handles stay crisp at any pixel ratio; their coordinates follow the model UVs.
 export function createEditOverlay({host,camera,getDraft,getSide,bounds,onChange,onCommit}){

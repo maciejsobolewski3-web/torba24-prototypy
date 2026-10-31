@@ -1,0 +1,19 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-31",
+  "note": "Illustrative generated product images. Output reviewed; broader full side panel of first cotton image assigned to cotton-sides. Optimized with cwebp to960x960.",
+  "assets": [
+    {
+      "file": "kraft-flat.webp",
+      "prompt": "Photorealistic ecommerce product photo, square image. One unprinted natural brown kraft paper shopping bag with two FLAT FOLDED PAPER HANDLES glued inside, rectangular flat paper strips 2 cm wide, folded angular inverted-U handles (NOT rope, not twisted handles, not cotton ribbon). Matte uncoated lightweight paper with realistic subtle fibers and creases, folded bottom and side gusset. Bag body proportions width26 depth14 height30 cm, handles modest height. Three quarter nearly frontal view showing a small right side. Whole product centered filling 78% frame, seamless very pale sage gray background #eaf0e6, soft diffuse studio daylight and realistic gentle contact shadow. Professional real packaging photography, crisp texture, no illustration, no CGI plastic look, no text, no logo, no dimensions, no props."
+    },
+    {
+      "file": "cotton-sides.webp",
+      "prompt": "Square photorealistic ecommerce studio product photograph, single unprinted natural ecru cotton shopping tote with a sewn-in BOTTOM GUSSET, approx body38cm wide42cm tall8cm deep, long flat woven shoulder straps. Heavy natural matte canvas, visible textile weave and subtle realistic creases, expanded flat rectangular bottom but flat side seams. Three quarter nearly front view showing right edge. Entire bag centered filling78% image. Seamless very pale sage gray #eaf0e6 background, soft daylight contact shadow. Real professional textile product photo, no text logos dimensions or props. Not paper not plastic."
+    },
+    {
+      "file": "cotton-bottom.webp",
+      "prompt": "Square photorealistic ecommerce studio product photograph. Single unprinted natural ecru cotton tote bag, flat sewn vertical side seams and an 8cm boxed BOTTOM GUSSET ONLY, no full-height side panel. Body38cm wide42cm high. TWO LONG woven flat cotton shoulder handles held upright in natural tall arches above the opening, fully visible. Premium matte canvas with visible textile weave, softly wrinkled fabric, realistic stitching along bottom and sides. Three quarter almost frontal view, entire bag centered at78% image height. Seamless very pale sage gray #eaf0e6 background, soft studio daylight and contact shadow. Real professional textile photography. No text no logos no dimensions no props. Not paper, no plastic, not illustration."
+    }
+  ]
+}

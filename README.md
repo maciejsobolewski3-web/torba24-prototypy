@@ -1,3 +1,5 @@
+> Aktualny zakres z 31.10.2026: sześć konstrukcji na podstawie Allbag. Zacznij od `docs/OFERTA-ALLBAG-JOOMLA.txt`. Starsze opisy Bagpack poniżej są historyczne.
+
 # Printbag24 — Soft glass
 
 Publiczna, interaktywna prezentacja sklepu: https://maciejsobolewski3-web.github.io/torba24-prototypy/

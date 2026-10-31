@@ -12,6 +12,7 @@ function color(product) {
  return colors.find(([token]) => product.id.includes(token))?.[1] || 'natural';
 }
 export function catalogPhoto(product) {
+ if(product.photo)return `../assets/catalog/${product.photo}.webp`;
  let name;
  switch (product.family) {
   case 'laminated':

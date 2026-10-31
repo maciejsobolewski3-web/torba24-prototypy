@@ -1,6 +1,6 @@
-import {mountStandaloneShell} from '../brand-shell.js?v=nav-27';
+import {mountStandaloneShell} from '../brand-shell.js?v=offer-32';
 mountStandaloneShell();
-import {get,list,put,remove,id,addToCart,makeQuoteDraft,money,price,needsQuote,shipping,format,esc,validQuantity,productName,productFormat} from './store.js?v=flow-26';
+import {get,list,put,remove,id,addToCart,makeQuoteDraft,money,price,needsQuote,shipping,format,esc,validQuantity,productName,productFormat} from './store.js?v=offer-32';
 const root=document.querySelector('#order-main'),status=document.querySelector('#order-status');
 const params=new URLSearchParams(location.search),step=params.get('step')||'cart';
 let cart=[],checkoutItems=[],receipt,busy=false,undoItem,quantitySaving=null;
@@ -68,7 +68,7 @@ root.addEventListener('submit',async event=>{
       }
       const saved=makeQuoteDraft(latest,Object.fromEntries(new FormData(event.target)));await put('receipts',saved);location.href=href('done',{receipt:saved.id});
     }
-  }catch{notify('Nie udało się zapisać zmian. Projekt pozostaje w przeglądarce. Sprawdź pamięć witryny i spróbuj ponownie.');button.disabled=false;}finally{busy=false;}
+  }catch(error){notify(error.message?.includes('spoza aktualnej oferty')?error.message:'Nie udało się zapisać zmian. Projekt pozostaje w przeglądarce. Sprawdź pamięć witryny i spróbuj ponownie.');button.disabled=false;}finally{busy=false;}
 });
 async function updateQuantity(event){
   const key=event.target.dataset.quantity;if(!key)return;

@@ -1,3 +1,5 @@
+> ARCHIWUM. Aktualny zakres i integracja: `docs/OFERTA-ALLBAG-JOOMLA.txt`. Nie przywracaj 109 produktów z tej historycznej analizy do aktywnej oferty.
+
 # Printbag24 — katalog, konfiguracja i podłączenie Joomla
 
 Stan audytu i frontu: **31.10.2026**. Referencja: **https://bagpack.pl/** (nie backpack.pl).

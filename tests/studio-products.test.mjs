@@ -13,10 +13,10 @@ test('every catalog model opens with valid printable studio parameters',()=>{
   for(const f of activeFields(p,v))assert.equal(valuesFrom(saved)[f.id],v[f.id]);
  }
 });
-test('cotton defaults to full-colour printing without unrelated rear ink options',()=>{
+test('cotton offers print sides without inventing an unconfirmed printing technology',()=>{
  const p=catalog.products.find(p=>p.family==='cotton');
  const c=configuration(p,studioDefaults(p),baseColor(p));
- assert.match(c.options.printMode.display,/DTF/);assert.ok(c.options.dtfSize);assert.equal(c.options.inkBack,undefined);
+ assert.match(c.options.printMode.display,/jednostronny/);assert.equal(c.options.dtfSize,undefined);assert.equal(c.options.inkBack,undefined);
 });
 test('rear print requests survive configuration without inventing supplier print options',async()=>{
  const {backAllowed}=await import('../configuration/config.js');

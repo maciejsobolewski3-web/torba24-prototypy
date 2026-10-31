@@ -1,4 +1,5 @@
-import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=catalog-22';
+import {productById} from '../configuration/config.js?v=offer-32';
+import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=offer-32';
 export async function initOrderBridge(studio){
   const $=s=>document.querySelector(s),params=new URLSearchParams(location.search);
   const projectId=params.get('project')||id(),quantity=$('#order-quantity'),button=$('#review-project'),status=$('#studio-status');
@@ -8,6 +9,7 @@ export async function initOrderBridge(studio){
   $('#variant-note').textContent=others.length?`W zapytaniu uwzględnimy też ${others.length} zapisane warianty. Możesz je sprawdzić w koszyku.`:'Jeden projekt? Przejdź od razu do danych kontaktowych.';
   const update=()=>{
     const p={...studio.details(),quantity:Number(quantity.value)};
+    const retired=p.configuration&&!productById(p.configuration.productId);button.disabled=!!retired;variantButton.disabled=!!retired;
     if(p.configuration){const box=$('.order-config');box.querySelector('.studio-eyebrow').textContent=p.configuration.productName;box.querySelector('strong').textContent=p.configuration.dimensions.label;box.querySelector('small').textContent='Minimalny nakład potwierdzimy przy wycenie.';}
     $('#studio-summary-details').innerHTML=p.configuration?Object.values(p.configuration.options).map(o=>`<div><dt>${esc(o.label)}</dt><dd>${esc(o.display)}</dd></div>`).join('')+(p.configuration.requests||[]).map(o=>`<div><dt>Na zamówienie</dt><dd>${esc(o.value)}</dd></div>`).join(''):'';
     const result=validQuantity(p.quantity,p)?price(p):null;
@@ -32,6 +34,7 @@ export async function initOrderBridge(studio){
   document.querySelector('.studio-panel').addEventListener('click',()=>setTimeout(update,0));
   async function proceed(addVariant=false){
     if(!ready||!quantity.reportValidity())return;
+    if(!productById(studio.details().configuration?.productId)){status.textContent='Wybierz bazę z aktualnej oferty przed wyceną.';return;}
     const invalid=document.querySelector('.custom-color [aria-invalid=true]');
     if(invalid){invalid.focus();status.textContent='Popraw kolor przed przejściem dalej.';return;}
     button.disabled=true;document.querySelector('.studio-layout').inert=true;status.textContent='Zapisuję projekt i podglądy obu stron…';

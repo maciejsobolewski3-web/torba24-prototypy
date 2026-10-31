@@ -1,4 +1,4 @@
-import {escape as esc,colorHex} from '../configuration/config.js?v=duplex-29';
+import {escape as esc,colorHex} from '../configuration/config.js?v=offer-32';
 // Native selects retain their values and change events; the shop dialog supplies the visible UI.
 let dialog,active,sourceId;
 const fieldTitle=select=>[...(select.labels[0]?.childNodes||[])].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim()||'Wybierz opcję';
@@ -33,6 +33,6 @@ export function enhanceOptions(root){
 }
 function render(){
  const query=dialog.querySelector('#option-query').value.toLocaleLowerCase('pl');
- const colors=/cord|ribbon|color-filter/.test(active.id),options=[...active.options].filter(o=>!o.disabled&&o.text.toLocaleLowerCase('pl').includes(query));
+ const colors=/cord|ribbon|stockColor|color-filter/.test(active.id),options=[...active.options].filter(o=>!o.disabled&&o.text.toLocaleLowerCase('pl').includes(query));
  dialog.querySelector('.option-grid').innerHTML=options.length?options.map(o=>`<button type="button" data-value="${esc(o.value)}" aria-pressed="${o.value===active.value}">${colors&&o.value?`<i style="--swatch:${colorHex(o.text)}" aria-hidden="true"></i>`:''}<span>${esc(o.text)}</span><span class="option-tick" aria-hidden="true">✓</span></button>`).join(''):'<p>Brak wyników. Spróbuj innej nazwy.</p>';
 }

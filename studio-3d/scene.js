@@ -1,12 +1,12 @@
-import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=duplex-29';
+import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=offer-32';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
-import {createStudioEnvironment} from './environment.js?v=lighting-30';
-import {createEditOverlay} from './edit-overlay.js?v=unified-25';
-import {createLivePreview} from './live-preview.js?v=lighting-30';
+import {createStudioEnvironment} from './environment.js?v=offer-32';
+import {createEditOverlay} from './edit-overlay.js?v=offer-32';
+import {createLivePreview} from './live-preview.js?v=offer-32';
 import {initColorControls} from './color-controls.js?v=flow-6';
 import {readLogo} from '../logo-file.js';
-import {BAG,palette,createBag} from './model.js?v=unified-25';
+import {BAG,palette,createBag} from './model.js?v=offer-32';
 
 export async function initStudio(configuration){
   const $=selector=>document.querySelector(selector),host=$('#scene'),status=$('#studio-status');
@@ -30,7 +30,7 @@ export async function initStudio(configuration){
   const key=new THREE.DirectionalLight(0xfff8e9,2.2);key.position.set(-3,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=5;key.shadow.camera.bottom=-4;key.shadow.normalBias=.035;key.shadow.bias=-.0001;key.shadow.radius=4;scene.add(key);
   // Match the front softbox on the rear so turning the bag does not change its colour.
   const rearKey=key.clone();rearKey.position.set(3,7,-5);scene.add(rearKey);
-  let bag=createBag(configuration);if(configuration){if(configuration.options.ribbon)bag.setRibbonColor(colorHex(configuration.options.ribbon.display));bag.setHandleColor(colorHex(configuration.options.cord?.display));bag.setFinish(configuration.options.finish?.display.toLowerCase().includes('błysk'));}scene.add(bag.group);
+  let bag=createBag(configuration);if(configuration){if(configuration.options.ribbon)bag.setRibbonColor(colorHex(configuration.options.ribbon.display));if(configuration.options.cord)bag.setHandleColor(colorHex(configuration.options.cord.display));bag.setFinish(configuration.options.finish?.display.toLowerCase().includes('błysk'));}scene.add(bag.group);
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);

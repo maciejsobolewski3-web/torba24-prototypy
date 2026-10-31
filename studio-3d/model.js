@@ -102,6 +102,13 @@ export function createBag(configuration){
       const clothCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-BAG.width*.27,top-.05,z),new THREE.Vector3(-BAG.width*.26,top+rise*.72,z+sign*.055),new THREE.Vector3(0,top+rise,z+sign*.10),new THREE.Vector3(BAG.width*.26,top+rise*.72,z+sign*.055),new THREE.Vector3(BAG.width*.27,top-.05,z)]);
       const handle=new THREE.Mesh(strapGeometry(clothCurve,.105),paper);handle.castShadow=true;group.add(handle);continue;
     }
+    if(family==='kraft'){
+      const flat=/płaski/.test(configuration?.specs?.Uchwyt||''),half=BAG.width*.25,rise=Math.min(.72,BAG.height*.3),y=BAG.bottom+BAG.height;
+      const points=[[-half,y-.16],[-half,y+rise*.8],[-half*.78,y+rise],[half*.78,y+rise],[half,y+rise*.8],[half,y-.16]].map(([x,y])=>new THREE.Vector3(x,y,sign*(BAG.depth/2-.035)));
+      const paperCurve=new THREE.CatmullRomCurve3(points,false,'centripetal',.1);
+      const mat=paper.clone();mat.side=THREE.DoubleSide;ropeMaterials.push(mat);
+      const handle=new THREE.Mesh(flat?strapGeometry(paperCurve,.16):new THREE.TubeGeometry(paperCurve,64,.026,8,false),mat);handle.castShadow=true;group.add(handle);continue;
+    }
     const handle=new THREE.Mesh(new THREE.TubeGeometry(curve,96,family==='kraft'?.027:.043,10,false),ropeMat);handle.castShadow=true;group.add(handle);
     if(family==='kraft')continue;
     const frames=curve.computeFrenetFrames(240,false);
@@ -121,5 +128,5 @@ export function createBag(configuration){
       for(const direction of [-1,1]){const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,BAG.height-.12,sign*(BAG.depth/2+.07)),new THREE.Vector3(direction*.32,BAG.height+.11,sign*(BAG.depth/2+.10)),new THREE.Vector3(direction*.30,BAG.height-.10,sign*(BAG.depth/2+.12)),new THREE.Vector3(0,BAG.height-.12,sign*(BAG.depth/2+.07))]);group.add(new THREE.Mesh(strapGeometry(curve,.07),ribbonMaterial));}
     }
   }else ribbonMaterial.dispose();
-  return {group,printMeshes,setRibbonColor(hex){if(family==='giftbox')ribbonMaterial.color.set(hex);},setHandleColor(hex){ropeMaterials.forEach(m=>m.color.set(hex));},setFinish(gloss){paper.roughness=BAG.cloth?1:gloss?.3:.83;for(const mesh of Object.values(printMeshes))mesh.material.roughness=gloss?.3:.86;},setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);}};
+  return {group,printMeshes,setRibbonColor(hex){if(family==='giftbox')ribbonMaterial.color.set(hex);},setHandleColor(hex){ropeMaterials.forEach(m=>m.color.set(hex));},setFinish(gloss){paper.roughness=BAG.cloth?1:gloss?.3:.83;for(const mesh of Object.values(printMeshes))mesh.material.roughness=gloss?.3:.86;},setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);if(family==='kraft')ropeMaterials.forEach(m=>m.color.set(colors.body));}};
 }

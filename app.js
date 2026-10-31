@@ -1,12 +1,12 @@
-import {mountCatalog} from './configuration/catalog.js?v=unified-25';
+import {mountCatalog} from './configuration/catalog.js?v=offer-32';
 import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 import {initHistoryTimeline} from './history-timeline.js?v=history-16';
-import {groupBar,groupBrand,groupFooter,historyPage,mainNavigation} from './brand-shell.js?v=nav-27';
-import {list as listStudioCart} from './order/store.js?v=catalog-22';
-import * as pb from './printbag-content.js?v=editorial-12';
-import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=brand-7';
+import {groupBar,groupBrand,groupFooter,historyPage,mainNavigation} from './brand-shell.js?v=offer-32';
+import {list as listStudioCart} from './order/store.js?v=offer-32';
+import * as pb from './printbag-content.js?v=offer-32';
+import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=offer-32';
 import {readLogo} from './logo-file.js';
-import { initProcessMotion } from './process-motion.js?v=feedback-20';
+import { initProcessMotion } from './process-motion.js?v=offer-32';
 const BASE = new URL('./', import.meta.url);
 const url = (path = '') => new URL(path, BASE).href;
 const asset = name => url(`assets/${name}`);
@@ -29,21 +29,20 @@ const variants = [
  {id:'creator',name:'Your studio',tag:'Podgląd · nadruk · interakcja',desc:'Własne logo, kolor i położenie nadruku w interaktywnym kreatorze.',image:'preview-creator.jpg',number:'06'}
 ];
 const products = [
- {id:'premium',name:'Papier premium',material:'paper',image:'paper.webp',color:'green',format:'medium',desc:'Gładki papier · uchwyt sznurkowy'},
+ {id:'premium',name:'Papier z uchwytem skręcanym',material:'paper',image:'kraft.webp',color:'kraft',format:'medium',desc:'Papier nielaminowany · uchwyt skręcany'},
  {id:'cotton',name:'Bawełna naturalna',material:'cotton',image:'cotton.webp',color:'natural',format:'large',desc:'Długie uchwyty · naturalny splot'},
- {id:'kraft',name:'Kraft klasyczny',material:'paper',image:'kraft.webp',color:'kraft',format:'medium',desc:'Papier kraft · uchwyt skręcany'},
- {id:'white',name:'Papier biały',material:'paper',image:'paper.webp',color:'white',format:'small',desc:'Jasna baza pod Twój nadruk',filter:'white-bag'},
+ {id:'kraft',name:'Papier z uchwytem płaskim',material:'paper',image:'kraft.webp',color:'kraft',format:'medium',desc:'Biały lub brązowy kraft · uchwyt płaski'},
+ {id:'white',name:'Papier biały',material:'paper',image:'kraft.webp',color:'white',format:'small',desc:'Jasna baza pod Twój nadruk',filter:'white-bag'},
  {id:'cotton-green',name:'Bawełna kolorowa',material:'cotton',image:'cotton.webp',color:'green',format:'large',desc:'Kolor dopasowany do marki',filter:'green-cotton'},
- {id:'gift',name:'Torba prezentowa',material:'paper',image:'paper.webp',color:'silver',format:'small',desc:'Oprawa dla Twojego prezentu',filter:'silver-bag'}
 ];
 const colors = {green:'#174f3d',natural:'#ece4d4',kraft:'#bb9670',white:'#ffffff',silver:'#b9c3c0',black:'#192b24'};
 let cart = [];
 try {cart=JSON.parse(localStorage.getItem('printbag24-cart') || '[]'); if (!Array.isArray(cart)) cart=[];} catch {}
 let renderedPath=location.pathname;
 let page = document.body.dataset.page || 'gallery';
-if(page==='product')location.replace(url('configuration/?id='+(new URLSearchParams(location.search).get('id')||'premium')));
+if(page==='product')location.replace(url('studio-3d/?id='+(new URLSearchParams(location.search).get('id')||'premium')));
 const app = document.querySelector('#app');
-let config = {material:'paper',color:'green',quantity:100};
+let config = {material:'paper',color:'kraft',quantity:100};
 let editorUploadSequence=0;
 let editor = {product:'cotton',quantity:100,ink:'#174f3d',size:42,x:50,y:58,text:'TWOJA MARKA',logo:null,side:'front'};
 let filters = {handle:'all',finish:'all',weight:'all',material:new URLSearchParams(location.search).get('material') || 'all',color:'all',format:'all',search:'',sort:'recommended'};
@@ -53,10 +52,10 @@ function brand(){return groupBrand();}
 function nav(editorMode=false){return `${groupBar()}<header class="site-nav">${brand()}${editorMode?`<ol class="steps"><li><a href="${url('catalog/')}"><span>${icon('check')}</span>Torba</a></li><li class="current"><span>2</span>Twój nadruk</li><li><span>3</span>Podsumowanie</li></ol>`:mainNavigation()}<div class="nav-actions">${editorMode?`<button class="button subtle save-project" data-action="save" aria-label="Zapisz projekt">${icon('save')}<span>Zapisz projekt</span></button>`:`<a class="button primary pb-nav-cta" href="${url('catalog/')}">Dodaj swoje logo</a>${accountButton()}<a class="icon-button" href="${url('catalog/#bag-search')}" aria-label="Szukaj produktów">${icon('search')}</a><button class="cart-button icon-button" data-action="cart" aria-label="Otwórz koszyk">${icon('bag')}<b class="cart-count">${cart.length}</b></button>`}<button class="icon-button mobile-menu" data-action="menu" aria-label="Otwórz menu">${icon('menu')}</button></div></header>`;}
 
 function photo(product,cls='',lazy=true){return `<img class="product-image ${product.filter||''} ${cls}" src="${asset(product.image)}" alt="${esc(product.name)}" ${lazy?'loading="lazy"':'fetchpriority="high"'} draggable="false">`;}
-function swatches(selected='green', attr='config-color', options=['green','natural','kraft']){return `<div class="swatches">${options.map(c=>`<button class="swatch ${selected===c?'selected':''}" style="--swatch:${colors[c]||c}" data-${attr}="${c}" aria-label="${({green:'Zielony',natural:'Naturalny',kraft:'Kraft',white:'Biały',silver:'Srebrny',black:'Czarny'})[c]||c}" aria-pressed="${selected===c}"></button>`).join('')}</div>`;}
+function swatches(selected='kraft', attr='config-color', options=['green','natural','kraft']){return `<div class="swatches">${options.map(c=>`<button class="swatch ${selected===c?'selected':''}" style="--swatch:${colors[c]||c}" data-${attr}="${c}" aria-label="${({green:'Zielony',natural:'Naturalny',kraft:'Kraft',white:'Biały',silver:'Srebrny',black:'Czarny'})[c]||c}" aria-pressed="${selected===c}"></button>`).join('')}</div>`;}
 function quantity(value=100,kind='config'){return `<div class="stepper"><button data-quantity="-1" data-kind="${kind}" aria-label="Zmniejsz ilość o 1">−</button><input type="number" min="1" max="10000" step="1" value="${value}" data-quantity-input="${kind}" aria-label="Liczba sztuk"><span>szt.</span><button data-quantity="1" data-kind="${kind}" aria-label="Zwiększ ilość o 1">+</button></div>`;}
 function configure(vertical=false){return `<form class="quick-config glass ${vertical?'vertical':''}" onsubmit="return false"><h2>${vertical?'Dopasuj swoją torbę':'Stwórz swoją torbę'}</h2><div class="config-field"><span>Materiał</span><div class="segments"><button class="selected" data-material="paper" aria-pressed="true">Papier</button><button data-material="cotton" aria-pressed="false">Bawełna</button></div></div><div class="config-field"><span>Kolor</span>${swatches()}</div><div class="config-field"><span>Nakład</span>${quantity()}</div>${page==='glassy'?heroUpload():`<button class="button primary" data-action="configure">Dodaj swoje logo</button>`}</form>`;}
-const editorialPhotos={premium:'model-premium-editorial.webp',cotton:'model-cotton-editorial.webp',kraft:'model-kraft-editorial.webp'};
+const editorialPhotos={premium:'catalog/kraft-brown.webp',cotton:'model-cotton-editorial.webp',kraft:'catalog/kraft-flat.webp'};
 function productCards(items=products.slice(0,3),editorial=false){return items.map(p=>`<article class="product-card reveal"><a class="product-stage ${editorial?'pb-editorial-stage':''}" href="${url('product/?id='+p.id)}">${photo(editorial?{...p,image:editorialPhotos[p.id]||p.image}:p)}<span class="stage-cta">Zobacz model</span></a><div class="product-info"><div><h3><a href="${url('product/?id='+p.id)}">${p.name}</a></h3><p>${p.desc}</p><small class="pb-product-spec">${pb.specs[p.id].size}</small></div><a class="pb-model-link" href="${url('product/?id='+p.id)}" aria-label="Zobacz model ${p.name}">Zobacz</a></div></article>`).join('');}
 function categories(){return `<section class="section categories" id="kolekcja"><div class="section-heading"><div><span class="eyebrow">ZACZNIJ OD MATERIAŁU</span><h2>Dwie bazy. Wiele możliwości.</h2></div><a class="text-link" href="${url('catalog/')}">Cała kolekcja</a></div><div class="category-grid pb-two">${[['Torby papierowe','Od codziennych zakupów po wyjątkowy prezent.',products[0],'paper'],['Torby bawełniane','Na wydarzenie, do pracy i na każdy dzień.',products[1],'cotton']].map(([name,desc,p,m])=>`<a class="category-card" href="${url('catalog/?material='+m)}"><h3>${name}</h3><p>${desc}</p>${photo(p)}</a>`).join('')}</div></section>`;}
 
@@ -101,7 +100,7 @@ initExampleReveals();
 initDimensions();
 initHeroUpload({getSelection:()=>config,openStudio:async logo=>{
  const product=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';
- try{const {startConfiguration}=await import('./configuration/start.js?v=unified-25');await startConfiguration({product,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
+ try{const {startConfiguration}=await import('./configuration/start.js?v=offer-32');await startConfiguration({product,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
 }});
 window.addEventListener('popstate',()=>{if(location.pathname!==renderedPath)location.reload();});
 document.body.insertAdjacentHTML('beforeend',`<dialog id="modal" aria-label="Printbag24 — szczegóły"></dialog><div id="toast" role="status" aria-live="polite"></div>`);
@@ -110,8 +109,8 @@ document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='
 document.querySelector('#concept-select')?.addEventListener('change',e=>location.href=url(e.target.value+'/'));
 document.addEventListener('click',e=>{
  const b=e.target.closest('button,[data-action]');if(!b)return;
- if(b.dataset.material){config.material=b.dataset.material;config.color=config.material==='cotton'?'natural':'green';document.querySelectorAll('[data-material]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x.dataset.configColor===config.color);x.setAttribute('aria-pressed',x.dataset.configColor===config.color);});document.querySelector('.hero')?.classList.toggle('cotton-selected',config.material==='cotton');document.querySelector('.quick-config .swatches').outerHTML=swatches(config.color,'config-color',config.material==='cotton'?['natural','green']:['green','natural','kraft']);document.querySelectorAll('.hero-bag.paper > img,.hero-bag.cotton > img').forEach(img=>img.className='product-image');}
- if(b.dataset.configColor){config.color=b.dataset.configColor;document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});const img=document.querySelector(config.material==='cotton'?'.hero-bag.cotton > img':'.hero-bag.paper > img');if(img)img.className='product-image '+(config.material==='cotton'?(config.color==='green'?'green-cotton':''):(config.color==='natural'?'white-bag':config.color==='kraft'?'kraft-tint':''));}
+ if(b.dataset.material){config.material=b.dataset.material;config.color=config.material==='cotton'?'natural':'kraft';document.querySelectorAll('[data-material]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x.dataset.configColor===config.color);x.setAttribute('aria-pressed',x.dataset.configColor===config.color);});document.querySelector('.hero')?.classList.toggle('cotton-selected',config.material==='cotton');document.querySelector('.quick-config .swatches').outerHTML=swatches(config.color,'config-color',config.material==='cotton'?['natural','green']:['green','natural','kraft']);document.querySelectorAll('.hero-bag.paper > img,.hero-bag.cotton > img').forEach(img=>img.className='product-image');}
+ if(b.dataset.configColor){config.color=b.dataset.configColor;document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});const img=document.querySelector(config.material==='cotton'?'.hero-bag.cotton > img':'.hero-bag.paper > img');if(img)img.className='product-image '+(config.material==='cotton'?(config.color==='green'?'green-cotton':''):(config.color==='natural'?'white-bag':config.color==='green'?'green-cotton':''));}
  if(b.dataset.quantity){let kind=b.dataset.kind;let next=clampQty((kind==='editor'?editor.quantity:config.quantity)+Number(b.dataset.quantity));if(kind==='editor')editor.quantity=next;else config.quantity=next;document.querySelector(`[data-quantity-input="${kind}"]`).value=next;}
  if(b.dataset.filterMaterial){filters.material=b.dataset.filterMaterial;filters.handle=filters.finish=filters.weight='all';updateResults();}
  if(b.dataset.filterColor){filters.color=filters.color===b.dataset.filterColor?'all':b.dataset.filterColor;updateResults();}

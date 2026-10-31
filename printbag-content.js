@@ -1,5 +1,5 @@
-import {groupFooter} from './brand-shell.js?v=brand-7';
-import {dimensions} from './product-interactions.js?v=brand-7';
+import {groupFooter} from './brand-shell.js?v=offer-32';
+import {dimensions} from './product-interactions.js?v=offer-32';
 import { process } from './process-motion.js?v=motion-11';
 export { process };
 // Content for the selected Printbag24 direction. Product data is illustrative.
@@ -7,11 +7,11 @@ const base = new URL('./', import.meta.url);
 const link = path => new URL(path, base).href;
 
 export const specs = {
- premium: {size:'32 × 12 × 26 cm',handle:'Sznurkowy',finish:'Gładki',weight:'—'},
- cotton: {size:'38 × 42 cm',handle:'Długi',finish:'Naturalny splot',weight:'140 g/m²'},
- kraft: {size:'26 × 12 × 35 cm',handle:'Skręcany',finish:'Kraft',weight:'—'},
- white: {size:'18 × 8 × 24 cm',handle:'Sznurkowy',finish:'Gładki',weight:'—'},
- 'cotton-green': {size:'38 × 42 cm',handle:'Długi',finish:'Naturalny splot',weight:'220 g/m²'},
+ premium: {size:'10 formatów do wyceny',handle:'Papierowy skręcany',finish:'Gładki',weight:'—'},
+ cotton: {size:'38 × 42 cm',handle:'Długi',finish:'Naturalny splot',weight:'Do uzgodnienia'},
+ kraft: {size:'4 formaty do wyceny',handle:'Papierowy płaski',finish:'Kraft',weight:'—'},
+ white: {size:'4 formaty do wyceny',handle:'Papierowy płaski',finish:'Gładki',weight:'—'},
+ 'cotton-green': {size:'38 × 42 cm',handle:'Długi',finish:'Naturalny splot',weight:'Do uzgodnienia'},
  gift: {size:'18 × 8 × 24 cm',handle:'Sznurkowy',finish:'Gładki',weight:'—'}
 };
 const faqItems = [

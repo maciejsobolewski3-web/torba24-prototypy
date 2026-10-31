@@ -1,0 +1,67 @@
+PRINTBAG24 — AKTUALNY ZAKRES I PRZEKAZANIE POD JOOMLA
+Stan: 31.10.2026. Ten dokument zastępuje zakres produktowy z BAGPACK-JOOMLA-MAP.md.
+
+DECYZJA
+Klient wskazał papier biały/kraft, torby materiałowe, kolory i uchwyty proste/skręcane. Wykluczył laminowane i worki. „Proste” interpretujemy jako płaskie papierowe. Dokładne możliwości produkcyjne nadal nie są potwierdzone.
+Maciej następnie polecił: na razie oprzeć parametry na Allbag, bez pozostałego asortymentu takiego jak fotele i krzesła. Implementacja jest więc PROPOZYCJĄ oferty opartą na konkurencie, nie deklaracją dostępności produkcji klienta.
+
+AKTYWNY KATALOG
+1. Papier · uchwyt płaski: 4 formaty, biały i brązowy kraft.
+2. Papier · uchwyt skręcany: 10 formatów; do 11 kolorów zależnie od formatu.
+3. Bawełna · długie uchwyty: 38×42 cm, uchwyty referencyjne 70 cm, 145/220/260 g/m²; do 6 kolorów zależnie od gramatury.
+4. Bawełna · krótkie uchwyty: 38×42 cm, referencyjne 35 cm, 145/220 g/m²; naturalny, biały, czarny.
+5. Bawełna · poszerzane dno: 38×8×42 lub 45×12×35 cm; gramatura i kolory zależne od formatu. Większy format w źródle jest naturalny, 280 g/m².
+6. Bawełna · dno i boki: oznaczenie źródłowe 38×8×8×42 cm, 145/220 g/m²; naturalny, biały, czarny.
+
+94 wiersze wariantów odczytane z publicznych kart Allbag dają 89 kombinacji po złączeniu identycznych formatów/gramatur/kolorów z różnymi oznaczeniami kraju pochodzenia. Nie przenosimy deklaracji „Polska/import”, cen, dostępności magazynowej, rabatów ani dostawy Allbag.
+Papierowe pole „weight” w źródle NIE jest gramaturą papieru. Nie zostało użyte jako g/m².
+Pełna macierz: configuration/catalog-data.js, pole variantMatrix.
+Źródło obserwacji bez cen: research/allbag-2026-10-31/observed-variants.json.
+Generator bieżącego katalogu: python3 tools/build-allbag-catalog.py.
+
+ŹRÓDŁA
+https://sklep.allbag.pl/products/torba-papierowa-z-nadrukiem-uchwyt-plaski
+https://sklep.allbag.pl/products/torba-papierowa-z-nadrukiem-uchwyt-skrecany
+https://sklep.allbag.pl/products/torba-bawelniana-z-nadrukiem
+https://sklep.allbag.pl/products/torba-bawelniana-z-nadrukiem-krotki-uchwyt
+https://sklep.allbag.pl/products/torba-bawelniana-z-dnem-z-nadrukiem
+https://sklep.allbag.pl/products/torba-bawelniana-z-dnem-i-bokami-z-nadrukiem
+Metoda: odczyt publicznego HTML i osadzonej listy data-abn-variants; sprawdzenie opisu kart. Nie składano zamówień u konkurencji, nie kopiowano ich zdjęć ani kodu konfiguratora.
+
+KONFIGURACJA I FLOW
+Katalog lub hero → studio 2D/3D → dane do wyceny. Koszyk jest opcjonalny dla wielu wariantów.
+Format → gramatura (bawełna) → kolor gotowej bazy → strony nadruku → technika → kolory sita albo format DTG → logo → nakład.
+Rozmiar filtruje gramaturę i kolor. Zmiana formatu automatycznie wybiera poprawną kombinację referencyjną, jeśli poprzednia przestaje pasować. Nie generować pełnego iloczynu wszystkich kolorów i formatów!
+RGB/HEX koloru korpusu jest schowane; aktywne produkty wyliczają bodyColor z stockColor. Wgrane logo zachowuje własne kolory.
+Papier: sitodruk 1–4 kolory lub druk cyfrowy. Bawełna: sitodruk 1–4 kolory lub DTG A5/A4/A4+. To techniki referencyjne Allbag — potwierdzić, czy klient wykonuje je czy np. DTF.
+Nadruk dwustronny taki sam: wspólny projekt. Różne projekty: niezależne strony; „Skopiuj nadruk” tworzy jednorazową kopię. U Allbag inny projekt z tyłu jest wyceniany indywidualnie; u nas całość ma pricing=quote.
+Brak walidacji rzeczywistego limitu farb w przesłanej bitmapie i przygotowania separacji. Podgląd 3D nie jest plikiem produkcyjnym ani CAD. Modele oddają ogólny rodzaj uchwytu i gabaryty; dno/boki i materiał są przybliżeniem.
+Fotografie katalogowe są wygenerowanymi wizualizacjami konstrukcji, a nie zdjęciami potwierdzonego stanu magazynowego.
+
+PRZED PRODUKCJĄ / PODPINANIEM JOOMLA
+Potwierdzić per SKU: format, gramaturę, materiał, gotowe kolory, typ i długość uchwytów, technikę nadruku, pole zadruku, min/max nakład, opłatę za przygotowanie, biały podkład, terminy, ceny i stany.
+Nie uznawać pełnej palety Allbag za potwierdzone „5 kolorów” klienta. Brak odpowiedzi o workoplecakach nie oznacza zgody — pozostają poza aktywnym katalogiem.
+Joomla ma być źródłem prawdy dla wariantów, ograniczeń i wyceny. Identyfikatory Allbag są tylko metadanymi researchu, nie produkcyjnym SKU klienta.
+Aktualny payload konfiguracji: schemaVersion 1, catalogVersion 2026-10-31-allbag-32, productId, family, productName, dimensions, specs, options.{size,weight?,stockColor,printMode,printing?,inkCount?,digitalFormat?}, bodyColor, requests, pricing=quote, productionStatus=reference-proposal, confirmationRequired.
+Katalog ma schemaVersion 2. Nie mylić schematu katalogu ze schematem konfiguracji.
+Każdy wybrany parametr w options ma value, label i display. Gramatura oraz kolor są też w specs. Pliki i nadruki stron są w project.faces.front/back (Blob, pozycja, rozmiar), podglądy w thumbnails.
+Joomla powinna ponownie sprawdzić kombinację SKU/format/kolor/gramaturę, pliki i cenę po stronie serwera. Nie ufać wyłącznie danym przeglądarki.
+Aktualnie IndexedDB jest lokalną pamięcią. Formularz zapisuje zapytanie lokalnie (status=saved-locally), bez wysyłki, płatności, produkcyjnego uwierzytelniania ani magazynu. Panel konta jest warstwą UI.
+
+STARE PROJEKTY
+configuration/catalog-bagpack-archive.js zachowuje 109 wcześniejszych modeli wyłącznie do odczytania starych projektów. tools/build-bag-catalog.py aktualizuje archiwum, nigdy aktywny katalog.
+Stary projekt nie jest nadpisywany przy otwarciu. Studio pokazuje komunikat i blokuje wycenę do wybrania nowej bazy. Zmiana bazy przenosi nadruki i ich ustawienia; parametry nowej bazy normalizują się według nowej oferty. makeQuoteDraft blokuje też stare produkty w koszyku.
+
+PLIKI I WERYFIKACJA
+configuration/config.js: zależności, normalizacja, zapis i odczyt parametrów.
+studio-3d/product-controls.js + base-picker.js + option-picker.js: wybór w studiu.
+studio-3d/model.js: papierowy uchwyt płaski/skręcany, bawełna, gabaryty.
+order/store.js i order/order.js: zapis lokalny, walidacja wycofanych modeli.
+Testy: node --test tests/*.test.mjs.
+Uruchomienie: python3 -m http.server 8767, następnie http://127.0.0.1:8767/glassy/.
+Nie otwierać HTML przez file://.
+
+WERYFIKACJA TEJ ZMIANY
+15 testów automatycznych przeszło; po poprawce dawnych formatów z „+” ponownie przeszło 10 testów katalogu i zapisanych projektów.
+Przeglądarka: 6 baz w katalogu i nakładce, wyszukiwanie po rozmiarze, format zależny od gramatury/koloru, wybór DTG, kopiowanie nadruku na tył, zapis i przejście do danych wyceny. Sprawdzono papier z płaskim uchwytem w 3D, otwarcie starego projektu i blokadę jego wyceny do zmiany bazy oraz układ mobilny 390 px bez poziomego przewijania.
+Nie wysyłano formularza do klienta ani konkurenta.

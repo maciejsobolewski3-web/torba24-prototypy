@@ -1,7 +1,8 @@
+import catalog from '../configuration/catalog-bagpack-archive.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {catalog,defaults,activeFields,configuration,valuesFrom,validate,dimensions,resolveProduct,productById,bagSVG,linkedSides,backAllowed} from '../configuration/config.js';
+import {defaults,activeFields,configuration,valuesFrom,validate,dimensions,resolveProduct,productById,bagSVG,linkedSides,backAllowed} from '../configuration/config.js';
 import {price,needsQuote,validQuantity,productFormat,productName} from '../order/store.js';
 const byFamily=f=>catalog.products.find(p=>p.family===f);
 test('109 observed products, all option lists match the captured source',async()=>{
