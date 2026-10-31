@@ -77,6 +77,7 @@ root.addEventListener('click',async event=>{
   if(!b.dataset.copy&&!b.dataset.remove&&b.id!=='download-projects')return;
   busy=true;b.disabled=true;
   try{
+    if(b.dataset.copy||b.dataset.remove){if(quantitySaving)await quantitySaving;cart=await list('cart');}
     if(b.dataset.copy){const p=cart.find(p=>p.id===b.dataset.copy);await addToCart({...p,id:id(),updatedAt:Date.now()});await renderCart();notify('Dodano niezależną kopię projektu. Możesz ją teraz edytować.');}
     if(b.dataset.remove){undoItem=cart.find(p=>p.id===b.dataset.remove);await remove('cart',undoItem.id);await renderCart();status.innerHTML='Projekt usunięty z koszyka. <button id="undo-remove">Cofnij</button>';}
     if(b.id==='download-projects'){
