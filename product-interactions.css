@@ -30,3 +30,14 @@
 @media(max-width:600px){.glassy-hero .vertical{grid-template-columns:1fr;gap:18px;padding:22px 20px}.glassy-hero .vertical h2{font-size:23px}.glassy-hero .vertical .config-field{grid-column:1}.glassy-hero .vertical .config-field:last-of-type{grid-column:1}.glassy-hero .vertical .stepper{max-width:none}.glassy-hero .vertical .segments button{min-height:42px;font-size:13px}.glassy-hero .hero-bag.paper{left:40%;width:68%;height:310px;bottom:8px}.glassy-hero .hero-bag.cotton{left:-8%;width:77%;height:275px;bottom:-2px}.pb-model-link{display:none}.glassy-hero .hero-actions{gap:0}.glassy-hero .pb-hero-upload>.text-link{font-size:12px}}
 
 .pb-3d-launch{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #8aab9455;border-radius:9px;background:#ffffff80;padding:11px 12px;min-height:42px;margin-top:12px;font-size:11px}.pb-3d-launch small{font-size:8px;color:#698472}.pb-3d-launch:hover{background:#fff;border-color:#6e957c}.pb-hero-upload .pb-3d-launch{grid-column:1/-1}.pb-product-copy .pb-3d-launch{margin:16px 0;font-size:13px}.pb-product-copy .pb-3d-launch small{font-size:10px}
+
+/* Center the bounded hero and let the configuration panel determine its height. */
+@media(min-width:951px){
+ .glassy-hero{width:calc(100% - 36px);max-width:1920px;margin:18px auto 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,290px);gap:32px;padding:50px 4%;min-height:700px}
+ .glassy-hero .hero-copy{grid-column:1;grid-row:1;width:48%;align-self:center;min-width:0}
+ .glassy-hero .vertical{position:relative;inset:auto;grid-column:2;grid-row:1;width:100%;max-width:none;align-self:center;margin:0}
+}
+@media(min-width:951px) and (max-width:1250px){
+ .glassy-hero .hero-bag.paper{left:40%;width:25%;height:470px;bottom:65px}
+ .glassy-hero .hero-bag.cotton{left:28%;width:25%;height:370px;bottom:45px}
+}
