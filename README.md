@@ -108,3 +108,12 @@ Motion-9: większa ekspozycja toreb, delikatne kołysanie, naniesienie nadruku, 
 Motion-10: etap „Wybierz bazę” pokazuje dwie duże torby (papier i bawełna) zamiast miniatury w etykiecie. Papier odsuwa się, a bawełna przesuwa na środek przed nadrukiem. Sprawdzono desktop 1440 px, telefon 390 px, przejście do nadruku i brak błędów konsoli.
 
 Motion-11: dekoracyjny kursor wybiera bawełnę (najazd, kliknięcie, impuls i zaznaczenie). Efekty korzystają ze wspólnego zegara pokazu, zatrzymują się poza ekranem i respektują reduced motion. Sprawdzono klatki przed/po kliknięciu, zaznaczenie na telefonie 390 px i brak błędów konsoli.
+
+
+## Zróżnicowanie strony głównej — editorial-12
+
+- Hero i animacja procesu zachowane. Wybór materiału używa próbek faktur zamiast kolejnych renderów toreb.
+- Kolekcja na stronie głównej ma trzy osobne ujęcia produktów; katalog i konfiguratory zachowują dotychczasowe grafiki i geometrię nadruku.
+- Inspiracje pokazują pakowanie zakupów w butiku i torbę w mieście. Są koncepcjami wizualnymi, nie realizacjami dla klientów ani potwierdzeniem dostępnych wariantów.
+- Pięć nowych grafik wygenerowano wbudowanym image_gen i zoptymalizowano do WebP. Dokładne prompty i nazwy plików: `assets/editorial-prompts.json`.
+- QA: desktop 1440 px i telefon 390 px, wczytanie wszystkich nowych grafik, brak poziomego przepełnienia, otwarcie produktu z karty, kategoria papieru i zapytanie z wybranym modelem premium; konsola bez błędów.

@@ -1,0 +1,26 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "Product collection and fictional inspiration scenes; not customer case studies.",
+  "prompts": [
+    {
+      "file": "model-premium-editorial.webp",
+      "prompt": "Photorealistic premium ecommerce product photograph, portrait 4:5. One unbranded deep forest green PAPER shopping bag, smooth matte paper, cream rope handles, body proportions width 32 height 26 depth12, wide rectangular silhouette. Three-quarter overhead view lying diagonally on a pale silver-grey studio surface; carefully styled folded cream tissue paper peeks out. Fill most frame with bag body and beautifully visible rope handle knots and paper folds. Directional soft daylight, realistic shadows, tangible material, understated Polish design studio aesthetic. No logos, no text, no other bags, no green swirl decoration, no floating cutout, no collage. This is a fresh product collection photo, not the site's hero image."
+    },
+    {
+      "file": "model-cotton-editorial.webp",
+      "prompt": "Photorealistic premium ecommerce product photograph, portrait 4:5. Natural ivory thin 140gsm cotton shopping tote with LONG flat fabric handles and plain unprinted body proportions 38x42cm. Top-down flat lay on light muted sage surface. Tote laid diagonally, one corner casually folded back so seams, weave and pliable material are obvious; long handles curved loosely above it. Bag fills frame, all essential shape visible, soft grazing daylight, realistic textile grain, sophisticated art direction. No words, no logos, no props, no other bags, no standing floating tote, no collage."
+    },
+    {
+      "file": "model-kraft-editorial.webp",
+      "prompt": "Photorealistic premium ecommerce product photograph portrait 4:5. Tall natural brown kraft paper shopping bag body width26 height35 depth12cm, TWISTED PAPER handles, plain unprinted. Bag standing at three-quarter angle on warm pale stone studio surface, camera slightly above showing open mouth and folded gusset; near it lie two flat folded kraft bags of same model forming a restrained composition. Rich tactile kraft texture, crisp folds, afternoon side light, grounded shadows, cropped close but all standing bag visible. No rope handles, no logo, no text, no collage, no gradient render, no cutout."
+    },
+    {
+      "file": "inspiration-boutique.webp",
+      "prompt": "Photorealistic editorial commercial lifestyle photograph landscape 3:2. Quiet modern clothing boutique, close scene at a brushed metal counter: a WHITE wide premium paper shopping bag with burgundy rope handles and large elegant burgundy typographic print 'ATELIER' on front, cream tissue and a folded burgundy garment inside. A person's hands at the edge arranging tissue, natural believable anatomy. Background blurred clothing rack, pale walls, daylight, deep green curtain far back. Bag is main subject but setting and real shopping context essential. Authentic subtle film grain, fashion magazine art direction, sophisticated lived-in texture. No additional captions, no mockup UI, no collage. Conceptual bag branding, not an advertisement for any existing brand."
+    },
+    {
+      "file": "inspiration-city.webp",
+      "prompt": "Photorealistic editorial commercial lifestyle photo portrait 4:5. Cropped waist-to-knees candid photograph of an adult person walking past a pale stone city facade, wearing a dark forest-green overshirt and off-white trousers, carrying a natural cotton tote by long fabric handles in one hand. Tote prominently shows a large cobalt-blue abstract sun and flowing line screen print, with small simple word 'splot'. Slight creases and real fabric weight, believable hand fingers and handles, warm daylight with soft street shadows, close framing but bag fully visible. Fashion magazine quality, spontaneous motion in clothing, bag and print sharp. No head needed, no other bags, no collage, no UI. Original conceptual branding, not a documented client case."
+    }
+  ]
+}
