@@ -7,12 +7,12 @@ const stages = [
   ['Odbierz swoją serię', 'Z jednego pomysłu powstaje cała seria. Termin i dostawę ustalimy przy wycenie.', 'Gotowe na Twoją historię']
 ];
 const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
-const bag = (cls='') => `<div class="pm-bag ${cls}"><img src="${asset('cotton.webp')}" alt="" width="600" height="800" loading="lazy"><span class="pm-print">Twoja<br><em>marka.</em></span></div>`;
+const bag = (cls='') => `<div class="pm-bag ${cls}"><div class="pm-bag-surface"><img src="${asset('cotton.webp')}" alt="" width="600" height="800" loading="lazy"><span class="pm-print">Twoja<br><em>marka.</em></span></div></div>`;
 
 export function process(){return `<section class="section pm-section" id="jak-zamawiac" aria-labelledby="pm-heading">
   <div class="section-heading"><div><span class="eyebrow">ZOBACZ, JAK POWSTAJE TWÓJ PROJEKT</span><h2 id="pm-heading">Od pustej torby<br>do Twojej marki.</h2></div><a class="text-link" href="${new URL('catalog/',base).href}">Zacznij od swojej torby</a></div>
   <div class="pm-story" data-stage="0">
-    <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Wybierz etap, aby przyjrzeć się szczegółom.</p></div>
+    <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Wybierz etap, aby przyjrzeć się szczegółom. <button type="button" class="pm-resume" hidden>Wznów animację</button></p></div>
     <div class="pm-player">
       <div class="pm-scene" id="pm-scene" role="img" aria-label="${stages[0][1]}">
         <div class="pm-materials" aria-hidden="true"><span class="pm-material-paper"><img src="${asset('paper.webp')}" alt="" width="80" height="100" loading="lazy">Papier</span><span class="pm-material-cotton">${check} Bawełna</span></div>
@@ -32,10 +32,13 @@ export function initProcessMotion(){
   if(!root)return;
   const buttons=[...root.querySelectorAll('[data-stage-button]')];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const duration=2400;
+  const duration=2600;
+  const resume=root.querySelector('.pm-resume');
   let stage=0,elapsed=0,last=0,frame=0,inView=false,playing=!reduced.matches;
   function paint(){
     root.dataset.stage=String(stage);
+    root.dataset.motion=playing&&inView&&!document.hidden?'on':'off';
+    resume.hidden=playing||reduced.matches;
     root.querySelector('.pm-scene').setAttribute('aria-label',stages[stage][1]);
     buttons.forEach((button,i)=>{button.classList.toggle('is-current',i===stage);button.setAttribute('aria-pressed',String(i===stage));});
   }
@@ -45,8 +48,7 @@ export function initProcessMotion(){
     if(last)elapsed+=Math.min(time-last,100);
     last=time;
     if(elapsed>=duration){
-      if(stage<3){stage++;elapsed=0;paint();}
-      else{elapsed=duration;playing=false;paint();return;}
+      stage=(stage+1)%4;elapsed=0;paint();
     }
     frame=requestAnimationFrame(tick);
   }
@@ -56,6 +58,7 @@ export function initProcessMotion(){
     button.addEventListener('click',()=>select(index));
     button.addEventListener('keydown',event=>{let next=index;if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%4;else if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=(index+3)%4;else if(event.key==='Home')next=0;else if(event.key==='End')next=3;else return;event.preventDefault();buttons[next].focus();select(next);});
   });
+  resume.addEventListener('click',()=>{playing=!reduced.matches;elapsed=0;sync();});
   // Observe the illustration, so tall mobile layouts can still start playback.
   const observer=new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;sync();},{threshold:.25});
   observer.observe(root.querySelector('.pm-scene'));

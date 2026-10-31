@@ -1,9 +1,9 @@
 import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=brand-7';
 import {list as listStudioCart} from './order/store.js?v=brand-7';
-import * as pb from './printbag-content.js?v=motion-8';
+import * as pb from './printbag-content.js?v=motion-9';
 import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=brand-7';
 import {readLogo} from './logo-file.js';
-import { initProcessMotion } from './process-motion.js?v=motion-8';
+import { initProcessMotion } from './process-motion.js?v=motion-9';
 const BASE = new URL('./', import.meta.url);
 const url = (path = '') => new URL(path, BASE).href;
 const asset = name => url(`assets/${name}`);
