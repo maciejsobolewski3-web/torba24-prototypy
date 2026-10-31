@@ -19,7 +19,12 @@ body.account-is-open{overflow:hidden}.account-dialog{position:fixed;inset:0;marg
 .site-nav.shop-header .shop-dropdown summary{font-size:inherit}
 .site-nav.shop-header .shop-dropdown>div a{font-size:16px;line-height:1.45}
 @media(min-width:1101px){
- .site-nav.shop-header .main-nav{font-size:clamp(20px,1.25vw,22px);min-height:68px;width:100%;justify-content:space-between;gap:24px}
+ .site-nav.shop-header{--shop-brand-width:310px}
+ .site-nav.shop-header .ea-lockup{width:var(--shop-brand-width);justify-content:center}
+ .site-nav.shop-header .main-nav{font-size:clamp(20px,1.25vw,22px);min-height:68px;width:100%;display:grid;grid-template-columns:var(--shop-brand-width) repeat(5,minmax(max-content,1fr));justify-items:center;gap:0}
  .site-nav.shop-header .main-nav> a,.site-nav.shop-header .shop-dropdown summary{padding-block:19px}
  .site-nav.shop-header .shop-dropdown summary{gap:11px}
 }
+
+@media(min-width:1101px) and (max-width:1450px){.site-nav.shop-header{--shop-brand-width:280px}}
+@media(min-width:1101px) and (max-width:1250px){.site-nav.shop-header .main-nav{font-size:18px}}
