@@ -180,3 +180,9 @@ Replace local receipt persistence with the server submission of the complete
 project payload and artwork, and only show a sent confirmation after a successful
 server response. At that point change “Zapisz zapytanie” to “Wyślij do wyceny” and
 remove the local-save notice. Do not treat local receipt creation as delivery.
+
+### Wybór bazy w studiu (31.10.2026)
+
+Przycisk „Zmień bazę” otwiera galerię całego katalogu (109 pozycji w 7 rodzinach). Kategorie, wyszukiwarka nazw/rozmiarów/gramatur i filtr koloru działają na tych samych danych co katalog. Zdjęcie prowadzi do wyboru produktu w bieżącym studiu — bez dodatkowej strony konfiguracji. Format, papier, nadruk, uszlachetnienie i uchwyt pozostają parametrami wybranego produktu. Zmiana bazy zachowuje pliki nadruków i ich położenie; zgodne opcje są przenoszone w obrębie tej samej rodziny. Kolor materiału przyjmuje domyślny kolor nowej bazy. Implementacja: `studio-3d/base-picker.js` i `studio-3d/product-controls.js`.
+
+Studio i formularz zapytania korzystają z pełnej wspólnej nawigacji `mainNavigation()` z `brand-shell.js`, z menu mobilnym, nakładką konta oraz linkiem do koszyka. Przy integracji z Joomla źródło produktów można podmienić bez zmiany trzyekranowego flow.

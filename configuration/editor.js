@@ -1,4 +1,4 @@
-import {mountStandaloneShell} from '../brand-shell.js?v=nav-17';
+import {mountStandaloneShell} from '../brand-shell.js?v=nav-27';
 import {get,put,addToCart,id,esc} from '../order/store.js?v=catalog-22';
 import {readLogo} from '../logo-file.js';
 import {catalog,resolveProduct,productById,defaults,activeFields,label,dimensions,baseColor,printMode,backAllowed,linkedSides,configuration,valuesFrom,validate,bagSVG,printBounds} from './config.js?v=catalog-22';

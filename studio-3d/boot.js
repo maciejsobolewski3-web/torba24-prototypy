@@ -1,7 +1,7 @@
 import {get} from '../order/store.js?v=catalog-22';
 import {resolveProduct,baseColor,configuration as makeConfiguration} from '../configuration/config.js?v=catalog-22';
-import {mountProductControls,studioDefaults} from './product-controls.js?v=unified-25';
-import {mountStandaloneShell} from '../brand-shell.js?v=nav-17';
+import {mountProductControls,studioDefaults} from './product-controls.js?v=base-27';
+import {mountStandaloneShell} from '../brand-shell.js?v=nav-27';
 mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');

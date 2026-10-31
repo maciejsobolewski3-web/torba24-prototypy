@@ -14,20 +14,27 @@ export function groupBar(){return `<div class="ea-topbar"><div class="ea-topbar-
 export function groupBrand(){return `<div class="ea-lockup"><a class="ea-group-logo" href="https://easolution.pl/" target="_blank" rel="noopener" aria-label="EA Solution Group"><img src="${asset('easolution-group-logo.png')}" alt="EA Solution Group" width="103" height="85"></a><span class="ea-plus" aria-hidden="true">+</span><a class="ea-print-logo" href="${link('glassy/')}" aria-label="Printbag24 — strona główna"><img src="${asset('printbag24-logo.png')}" alt="printbag24.pl" width="1774" height="887"></a></div>`;}
 const external=(path,label)=>`<a href="https://zamowdruk.pl/${path}" target="_blank" rel="noopener" title="${label} — zamowdruk.pl">${label}</a>`;
 export function groupFooter(){return `<footer class="ea-footer"><div class="ea-footer-grid"><div class="ea-company">${groupBrand()}<p>Torby z nadrukiem od GRUPY EASOLUTION.PL.<br>Produkujemy w Rzeszowie. Wysyłamy w całej Polsce.</p><address><strong>GRUPA EASOLUTION.PL</strong>al. Gen. Władysława Sikorskiego 140B<br>35-304 Rzeszów<br>NIP: 8132362514 · REGON: 180152629<br><a href="mailto:info@easolution.pl">info@easolution.pl</a></address><div class="ea-social"><span>Obserwuj nas</span><a href="https://www.facebook.com/zamowdrukpl/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/zamowdruk.pl/" target="_blank" rel="noopener">Instagram</a><a href="https://www.youtube.com/channel/UCZYdf_5aEOSOOzgLn7Gbe9Q" target="_blank" rel="noopener">YouTube</a></div></div><nav aria-label="O nas"><h2>O nas</h2><a href="${link('nasza-historia/')}">Nasza historia</a><a href="${link('contact/')}">Kontakt</a>${external('stopka-blog','Poradniki')}${external('program-lojalnosciowy','Program lojalnościowy')}</nav><nav aria-label="Pomoc"><h2>Pomoc</h2><a href="${link('how-to/')}">Jak zamawiać</a><a href="${link('how-to/#pliki')}">Przygotowanie plików</a><a href="${link('how-to/#dostawa')}">Dostawa i płatności</a><a href="${link('how-to/#faq')}">Najczęstsze pytania</a></nav><nav aria-label="Regulaminy grupy"><h2>Regulaminy</h2>${external('regulamin-sklepu','Regulamin drukarni')}${external('polityka-prywatnosci','Polityka prywatności')}${external('reklamacje-i-zwroty','Reklamacje i zwroty')}</nav></div><div class="ea-payments"><span>PŁATNOŚCI</span><div>${[['przelewy24','Przelewy24'],['blik','BLIK'],['visa','Visa'],['mastercard','Mastercard']].map(([name,label])=>`<img src="${asset('payment-'+name+'.png')}" alt="${label}" loading="lazy">`).join('')}</div></div><nav class="ea-footer-services" aria-label="Pozostałe serwisy grupy"><strong>Nasze serwisy:</strong>${serviceLinks()}</nav><div class="ea-copyright">© ${new Date().getFullYear()} printbag24.pl — Wszystkie prawa zastrzeżone.</div></footer>`;}
+export function mainNavigation(){return `<nav class="main-nav" id="shop-navigation" aria-label="Główna nawigacja">${[['catalog/?material=paper','Papierowe'],['catalog/?material=cotton','Bawełniane'],['projects/','Realizacje'],['how-to/','Jak zamawiać'],['nasza-historia/','Nasza historia'],['contact/','Kontakt']].map(([path,name])=>`<a href="${link(path)}">${name}</a>`).join('')}</nav>`;}
 export function mountStandaloneShell(){
   const header=document.querySelector('.studio-header');
   if(header&&!document.querySelector('.ea-topbar')){
     header.insertAdjacentHTML('beforebegin',groupBar());
-    header.querySelector('.studio-brand')?.insertAdjacentHTML('beforebegin',groupBrand());
-    header.querySelector('.studio-brand')?.remove();
-    const history=document.createElement('a');history.className='ea-header-history';history.href=link('nasza-historia/');history.textContent='Nasza historia';
-    header.querySelector('.studio-header-label')?.replaceWith(history);
-    header.insertAdjacentHTML('beforeend',accountButton());
+    header.className='site-nav standalone-nav';
+    const icon=path=>`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${path}</svg>`;
+    header.innerHTML=groupBrand()+mainNavigation()+`<div class="nav-actions">${accountButton()}<a class="icon-button" href="${link('catalog/#bag-search')}" aria-label="Szukaj produktów">${icon('<circle cx="10.5" cy="10.5" r="7"/><path d="m16 16 5 5"/>')}</a><a class="icon-button standalone-cart" href="${link('order/?step=cart')}" aria-label="Otwórz koszyk">${icon('<path d="M5 7h14l1 15H4L5 7Z"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/>')}<span id="cart-count"></span></a><button class="icon-button mobile-menu" id="shop-menu-toggle" aria-label="Otwórz menu" aria-expanded="false" aria-controls="shop-navigation">${icon('<path d="M4 6h16M4 12h16M4 18h16"/>')}</button></div>`;
+    const toggle=header.querySelector('#shop-menu-toggle');
+    const close=()=>{header.classList.remove('menu-expanded');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Otwórz menu');};
+    toggle.addEventListener('click',()=>{const open=header.classList.toggle('menu-expanded');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Zamknij menu':'Otwórz menu');});
+    document.addEventListener('click',e=>{if(!header.contains(e.target))close();});
+    header.addEventListener('keydown',e=>{if(e.key==='Escape'){close();toggle.focus();}});
+    header.querySelector('.main-nav').addEventListener('click',e=>{if(e.target.closest('a'))close();});
+    import('./order/store.js?v=flow-26').then(({list})=>list('cart')).then(items=>{header.querySelector('#cart-count').textContent=items.length||'';}).catch(()=>{});
   }
   document.querySelector('.order-footer,.studio-footer')?.remove();
   if(!document.querySelector('.ea-footer'))document.body.insertAdjacentHTML('beforeend',groupFooter());
   initAccountUI();
 }
+
 const timeline=[
   ['2000','Początek w Rzeszowie','Małe studio poligraficzne w garażu. Pierwsze pomysły, pierwsze projekty i początek własnej drogi.'],
   ['2001–2010','Pierwszy lokal, stali klienci','Przeprowadzka na ulicę Lwowską. Druk cyfrowy i introligatornia pozwalają samodzielnie wykańczać prace.'],
