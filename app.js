@@ -1,4 +1,4 @@
-import {mountCatalog} from './configuration/catalog.js?v=catalog-22';
+import {mountCatalog} from './configuration/catalog.js?v=photos-24';
 import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 import {initHistoryTimeline} from './history-timeline.js?v=history-16';
 import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=nav-17';
