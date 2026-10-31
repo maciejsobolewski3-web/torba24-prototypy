@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {catalog,productById,resolveCurrentProduct,resolveProduct,defaults,configuration,valuesFrom,dimensions,validate,normalizeValues,activeFields} from '../configuration/config.js';
 import {makeQuoteDraft} from '../order/store.js';
 test('merchant scope excludes unsupported constructions and uses stock colour instead of arbitrary RGB',()=>{
- assert.deepEqual(catalog.products.map(p=>p.id),['papier-plaski','papier-skrecany','bawelna','bawelna-krotkie','bawelna-dno','bawelna-boki']);
+ assert.deepEqual(catalog.products.map(p=>p.id),['papier-plaski','papier-skrecany','bawelna','bawelna-krotkie','bawelna-dno','bawelna-boki','juta','workoplecak','papier-catering','pizza-45','pizza-32','serwetki']);
  for(const p of catalog.products){
   assert.ok(!p.fields.some(f=>['finish','cord','ribbon','dtfSize'].includes(f.id)));
   for(const row of p.variantMatrix){
@@ -24,6 +24,7 @@ test('old artwork can reopen with its original model, but retired SKUs cannot be
  assert.throws(()=>makeQuoteDraft([{quantity:100,configuration:{productId:old}}],contact),/spoza aktualnej oferty/);
  const p=productById('papier-skrecany');
  assert.equal(makeQuoteDraft([{quantity:100,configuration:configuration(p,defaults(p),'#ff00ff')}],contact).status,'saved-locally');
+ assert.throws(()=>makeQuoteDraft([{quantity:100,configuration:{...configuration(p,defaults(p)),catalogVersion:'2026-10-31-offer-32'}}],contact),/Parametry oferty zostały/);
 });
 
 test('format changes keep only observed stock combinations and print-specific settings',()=>{
@@ -35,5 +36,16 @@ test('format changes keep only observed stock combinations and print-specific se
  const c=productById('bawelna-dno'),v=normalizeValues(c,{size:'45x12x35',stockColor:'bialy',weight:'145'});
  assert.equal(v.weight,'280');assert.equal(v.stockColor,'naturalny');
  assert.equal(dimensions(productById('bawelna-boki'),defaults(productById('bawelna-boki'))).height,42);
- const digital={...defaults(c),printing:'digital'};assert.ok(activeFields(c,digital).some(f=>f.id==='digitalFormat'));assert.ok(!activeFields(c,digital).some(f=>f.id==='inkCount'));
+ const saved=configuration(c,defaults(c));assert.equal(saved.printing.id,'dtf');assert.equal(saved.printing.status,'proposed');assert.ok(!activeFields(c,defaults(c)).some(f=>['printing','digitalFormat','inkCount'].includes(f.id)));
+});
+
+test('packaging has one print surface, fixed pizza colours, and no invented production format',async()=>{
+ const {backAllowed,inventoryKey,printingFor}=await import('../configuration/config.js');
+ for(const id of ['pizza-45','pizza-32','serwetki']){const p=productById(id),v=defaults(p);assert.equal(backAllowed(p,v,[{type:'printSides'}]),false);assert.equal(p.fields.find(f=>f.id==='stockColor').options.length,1);}
+ assert.equal(configuration(productById('pizza-45'),defaults(productById('pizza-45'))).options.stockColor.display,'Biały');
+ assert.equal(configuration(productById('pizza-32'),defaults(productById('pizza-32'))).options.stockColor.display,'Szary kraft');
+ for(const id of ['juta','serwetki'])assert.match(dimensions(productById(id),defaults(productById(id))).label,/ustalenia/);
+ const p=productById('papier-catering'),v=defaults(p);assert.equal(inventoryKey(p,v),inventoryKey(productById('papier-plaski'),v));
+ assert.equal(printingFor(productById('workoplecak'),defaults(productById('workoplecak'))).id,'dtf');
+ const paper=productById('papier-skrecany');assert.equal(printingFor(paper,{...defaults(paper),stockColor:'czarny'}).status,'to-confirm');
 });

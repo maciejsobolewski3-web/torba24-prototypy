@@ -1,4 +1,4 @@
-> Aktualny zakres z 31.10.2026: sześć konstrukcji na podstawie Allbag. Zacznij od `docs/OFERTA-ALLBAG-JOOMLA.txt`. Starsze opisy Bagpack poniżej są historyczne.
+> Aktualny stan: merchant-33, 12 baz w 3 grupach. Zacznij od `docs/OFERTA-ALLBAG-JOOMLA.txt` i `docs/JOOMLA-MERCHANT-33.txt`. Starsze opisy poniżej są historyczne. Główne studio: `/studio-3d/`; katalog: `/catalog/`. Aktywna oferta ma wycenę indywidualną, bez płatności i wysyłania zamówień. Brak podłączenia magazynu oznacza „do potwierdzenia”, nie stan zerowy.
 
 # Printbag24 — Soft glass
 

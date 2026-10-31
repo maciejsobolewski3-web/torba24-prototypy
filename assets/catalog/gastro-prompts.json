@@ -1,0 +1,19 @@
+{
+  "mode": "built-in imagegen",
+  "date": "2026-10-31",
+  "purpose": "Representative catalogue photography, not verified physical specifications",
+  "prompts": [
+    [
+      "pizza-white",
+      "Use case: product-mockup. Photorealistic square ecommerce catalogue photograph of ONE plain white unprinted corrugated cardboard pizza takeaway box, closed lid, large square pizza box proportions approximately 45cm wide and low 4cm profile, viewed from above at gentle three-quarter angle, full object centered with breathing space. Pale sage off-white seamless studio background, soft daylight from upper left, subtle contact shadow, real fine cardboard fibers and folded die-cut corner tabs. No text, no logo, no food, no graphics, no handles. Premium clean realistic product photography, not illustration or computer vector art."
+    ],
+    [
+      "pizza-kraft",
+      "Use case: product-mockup. Photorealistic square ecommerce catalogue photograph of ONE plain natural grey-brown kraft corrugated cardboard pizza takeaway box, closed square lid, 32cm pizza-box proportions, low 3.5cm profile. Three-quarter angle slightly from above, entire product centered with breathing space. Pale sage off-white seamless studio background, soft daylight from upper left, subtle contact shadow, realistic paper fibers and folded die-cut corner tabs. No text no logo no food no handles. Natural packaging photography, not vector or illustration."
+    ],
+    [
+      "napkins-white",
+      "Use case: product-mockup. Photorealistic square ecommerce catalogue photograph of a short neat stack of plain white folded square paper restaurant napkins. Top napkin completely blank, soft fine tissue texture with tiny embossed dotted border and visible delicate layered edges. Gentle three-quarter view from above, full stack centered with breathing space on pale sage off-white seamless studio background. Soft daylight from upper left and subtle shadow. No logo, no text, no cutlery, no food. Real paper not cloth, natural catalogue photography."
+    ]
+  ]
+}

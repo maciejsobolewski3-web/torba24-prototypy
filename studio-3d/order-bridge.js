@@ -1,17 +1,19 @@
-import {productById} from '../configuration/config.js?v=offer-32';
-import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=offer-32';
+import {availabilityHTML} from '../configuration/inventory.js?v=merchant-33';
+import {productById} from '../configuration/config.js?v=merchant-33';
+import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=merchant-33';
 export async function initOrderBridge(studio){
   const $=s=>document.querySelector(s),params=new URLSearchParams(location.search);
   const projectId=params.get('project')||id(),quantity=$('#order-quantity'),button=$('#review-project'),status=$('#studio-status');
   let ready=false;
   const variantButton=$('#add-variant'),variants=await list('cart'),others=variants.filter(p=>p.id!==projectId);
-  button.textContent=others.length?`Wyceń torby (${others.length+1})`:'Wyceń tę torbę';
+  button.textContent=others.length?`Wyceń projekty (${others.length+1})`:'Wyceń projekt';
   $('#variant-note').textContent=others.length?`W zapytaniu uwzględnimy też ${others.length} zapisane warianty. Możesz je sprawdzić w koszyku.`:'Jeden projekt? Przejdź od razu do danych kontaktowych.';
+  const stock=document.createElement('div');stock.id='studio-stock';$('.order-config').append(stock);
   const update=()=>{
-    const p={...studio.details(),quantity:Number(quantity.value)};
+    const p={...studio.details(),quantity:Number(quantity.value)};stock.innerHTML=availabilityHTML(p.configuration,p.quantity);
     const retired=p.configuration&&!productById(p.configuration.productId);button.disabled=!!retired;variantButton.disabled=!!retired;
     if(p.configuration){const box=$('.order-config');box.querySelector('.studio-eyebrow').textContent=p.configuration.productName;box.querySelector('strong').textContent=p.configuration.dimensions.label;box.querySelector('small').textContent='Minimalny nakład potwierdzimy przy wycenie.';}
-    $('#studio-summary-details').innerHTML=p.configuration?Object.values(p.configuration.options).map(o=>`<div><dt>${esc(o.label)}</dt><dd>${esc(o.display)}</dd></div>`).join('')+(p.configuration.requests||[]).map(o=>`<div><dt>Na zamówienie</dt><dd>${esc(o.value)}</dd></div>`).join(''):'';
+    $('#studio-summary-details').innerHTML=p.configuration?Object.values(p.configuration.options).map(o=>`<div><dt>${esc(o.label)}</dt><dd>${esc(o.display)}</dd></div>`).join('')+(p.configuration.printing?`<div><dt>Technologia</dt><dd>${esc(p.configuration.printing.label)}</dd></div>`:'')+(p.configuration.requests||[]).map(o=>`<div><dt>Na zamówienie</dt><dd>${esc(o.value)}</dd></div>`).join(''):'';
     const result=validQuantity(p.quantity,p)?price(p):null;
     $('#order-price').textContent=!validQuantity(p.quantity,p)?(p.configuration?'Wpisz nakład od 1 do 100 000 szt.':'Wpisz nakład od 50 do 10 000 szt.'):result?money(result.total):'Indywidualna wycena';
     $('#order-price-note').textContent=result?`${money(result.unit)} / szt. · szacunkowo brutto`:'Parametry, cena i termin wymagają potwierdzenia przy wycenie.';

@@ -1,7 +1,7 @@
-import {mountStandaloneShell} from '../brand-shell.js?v=offer-32';
-import {get,put,addToCart,id,esc} from '../order/store.js?v=offer-32';
+import {mountStandaloneShell} from '../brand-shell.js?v=merchant-33';
+import {get,put,addToCart,id,esc} from '../order/store.js?v=merchant-33';
 import {readLogo} from '../logo-file.js';
-import {catalog,resolveProduct,resolveCurrentProduct,stockColor,productById,defaults,normalizeValues,activeFields,label,dimensions,baseColor,printMode,backAllowed,linkedSides,configuration,valuesFrom,validate,bagSVG,printBounds} from './config.js?v=offer-32';
+import {catalog,resolveProduct,resolveCurrentProduct,stockColor,productById,defaults,normalizeValues,activeFields,label,dimensions,baseColor,printMode,backAllowed,linkedSides,configuration,valuesFrom,validate,bagSVG,printBounds} from './config.js?v=merchant-33';
 mountStandaloneShell();
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),root=$('#configuration-main');
 let product=resolveCurrentProduct(params.get('sku')||params.get('id')),values=defaults(product),body=baseColor(product),quantity=Math.max(1,Math.min(100000,Number(params.get('quantity'))||100)),side='front',requests=[],pending=0,busy=false;

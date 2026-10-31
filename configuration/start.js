@@ -1,5 +1,5 @@
-import {resolveCurrentProduct,defaults,configuration,baseColor} from './config.js?v=offer-32';
-import {id,put} from '../order/store.js?v=offer-32';
+import {resolveCurrentProduct,defaults,configuration,baseColor} from './config.js?v=merchant-33';
+import {id,put} from '../order/store.js?v=merchant-33';
 export async function startConfiguration({product:legacyProduct,quantity=100,logo,color}){
  const p=resolveCurrentProduct(legacyProduct),values=defaults(p);
  if(logo){const print=p.fields.find(f=>f.id==='printMode');if(print)values.printMode=(print.options.find(o=>o.label.includes('DTF'))||print.options.find(o=>o.label!=='bez nadruku')).id;}

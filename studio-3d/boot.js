@@ -1,7 +1,7 @@
-import {get} from '../order/store.js?v=offer-32';
-import {resolveCurrentProduct,baseColor,configuration as makeConfiguration} from '../configuration/config.js?v=offer-32';
-import {mountProductControls,studioDefaults} from './product-controls.js?v=offer-32';
-import {mountStandaloneShell} from '../brand-shell.js?v=offer-32';
+import {get} from '../order/store.js?v=merchant-33';
+import {resolveCurrentProduct,baseColor,configuration as makeConfiguration} from '../configuration/config.js?v=merchant-33';
+import {mountProductControls,studioDefaults} from './product-controls.js?v=merchant-33';
+import {mountStandaloneShell} from '../brand-shell.js?v=merchant-33';
 mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
@@ -11,9 +11,9 @@ try {
   let configuration;
   if(params.has('project')){const saved=await get(params.get('from')==='cart'?'cart':'projects',params.get('project'));configuration=saved?.configuration;}
   else{const p=resolveCurrentProduct(params.get('sku')||params.get('id')||'premium');configuration=makeConfiguration(p,studioDefaults(p),baseColor(p));}
-  const {initStudio} = await import('./scene.js?v=offer-32');
+  const {initStudio} = await import('./scene.js?v=merchant-33');
   const studio = await initStudio(configuration);
-  const {initOrderBridge} = await import('./order-bridge.js?v=offer-32');
+  const {initOrderBridge} = await import('./order-bridge.js?v=merchant-33');
   await initOrderBridge(studio);
   mountProductControls(studio);
   panel.classList.remove('is-loading');

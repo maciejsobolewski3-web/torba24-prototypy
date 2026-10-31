@@ -1,12 +1,12 @@
-import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=offer-32';
+import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=merchant-33';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
-import {createStudioEnvironment} from './environment.js?v=offer-32';
-import {createEditOverlay} from './edit-overlay.js?v=offer-32';
-import {createLivePreview} from './live-preview.js?v=offer-32';
+import {createStudioEnvironment} from './environment.js?v=merchant-33';
+import {createEditOverlay} from './edit-overlay.js?v=merchant-33';
+import {createLivePreview} from './live-preview.js?v=merchant-33';
 import {initColorControls} from './color-controls.js?v=flow-6';
 import {readLogo} from '../logo-file.js';
-import {BAG,palette,createBag} from './model.js?v=offer-32';
+import {BAG,palette,createBag,presentPackaging} from './model.js?v=merchant-33';
 
 export async function initStudio(configuration){
   const $=selector=>document.querySelector(selector),host=$('#scene'),status=$('#studio-status');
@@ -66,11 +66,14 @@ export async function initStudio(configuration){
   function syncPanel(){const d=renderDraft(side);$('#no-print-note').hidden=printEnabled();
     document.querySelectorAll('[data-side="back"],[data-view="back"]').forEach(b=>b.disabled=!canBack());
     for(const selector of ['.logo-field','#logo-settings'])$(selector).hidden=!printEnabled();
-    $('.duplex-print').hidden=false;
+    $('.duplex-print').hidden=!!configuration?.singleSurface;
+    const frontLabel=configuration?.family==='pizza'?'Wieczko':configuration?.family==='napkin'?'Strona nadruku':'Przód';
+    document.querySelectorAll('[data-side="front"],[data-view="front"]').forEach(b=>b.textContent=frontLabel);
+    document.querySelectorAll('[data-side="back"],[data-view="back"]').forEach(b=>b.hidden=!!configuration?.singleSurface);
     $('#copy-print').hidden=false;
     $('#duplex-help').textContent=!printEnabled()?'Najpierw wybierz technikę nadruku w parametrach torby.':!canBack()?'Skopiuj projekt również na drugą stronę. Dostępność tej opcji potwierdzimy przy wycenie.':sameSides()?'Obie strony są połączone. Zmiana logo, wielkości lub położenia aktualizuje przód i tył jednocześnie.':'Jednorazowa kopia. Później edytujesz strony osobno. Po zmianie położenia skopiuj ponownie, jeśli obie strony mają być identyczne.';
 if(configuration?.requests?.some(r=>r.type==='printSides')&&printEnabled())$('#duplex-help').textContent+=' Druk na obu stronach potwierdzimy przy wycenie.';
-$('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i tył · połączone':drafts.front.kind!=='none'&&drafts.back.kind!=='none'?'Przód i tył':drafts.front.kind!=='none'?'Tylko przód':drafts.back.kind!=='none'?'Tylko tył':'Bez nadruku';$('#copy-print').disabled=!printEnabled()||d.kind==='none';$('#copy-print').textContent=sameSides()?'Zobacz identyczny nadruk na tyle':side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=!printEnabled()||d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
+$('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i tył · połączone':drafts.front.kind!=='none'&&drafts.back.kind!=='none'?'Przód i tył':drafts.front.kind!=='none'?'Tylko przód':drafts.back.kind!=='none'?'Tylko tył':'Bez nadruku';$('#copy-print').disabled=!printEnabled()||d.kind==='none';$('#copy-print').textContent=sameSides()?'Zobacz identyczny nadruk na tyle':side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?frontLabel:'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=!printEnabled()||d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
   function setRotation(value){value=value&&mode==='3d';controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
   const views={front:{position:[0,2.2,9],target:[0,1.95,0]},back:{position:[0,2.2,-9],target:[0,1.95,0]},detail:{position:[3.2,4.25,4.4],target:[0,2.45,0]},perspective:{position:[5.3,3.3,7.5],target:[0,1.95,0]}};
   function goView(name){setRotation(false);if(mode==='2d'){alignFlatView();invalidate();return;}const view=views[name];document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));const to=new THREE.Vector3(...view.position),target=new THREE.Vector3(...view.target);
@@ -83,7 +86,7 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
   function selectSide(s){if(s==='back'&&!canBack())return;side=s;syncPanel();goView(s);preview?.orient(s);overlay?.update();status.textContent=s==='front'?'Edytujesz przód torby.':'Edytujesz tył torby. Nadruki obu stron ustawiasz osobno.';}
   function tick(now){frame=0;if(disposed||document.hidden||!stageVisible())return;const dt=Math.min((now-lastTime)/1000||.016,.05);lastTime=now;
     if(tween){const t=Math.min(1,(now-tween.start)/700),e=1-Math.pow(1-t,3);controls.target.lerpVectors(tween.targetFrom,tween.targetTo,e);const s=new THREE.Spherical(THREE.MathUtils.lerp(tween.from.radius,tween.to.radius,e),THREE.MathUtils.lerp(tween.from.phi,tween.to.phi,e),THREE.MathUtils.lerp(tween.from.theta,tween.to.theta,e));camera.position.setFromSpherical(s).add(controls.target);if(t===1)tween=null;}
-    const moving=mode==='3d'&&controls.update(dt);renderer.render(scene,camera);overlay?.update();const previewMoving=preview?.render(dt);if(tween||controls.autoRotate||moving||previewMoving)invalidate();
+    const moving=mode==='3d'&&controls.update(dt);presentPackaging(bag.group,mode==='3d');renderer.render(scene,camera);presentPackaging(bag.group,false);overlay?.update();const previewMoving=preview?.render(dt);if(tween||controls.autoRotate||moving||previewMoving)invalidate();
   }
   // Check the actual stage bounds: observing an absolutely positioned canvas in a
   // clipped sticky container can report a stale intersection after resizing.
@@ -132,7 +135,7 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
     $('.studio-stage').classList.toggle('is-split',split);
     $('.live-preview').hidden=!split;
     $('.editor-tools').hidden=mode!=='2d';
-    if(split&&!preview){try{preview=createLivePreview({host:$('#live-scene'),scene,contact,invalidate,onExpand:()=>setMode('3d')});preview.orient(side);}catch(error){console.warn('Live preview unavailable',error);$('.live-preview').hidden=true;$('.studio-stage').classList.remove('is-split');}}
+    if(split&&!preview){try{preview=createLivePreview({host:$('#live-scene'),scene,contact,invalidate,getProduct:()=>bag.group,onExpand:()=>setMode('3d')});preview.orient(side);}catch(error){console.warn('Live preview unavailable',error);$('.live-preview').hidden=true;$('.studio-stage').classList.remove('is-split');}}
     if(preview?.failed){$('.live-preview').hidden=true;$('.studio-stage').classList.remove('is-split');}
     preview?.setActive(split);overlay?.setEnabled(mode==='2d');
   }
@@ -146,7 +149,7 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
   window.addEventListener('scroll',invalidate,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();});
   reduced.addEventListener('change',()=>{if(reduced.matches){tween=null;setRotation(false);}invalidate();});
-  const colorControls=initColorControls({palette,onChange:(next,key)=>{color=next;preset=key;bag.setColor(color);draw('front');draw('back');document.dispatchEvent(new Event('studio-project-change'));}});
+  const colorControls=initColorControls({palette,onChange:(next,key)=>{color={...next};if(['kraft','pizza','napkin'].includes(configuration?.family))color.ink='#194f3b';preset=key;bag.setColor(color);draw('front');draw('back');document.dispatchEvent(new Event('studio-project-change'));}});
   document.querySelectorAll('[data-side]').forEach(b=>b.addEventListener('click',()=>selectSide(b.dataset.side)));
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(['front','back'].includes(b.dataset.view))selectSide(b.dataset.view);else goView(b.dataset.view);}));
   $('#rotate').addEventListener('click',()=>{tween=null;setRotation(!controls.autoRotate);});
@@ -185,7 +188,7 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
       event.preventDefault();const [axis,amount]=change;renderDraft(side)[axis]=THREE.MathUtils.clamp(renderDraft(side)[axis]+amount,-100,100);syncPanel();draw(side);return;
     }
     if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();setRotation(false);tween=null;const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new THREE.Vector3(0,1,0),event.key==='ArrowLeft'?-.16:.16);camera.position.copy(controls.target).add(offset);controls.update();invalidate();});
-  $('#save-preview').addEventListener('click',()=>{renderer.render(scene,camera);const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e7eee3';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);ctx.fillStyle='#456453';ctx.font=`${Math.max(12,output.width*.014)}px sans-serif`;ctx.fillText('PRINTBAG24 / TWÓJ PROJEKT',output.width*.04,output.height*.96);output.toBlob(blob=>{if(!blob){status.textContent='Nie udało się zapisać podglądu.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`printbag24-podglad-${mode}-${side==='front'?'przod':'tyl'}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Podgląd PNG został przygotowany do pobrania.';},'image/png');});
+  $('#save-preview').addEventListener('click',()=>{presentPackaging(bag.group,mode==='3d');renderer.render(scene,camera);presentPackaging(bag.group,false);const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e7eee3';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);ctx.fillStyle='#456453';ctx.font=`${Math.max(12,output.width*.014)}px sans-serif`;ctx.fillText('PRINTBAG24 / TWÓJ PROJEKT',output.width*.04,output.height*.96);output.toBlob(blob=>{if(!blob){status.textContent='Nie udało się zapisać podglądu.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`printbag24-podglad-${mode}-${side==='front'?'przod':'tyl'}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Podgląd PNG został przygotowany do pobrania.';},'image/png');});
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();setRotation(false);$('#scene-fallback').hidden=false;const fallbackParams=new URLSearchParams(location.search);fallbackParams.set('fallback','1');$('#scene-fallback a').href='../configuration/?'+fallbackParams;$('.editor-tools').hidden=true;$('.live-preview').hidden=true;preview?.setActive(false);$('#stage-controls').hidden=true;$('#scene').hidden=true;$('#fallback-message').textContent='Widok 3D został zatrzymany. Odśwież stronę lub otwórz podgląd klasyczny.';document.querySelectorAll('.studio-panel button,.studio-panel input').forEach(el=>el.disabled=true);});
   window.addEventListener('pagehide',event=>{cancelAnimationFrame(frame);frame=0;if(event.persisted)return;disposed=true;resize.disconnect();window.removeEventListener('scroll',invalidate);controls.dispose();preview?.dispose();for(const d of Object.values(drafts))if(d.url)URL.revokeObjectURL(d.url);scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const m of mats){m.map?.dispose();m.bumpMap?.dispose();m.dispose();}}});env.dispose();renderer.dispose();});
   window.addEventListener('pageshow',()=>invalidate());

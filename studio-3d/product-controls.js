@@ -1,7 +1,7 @@
-import {enhanceOptions} from './option-picker.js?v=offer-32';
-import {createBasePicker} from './base-picker.js?v=offer-32';
-import {catalogPhoto} from '../configuration/catalog-photos.js?v=offer-32';
-import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,escape as esc} from '../configuration/config.js?v=offer-32';
+import {enhanceOptions} from './option-picker.js?v=merchant-33';
+import {createBasePicker} from './base-picker.js?v=merchant-33';
+import {catalogPhoto} from '../configuration/catalog-photos.js?v=merchant-33';
+import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,printingFor,escape as esc} from '../configuration/config.js?v=merchant-33';
 export function studioDefaults(product){
  const values=defaults(product),print=product.fields.find(f=>f.id==='printMode');
  if(print)values.printMode=(print.options.find(o=>o.label.includes('DTF'))||print.options.find(o=>o.label!=='bez nadruku')||print.options[0]).id;
@@ -10,13 +10,17 @@ export function studioDefaults(product){
 export function mountProductControls(studio){
  const root=document.querySelector('#product-controls');
  let config=studio.details().configuration,product=resolveProduct(config?.productId||'premium'),values={...defaults(product),...(config?valuesFrom(config):{})},requests=config?.requests||[];
- root.innerHTML=`<div class="current-base"><img id="current-base-photo" alt="" width="160" height="160"><div><span class="studio-eyebrow">WYBRANA BAZA</span><strong id="current-base-name"></strong><span id="studio-facts" class="model-facts"></span></div></div><button type="button" id="choose-base" class="choose-base-button" aria-haspopup="dialog">Zmień bazę <span>${catalog.products.length} baz · rozmiary i kolory</span></button><details class="product-details" open><summary>Format, kolor i nadruk <span>Dobierz szczegóły</span></summary><div id="studio-options"></div></details><details class="product-details" id="studio-special"><summary>Opcje na zamówienie</summary><p>Te efekty i uchwyty potwierdzimy przy wycenie. Podgląd pokazuje standardową konstrukcję.</p><label for="request-finish">Efekt specjalny</label><select id="request-finish"><option value="">Bez dodatkowego efektu</option>${['Soft touch','Scuff free','Lakier UV wybiórczy','Hot stamping'].map(s=>`<option>${s}</option>`).join('')}</select><label for="request-handle">Inny uchwyt</label><select id="request-handle"><option value="">Uchwyt standardowy</option>${['Sznurek bawełniany','Tasiemka satynowa','Tasiemka rypsowa','Uchwyt wycinany'].map(s=>`<option>${s}</option>`).join('')}</select></details>`;
+ root.innerHTML=`<div class="current-base"><img id="current-base-photo" alt="" width="160" height="160"><div><span class="studio-eyebrow">WYBRANA BAZA</span><strong id="current-base-name"></strong><span id="studio-facts" class="model-facts"></span></div></div><button type="button" id="choose-base" class="choose-base-button" aria-haspopup="dialog">Zmień bazę <span>${catalog.products.length} baz · rozmiary i kolory</span></button><details class="product-details" open><summary>Format, kolor i nadruk <span>Dobierz szczegóły</span></summary><div id="studio-options"></div><div class="product-printing" id="printing-details"></div><p class="color-note" id="dimension-note"></p><label id="requested-format-label" for="requested-format">Preferowany format lub dodatkowe wymagania<input id="requested-format" type="text" maxlength="160" placeholder="Np. wymiar i sposób składania"></label></details><details class="product-details" id="studio-special"><summary>Opcje na zamówienie</summary><p>Te efekty i uchwyty potwierdzimy przy wycenie. Podgląd pokazuje standardową konstrukcję.</p><label for="request-finish">Efekt specjalny</label><select id="request-finish"><option value="">Bez dodatkowego efektu</option>${['Soft touch','Scuff free','Lakier UV wybiórczy','Hot stamping'].map(s=>`<option>${s}</option>`).join('')}</select><label for="request-handle">Inny uchwyt</label><select id="request-handle"><option value="">Uchwyt standardowy</option>${['Sznurek bawełniany','Tasiemka satynowa','Tasiemka rypsowa','Uchwyt wycinany'].map(s=>`<option>${s}</option>`).join('')}</select></details>`;
  const $=s=>root.querySelector(s);
  function render(){
   $('#current-base-photo').src=catalogPhoto(product);$('#current-base-name').textContent=product.name;
-  $('#studio-facts').textContent=[product.fields.some(f=>f.id==='size')?studio.details().configuration?.dimensions.label:product.size,studio.details().configuration?.specs.Gramatura,product.specs.Uchwyt].filter(Boolean).join(' · ');
+  $('#studio-facts').textContent=[product.fields.some(f=>f.id==='size')?studio.details().configuration?.dimensions.label:product.size,studio.details().configuration?.specs.Gramatura,product.specs.Uchwyt==='brak'?'':product.specs.Uchwyt].filter(Boolean).join(' · ');
   $('#studio-options').innerHTML=activeFields(product,values).map(f=>`<label for="option-${f.id}">${esc(f.label)}</label><select id="option-${f.id}" data-option="${f.id}">${f.options.map(o=>`<option value="${esc(o.id)}" ${o.id===values[f.id]?'selected':''}>${esc(o.label)}</option>`).join('')}</select>`).join('');
   $('#studio-special').hidden=true;
+  const printing=printingFor(product,values);$('#printing-details').textContent=printing?(printing.label+(printing.status==='proposed'||printing.status==='to-confirm'?' · potwierdzimy przy wycenie.':'')):'Bez nadruku';
+  $('#dimension-note').textContent=product.dimensionNote||'';
+  $('#requested-format-label').hidden=!product.acceptsFormatRequest;
+  $('#requested-format').value=requests.find(r=>r.type==='format')?.value||'';
   document.querySelector('#offer-status').hidden=!!productById(product.id);
   for(const type of ['finish','handle'])$('#request-'+type).value=requests.find(r=>r.type===type)?.value||'';
   enhanceOptions(root);
@@ -34,12 +38,14 @@ export function mountProductControls(studio){
   document.querySelector('#studio-status').textContent='Baza zmieniona. Logo i jego ustawienia pozostają w projekcie.';
  }
  document.addEventListener('studio-enable-back',()=>{
+  if(product.singleSurface)return;
   const mode=product.fields.find(f=>f.id==='printMode');
   const both=mode?.options.find(o=>o.label.includes('różne'))||mode?.options.find(o=>o.label.includes('dwustronny'));
   if(both)values.printMode=both.id;
   else if(!requests.some(r=>r.type==='printSides'))requests.push({type:'printSides',value:'Nadruk dwustronny — do potwierdzenia przy wycenie'});
   apply();
  });
+ $('#requested-format').addEventListener('input',e=>{const i=requests.findIndex(r=>r.type==='format');if(i>=0)requests.splice(i,1);if(e.target.value.trim())requests.push({type:'format',value:e.target.value.trim()});document.dispatchEvent(new Event('studio-project-change'));});
  const picker=createBasePicker({getSelected:()=>product.id,onChoose:choose});
  $('#choose-base').addEventListener('click',e=>picker.open(e.currentTarget));
  $('#studio-options').addEventListener('change',e=>{if(!e.target.dataset.option)return;const key=e.target.dataset.option,previous={...values};values[key]=e.target.value;apply();if(key==='size'&&(previous.stockColor!==values.stockColor||previous.weight!==values.weight))document.querySelector('#studio-status').textContent='Kolor lub gramatura zostały dopasowane do wybranego formatu.';$('#option-'+key+'-trigger')?.focus();});
@@ -51,5 +57,5 @@ export function mountProductControls(studio){
  }
  document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>showPanel(b.dataset.panel)));
  document.querySelector('#open-artwork').addEventListener('click',()=>showPanel('artwork'));
- render();
+ if(productById(product.id))apply();else render();
 }

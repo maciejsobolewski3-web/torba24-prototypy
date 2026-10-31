@@ -1,6 +1,47 @@
 PRINTBAG24 — AKTUALNY ZAKRES I PRZEKAZANIE POD JOOMLA
 Stan: 31.10.2026. Ten dokument zastępuje zakres produktowy z BAGPACK-JOOMLA-MAP.md.
 
+AKTUALIZACJA WYMAGAŃ — DALSZE WIADOMOŚCI KLIENTA Z 31.10.2026, DO 18:10
+Ta sekcja ma pierwszeństwo przed historycznym offer-32 poniżej. Wersja merchant-33 wdraża 12 baz w trzech grupach, wspólne studio 2D/3D, osobne powierzchnie pudełek i serwetek, przypisane technologie nadruku i komunikaty dostępności. Magazyn nie jest jeszcze podłączony; dane są nieznane. Szczegóły implementacji i kontrakt Joomla: JOOMLA-MERCHANT-33.txt.
+
+ZAKRES I PRIORYTET
+- Główna oferta: torby papierowe białe i szare/kraft, uchwyt prosty (roboczo: płaski) lub skręcany. „Szary” to najpewniej potoczne określenie naturalnego kraftu; odcień potwierdzić na próbce.
+- Torby bawełniane i torby jutowe: klient wymienił je wprost.
+- Wcześniejsze wykluczenie wszystkich worków jest nieaktualne. Klient później dopuścił materiałowe worki/workoplecaki i plecaki możliwe do znakowania DTF. Nie oznacza to automatycznie całego asortymentu worków Allbag.
+- Torby cateringowe: w zakresie; szerokie dno jako zastosowanie torby papierowej, nie automatycznie nowa technologia materiału.
+- Pudełka na pizzę: wariant „45” wyłącznie biały, „32” szary. Prawdopodobnie rozmiar nominalny w cm, ale nie wpisywać jako potwierdzone 45×45×H lub 32×32×H bez wysokości i rzeczywistej specyfikacji opakowania.
+- Serwetki z nadrukiem logo: w zakresie; format, składanie, liczba warstw i pole nadruku niepodane.
+- Nadal wykluczone: premium laminowane i podobne konstrukcje wymagające innej technologii. Meble/leżaki/krzesła poza zakresem.
+- Kolorowe torby nie zostały jednoznacznie odwołane; biały i kraft mają być głównym nurtem. Pełna paleta konkurenta nadal jest propozycją do potwierdzenia.
+
+TECHNOLOGIA — CO WIEMY I CZEGO NIE WNIOSKOWAĆ
+Klient wymienił typy sprzętu, nie podał ostatecznej konfiguracji zakupionego parku maszynowego.
+„Rollenco” odpowiada marce Rollenco; „Ticsbprit” najprawdopodobniej TICAB PRINT; „Trojan label T3O opx” najprawdopodobniej TrojanLabel T3-OPX; „Smart jest flex” najprawdopodobniej SMARTJET FLEX. Te dopasowania, zwłaszcza błędnie zapisane nazwy, wymagają potwierdzenia modelu.
+Producenci opisują bezpośredni nadruk cyfrowy na gotowych opakowaniach: papierowych torbach i pudełkach; TICAB wymienia też serwetki. T3-OPX podaje maksymalną szerokość nadruku 297 mm. Nie przenosić tego limitu automatycznie na wszystkie urządzenia ani wszystkie produkty.
+Roboczy kierunek konfiguracji: papier/opakowania — nadruk cyfrowy na zatwierdzonej bazie; workoplecaki — DTF zgodnie z wypowiedzią klienta. Słowo „dftem” interpretujemy jako DTF. Technika dla poszczególnych toreb bawełnianych/jutowych do przypisania po potwierdzeniu.
+Dotychczasowy wybór sitodruk/DTG w offer-32 pochodzi z Allbag i NIE jest potwierdzoną ofertą technologiczną tego klienta. Nie utożsamiać DTF z DTG. Najlepiej przypisać technologię do SKU, a klientowi pokazać potrzebne parametry nadruku zamiast katalogu nazw maszyn.
+Nie obiecywać białego tuszu/podkładu, druku na ciemnych bazach, pełnego zadruku po krawędź ani zgodności każdej powłoki na podstawie samej nazwy rodziny maszyn. Pole nadruku i odwzorowanie barw ustalić per produkt. W przypadku opakowań gastronomicznych ustalić zatwierdzone podłoże, tusz i stronę zadruku z produkcją; brak podstaw do deklaracji nadruku w kontakcie z żywnością.
+
+STANY MAGAZYNOWE I ZAMÓWIENIA OCZEKUJĄCE
+Klient chce pokazywać stany i umożliwiać zakup mimo braku zapasu, z informacją o oczekiwaniu. „Np. 3 dni” to przykład, nie stały SLA.
+Wariant magazynowy powinien identyfikować konkretną bazę: produkt + format + kolor + gramatura/uchwyt, jeśli różnicują towar. Nadruk zwykle konsumuje tę samą pulę niezadrukowanych baz.
+Joomla powinna dostarczać co najmniej: ilość dostępną po rezerwacjach, możliwość zamówienia ponad stan, oczekiwany termin dostawy bazy oraz czas realizacji nadruku. Terminu uzupełnienia magazynu nie przedstawiać jako daty doręczenia klientowi.
+Przykłady prezentacji: „Dostępne: 250 szt.”; „Na zamówienie — przewidywane uzupełnienie zapasu: [data]”; „Termin do potwierdzenia”, gdy brak wiarygodnej daty.
+Przy nakładzie większym od stanu pokazać różnicę i termin realizacji całego nakładu. Nie zakładać wysyłki częściowej bez ustalenia zasad. Rezerwacja i ponowna walidacja dostępności/ceny muszą nastąpić na backendzie. Nie generować fikcyjnych stanów na froncie.
+
+REKOMENDOWANY UKŁAD
+Torby papierowe jako pierwsza pozycja i główny hero. Dalej: Torby materiałowe (bawełna, juta, workoplecaki) oraz Gastronomia (torby cateringowe, pudełka do pizzy, serwetki). Zachować istniejący edytor 2D/3D toreb. Pudełka i serwetki wymagają własnego obrysu i pola nadruku; nie używać geometrii torby do każdego produktu.
+
+SPRAWDZONE ŹRÓDŁA (31.10.2026)
+Allbag, kategorie papierowe/materiałowe/plecaki: https://sklep.allbag.pl/
+Allbag, nadruk papierowy; cyfrowy na białym i brązowym papierze: https://sklep.allbag.pl/pages/torby-z-nadrukiem-wycena
+Rollenco: https://rollenco.com/machines/
+TICAB, druk CMYK na opakowaniach i serwetkach: https://www.ticabprint.com/printers-from-manufacturer
+TrojanLabel T3-OPX: https://astronovaproductid.my/product/t3-opx/
+SMARTJET FLEX: https://www.smartjet.it/en/categoria-prodotto/flex-printers/
+
+POPRZEDNI STAN WDROŻENIA OFFER-32 (PONIŻEJ)
+
 DECYZJA
 Klient wskazał papier biały/kraft, torby materiałowe, kolory i uchwyty proste/skręcane. Wykluczył laminowane i worki. „Proste” interpretujemy jako płaskie papierowe. Dokładne możliwości produkcyjne nadal nie są potwierdzone.
 Maciej następnie polecił: na razie oprzeć parametry na Allbag, bez pozostałego asortymentu takiego jak fotele i krzesła. Implementacja jest więc PROPOZYCJĄ oferty opartą na konkurencie, nie deklaracją dostępności produkcji klienta.
@@ -40,7 +81,7 @@ Fotografie katalogowe są wygenerowanymi wizualizacjami konstrukcji, a nie zdję
 
 PRZED PRODUKCJĄ / PODPINANIEM JOOMLA
 Potwierdzić per SKU: format, gramaturę, materiał, gotowe kolory, typ i długość uchwytów, technikę nadruku, pole zadruku, min/max nakład, opłatę za przygotowanie, biały podkład, terminy, ceny i stany.
-Nie uznawać pełnej palety Allbag za potwierdzone „5 kolorów” klienta. Brak odpowiedzi o workoplecakach nie oznacza zgody — pozostają poza aktywnym katalogiem.
+Nie uznawać pełnej palety Allbag za potwierdzone „5 kolorów” klienta. Workoplecaki nie są jeszcze w aktywnym katalogu offer-32, ale zostały dopuszczone w późniejszej wiadomości klienta — patrz aktualizacja na początku dokumentu.
 Joomla ma być źródłem prawdy dla wariantów, ograniczeń i wyceny. Identyfikatory Allbag są tylko metadanymi researchu, nie produkcyjnym SKU klienta.
 Aktualny payload konfiguracji: schemaVersion 1, catalogVersion 2026-10-31-allbag-32, productId, family, productName, dimensions, specs, options.{size,weight?,stockColor,printMode,printing?,inkCount?,digitalFormat?}, bodyColor, requests, pricing=quote, productionStatus=reference-proposal, confirmationRequired.
 Katalog ma schemaVersion 2. Nie mylić schematu katalogu ze schematem konfiguracji.

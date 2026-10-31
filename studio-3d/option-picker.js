@@ -1,11 +1,11 @@
-import {escape as esc,colorHex} from '../configuration/config.js?v=offer-32';
+import {escape as esc,colorHex} from '../configuration/config.js?v=merchant-33';
 // Native selects retain their values and change events; the shop dialog supplies the visible UI.
 let dialog,active,sourceId;
 const fieldTitle=select=>[...(select.labels[0]?.childNodes||[])].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim()||'Wybierz opcję';
 export function enhanceOptions(root){
  if(!dialog){
   dialog=document.createElement('dialog');dialog.className='option-picker';dialog.setAttribute('aria-labelledby','option-picker-title');
-  dialog.innerHTML='<header><div><span class="studio-eyebrow">DOPASUJ SWOJĄ TORBĘ</span><h2 id="option-picker-title"></h2></div><button type="button" class="option-close" aria-label="Zamknij wybór">×</button></header><label class="option-search">Znajdź opcję<input type="search" id="option-query" placeholder="Wpisz nazwę lub rozmiar…"></label><div class="option-grid"></div>';
+  dialog.innerHTML='<header><div><span class="studio-eyebrow">DOPASUJ SWÓJ PRODUKT</span><h2 id="option-picker-title"></h2></div><button type="button" class="option-close" aria-label="Zamknij wybór">×</button></header><label class="option-search">Znajdź opcję<input type="search" id="option-query" placeholder="Wpisz nazwę lub rozmiar…"></label><div class="option-grid"></div>';
   document.body.append(dialog);
   dialog.querySelector('.option-close').onclick=()=>dialog.close();
   dialog.querySelector('#option-query').oninput=render;

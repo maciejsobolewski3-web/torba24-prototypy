@@ -1,4 +1,4 @@
-import {productById} from '../configuration/config.js?v=offer-32';
+import {productById,catalog} from '../configuration/config.js?v=merchant-33';
 // Files and projects stay on this device. Never serialize temporary blob URLs.
 let database;
 function open(){
@@ -54,6 +54,7 @@ export const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<
 export function makeQuoteDraft(items,contact){
   if(!items.length||items.some(p=>!validQuantity(p.quantity,p)))throw new Error('Sprawdź warianty i nakład.');
   if(items.some(p=>p.configuration?.productId&&!productById(p.configuration.productId)))throw new Error('W koszyku jest model spoza aktualnej oferty. Otwórz jego edycję i wybierz nową bazę; nadruki zostaną zachowane.');
+  if(items.some(p=>p.configuration?.catalogVersion&&p.configuration.catalogVersion!==catalog.auditedAt))throw new Error('Parametry oferty zostały zaktualizowane. Otwórz edycję każdego wcześniejszego projektu i ponownie zapisz wariant.');
   if(!contact.name?.trim()||!contact.email?.trim())throw new Error('Uzupełnij dane kontaktowe.');
   return {id:id(),createdAt:Date.now(),kind:'quote-draft',status:'saved-locally',items,contact};
 }

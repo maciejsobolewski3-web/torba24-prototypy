@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {filterBases} from '../studio-3d/base-picker.js';
 import {catalog} from '../configuration/config.js';
 test('base selection exposes the entire catalog and combines material, colour and format searches',()=>{
- assert.equal(filterBases(catalog.products).length,6);
+ assert.equal(filterBases(catalog.products).length,12);
  for(const family of catalog.families)assert.deepEqual(filterBases(catalog.products,{family:family.id}),catalog.products.filter(p=>p.family===family.id));
  const cotton=filterBases(catalog.products,{family:'cotton',query:'38 × 42'});
  assert.ok(cotton.length>0);assert.ok(cotton.every(p=>p.family==='cotton'));

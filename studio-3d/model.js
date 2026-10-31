@@ -15,6 +15,7 @@ function paperGrain(){
   const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(4,4);return texture;
 }
 export function surfacePoint(u,v,back=false,offset=0){
+  if(BAG.packaging)return [(back?-1:1)*(u-.5)*BAG.width,BAG.bottom+v*BAG.height,(back?-1:1)*(BAG.depth/2+offset)];
   const soft=BAG.cloth, cinch=BAG.drawstring?1-.15*Math.pow(v,8):1;
   const x=(u-.5)*(BAG.width-.12*(1-v))*cinch;
   const wave=soft?(.075*Math.sin(u*22+v*4)*Math.pow(1-v,2)+.055*Math.sin(u*31+v*5)*Math.pow(v,2)+.025*Math.sin(u*18-v*8))*Math.sin(Math.PI*u)*Math.sin(Math.PI*v):0;
@@ -59,9 +60,10 @@ function strapGeometry(curve,width){
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;
 }
 export function createBag(configuration){
-  const family=configuration?.family||'laminated';BAG.cloth=['cotton','jute','drawstring'].includes(family);BAG.drawstring=family==='drawstring';
+  const family=configuration?.family||'laminated';BAG.packaging=['pizza','napkin'].includes(family);BAG.bottom=BAG.packaging?.62:.07;BAG.cloth=['cotton','jute','drawstring'].includes(family);BAG.drawstring=family==='drawstring';
   if(configuration?.dimensions){const d=configuration.dimensions,k=Math.min(3.2/d.width,2.8/d.height);BAG.width=d.width*k;BAG.height=d.height*k;BAG.depth=Math.max(.2,d.depth*k);}
 
+  if(BAG.packaging)return createPackaging(configuration,family);
   const group=new THREE.Group(),grain=BAG.cloth?fabricGrain(family==='jute'):paperGrain();
   const paper=new THREE.MeshStandardMaterial({color:palette.green.body,roughness:BAG.cloth?1:.83,bumpMap:grain,bumpScale:BAG.cloth?.025:.009,side:THREE.DoubleSide});
   const inner=new THREE.MeshStandardMaterial({color:palette.green.inside,roughness:.93,side:THREE.DoubleSide});
@@ -129,4 +131,20 @@ export function createBag(configuration){
     }
   }else ribbonMaterial.dispose();
   return {group,printMeshes,setRibbonColor(hex){if(family==='giftbox')ribbonMaterial.color.set(hex);},setHandleColor(hex){ropeMaterials.forEach(m=>m.color.set(hex));},setFinish(gloss){paper.roughness=BAG.cloth?1:gloss?.3:.83;for(const mesh of Object.values(printMeshes))mesh.material.roughness=gloss?.3:.86;},setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);if(family==='kraft')ropeMaterials.forEach(m=>m.color.set(colors.body));}};
+}
+
+function createPackaging(configuration,family){
+ const group=new THREE.Group(),grain=paperGrain(),paper=new THREE.MeshStandardMaterial({color:configuration.bodyColor,roughness:1,bumpMap:grain,bumpScale:.006}),printMeshes={};
+ BAG.depth=family==='napkin'?.07:BAG.depth;
+ const body=new THREE.Mesh(new THREE.BoxGeometry(BAG.width,BAG.height,BAG.depth),paper);body.position.y=BAG.bottom+BAG.height/2;body.castShadow=true;body.receiveShadow=true;group.add(body);
+ for(const side of ['front','back']){const mesh=new THREE.Mesh(panelGeometry(side==='back',.004),new THREE.MeshStandardMaterial({transparent:true,alphaTest:.015,roughness:1,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));mesh.userData.side=side;group.add(mesh);printMeshes[side]=mesh;}
+ const seam=new THREE.LineBasicMaterial({color:family==='pizza'?'#9b8a70':'#d5d2c7',transparent:true,opacity:.4});
+ const outline=(inset,z)=>{const x=BAG.width/2-inset,y=BAG.bottom+inset,h=BAG.height-2*inset;const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([[-x,y,z],[x,y,z],[x,y+h,z],[-x,y+h,z],[-x,y,z]].map(p=>new THREE.Vector3(...p))),seam);group.add(line);};
+ if(family==='napkin'){outline(.06,BAG.depth/2+.005);outline(.085,BAG.depth/2+.005);for(let i=0;i<4;i++)outline(0,-BAG.depth/2+i*.014);}
+ else{outline(.025,BAG.depth/2+.006);const notch=new THREE.Mesh(new THREE.CircleGeometry(.065,24,0,Math.PI),new THREE.MeshStandardMaterial({color:'#9b8262',roughness:1}));notch.position.set(0,BAG.bottom+.004,BAG.depth/2+.007);group.add(notch);}
+ return {group,printMeshes,setRibbonColor(){},setHandleColor(){},setFinish(){},setColor(value){paper.color.set(typeof value==='string'?palette[value].body:value.body);}};
+}
+
+export function presentPackaging(group,enabled){
+ if(!BAG.packaging)return;const a=enabled?-.7:0,c=BAG.bottom+BAG.height/2;group.rotation.x=a;group.position.set(0,c*(1-Math.cos(a)),-c*Math.sin(a));group.updateMatrixWorld(true);
 }

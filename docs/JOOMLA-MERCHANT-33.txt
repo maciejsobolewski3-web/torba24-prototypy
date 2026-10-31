@@ -1,0 +1,46 @@
+PRINTBAG24 — PRZEKAZANIE FRONTENDU, MERCHANT-33
+31.10.2026. Pierwszeństwo: najnowsze ustalenia klienta w OFERTA-ALLBAG-JOOMLA.txt.
+
+WDROŻONE
+- 12 baz / 3 grupy: papierowe płaskie i skręcane; 4 konstrukcje bawełniane, juta, workoplecak; catering, pizza 45 biała, pizza 32 szary kraft, serwetki.
+- Katalog i okno zmiany bazy w tym samym studio 2D/3D. Logo i ustawienia pozostają przy zmianie produktu. 2D zawsze na wprost.
+- Papier: cyfrowy nadruk na białym/kraft. Kolorowy papier: technika do potwierdzenia; brak obietnicy białego tuszu. Workoplecak: DTF. Bawełna: DTF jako propozycja do potwierdzenia. Juta: technika do ustalenia. Serwetki: cyfrowy do potwierdzenia.
+- Pudełka i serwetki mają osobny model powierzchni, bez uchwytów, bez opcji tylnego nadruku. W 3D model jest pochylony; 2D ma prawidłową płaską projekcję. Pole nadruku nadal orientacyjne.
+- Pizza 45 tylko biała; 32 tylko szary kraft. Liczba jest nominalnym rozmiarem, nie kompletem wymiarów produkcyjnych. Wysokość modelu 4 cm służy wyłącznie wizualizacji.
+- Juta i serwetki: rozmiar „Do ustalenia przy wycenie”; klient może dopisać preferowany format w requests[type=format]. previewDimensions nie jest specyfikacją produkcyjną.
+- Technologie nie są już dowolnym wyborem sitodruk/DTG przeniesionym z Allbag. Zapis configuration.printing zawiera id, label, status. „proposed” i „to-confirm” wymagają potwierdzenia.
+- StockColor i macierz dopuszczonych rozmiarów/gramatur/kolorów; brak dowolnego RGB korpusu.
+- Wycenę zapisujemy lokalnie. Nie ma wysyłki formularza, płatności ani serwerowego zamówienia. Stary projekt z inną wersją parametrów należy otworzyć w edytorze przed dalszą wyceną.
+
+MAGAZYN — KONTRAKT DO PODŁĄCZENIA
+configuration/inventory.js zawiera czystą logikę, renderowanie i celowo pusty inventoryRecords. W studio, koszyku i podsumowaniu brak danych pokazuje „Dostępność do potwierdzenia”. Nie ma fikcyjnych stanów.
+Joomla ma zwracać rekordy pod kluczem configuration.stockKey. Klucz jest generowany przez inventoryKey(product,values):
+  inventoryProductId lub productId | size=... | weight=... (gdy występuje) | stockColor=...
+Torba cateringowa 32x22x24.5 konsumuje tę samą bazę co papier-plaski w identycznym wariancie. Różne nadruki w koszyku sumują nakłady z tej samej puli. Produkty wymagające ustalenia formatu muszą dostać konkretne SKU przed rezerwacją.
+Schemat rekordu (nazwy pól, nie dane produkcyjne):
+  available: liczba sztuk po rezerwacjach, >=0
+  allowBackorder: boolean
+  restockAt: ISO data dostawy BAZY lub null
+  validUntil: ISO koniec ważności odczytu
+Dane nieobecne, przeterminowane i błędne => unknown. Wystarczający stan => available. Brak sztuk + allowBackorder => backorder i informacja o uzupełnieniu zapasu. Brak pozwolenia => unavailable. Przeszła/błędna data nie daje obietnicy ETA.
+Data dostawy bazy jest oddzielona od czasu nadruku i transportu. Serwer musi wycenić, zweryfikować parametry oraz zarezerwować stan atomowo przy rzeczywistym zamówieniu. Frontendowa informacja jest tylko odczytem. Nie wdrożono endpointu ani rezerwacji, bo silnik Joomla nie jest tu udostępniony.
+
+INTEGRACJA
+1. Zidentyfikować istniejący komponent sklepu Joomla, API, tabelę wariantów i workflow panelu; nie zakładać VirtueMart/HikaShop bez kodu.
+2. Powiązać productId/stockKey z rzeczywistym SKU i potwierdzić ofertę z klientem. Cena, MOQ, dostępne kolory/formaty i pola nadruku wymagają akceptacji.
+3. Oddzielić pliki projektu/źródłowe od miniatur: IndexedDB stores projects/cart/receipts, faces.front/back zawierają Blob i ustawienia. Zastąpić trwałym storage z ID plików i autoryzacją.
+4. Serwer waliduje tylko aktywne pola, technologię, zakres powierzchni nadruku oraz zgodność stockColor z variantMatrix. Nie ufać previewDimensions ani wartościom z przeglądarki jako wymiarom wykonawczym.
+5. Podłączyć realną wycenę, wiadomości transakcyjne, stany i backorder. Nie pokazywać „wysłano/zamówiono” bez odpowiedzi backendu.
+6. Testy: node --test tests/*.mjs. Uruchomienie lokalne: python3 -m http.server 8767.
+
+ŹRÓDŁA I ODTWARZANIE
+- tools/build-allbag-catalog.py => configuration/catalog-data.js. Aktualny schemaVersion 3, auditedAt 2026-10-31-merchant-33.
+- research/allbag-2026-10-31/observed-variants.json: poprzednie 94 obserwacje / 89 kombinacji 6 baz.
+- extended-products.json: 9 referencyjnych wariantów workoplecaka 34x40 / 145,220,260 g/m² / naturalny,biały,czarny; catering i ustalenia klienta.
+- Juta, pizza i serwetki dodane z ustaleń klienta; nie przypisywać im niezweryfikowanego SKU Allbag. Produkty nie są deklaracją faktycznego stanu klienta.
+- catalog-bagpack-archive.js: tylko odczyt starszych zapisanych projektów. Nigdy nie przywracać jako aktywnej oferty.
+- assets/catalog/gastro-prompts.json: dokładne prompty built-in imagegen dla pizza-white.webp, pizza-kraft.webp, napkins-white.webp. Fotografie reprezentacyjne, nie dokumentacja wyrobu klienta. Starsze zdjęcia juty i workoplecaka ponownie wykorzystane.
+
+WERYFIKACJA
+19 testów: zakres/wykluczenia, zależności wariantów, pojedyncze powierzchnie, kolory pizzy, brak fikcyjnych formatów, zachowanie starszych projektów, wspólna pula magazynowa, stany/ETA i zapis zapytania.
+Manualnie: desktop 1440px, mobile 390px, wybór baz, DTF workoplecaka, kopiowanie na tył, serwetka i preferowany format, przejście do wyceny, nowe kategorie w home/katalogu.

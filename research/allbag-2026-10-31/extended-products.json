@@ -1,0 +1,84 @@
+{
+  "checkedAt": "2026-10-31",
+  "drawstring": {
+    "url": "https://sklep.allbag.pl/products/plecak-bawelniany-z-nadrukiem",
+    "variants": [
+      {
+        "sku": "NPB34x40-145P-EC",
+        "size": "340 × 400 mm",
+        "colour": "ecru",
+        "mat": "145 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-145P-BI",
+        "size": "340 × 400 mm",
+        "colour": "biały",
+        "mat": "145 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-145P-CZ",
+        "size": "340 × 400 mm",
+        "colour": "czarny",
+        "mat": "145 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-220P-EC",
+        "size": "340 × 400 mm",
+        "colour": "ecru",
+        "mat": "220 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-220P-BI",
+        "size": "340 × 400 mm",
+        "colour": "biały",
+        "mat": "220 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-220P-CZ",
+        "size": "340 × 400 mm",
+        "colour": "czarny",
+        "mat": "220 g/m², Polska"
+      },
+      {
+        "sku": "NPB34x40-260P-EC",
+        "size": "340 × 400 mm",
+        "colour": "ecru",
+        "mat": "260 g/m², Polska"
+      },
+      {
+        "sku": "ND-PB-340x400-260P-BI",
+        "size": "340 × 400 mm",
+        "colour": "biały",
+        "mat": "260 g/m², Polska"
+      },
+      {
+        "sku": "ND-PB-340x400-260P-CZ",
+        "size": "340 × 400 mm",
+        "colour": "czarny",
+        "mat": "260 g/m², Polska"
+      }
+    ]
+  },
+  "catering": {
+    "source": "https://sklep.allbag.pl/products/torba-papierowa-z-nadrukiem-uchwyt-plaski",
+    "size": "32x22x24.5",
+    "colors": [
+      "brazowy-kraft",
+      "bialy"
+    ]
+  },
+  "merchant": {
+    "pizza": [
+      {
+        "nominalSize": "45",
+        "color": "bialy"
+      },
+      {
+        "nominalSize": "32",
+        "color": "szary-kraft"
+      }
+    ],
+    "jute": "Category confirmed; dimensions and print method pending",
+    "napkins": "Category confirmed; dimensions, layers, folding and ink pending"
+  }
+}

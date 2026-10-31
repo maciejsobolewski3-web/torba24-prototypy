@@ -1,8 +1,9 @@
+import {presentPackaging} from './model.js?v=merchant-33';
 import * as THREE from 'three';
-import {createStudioEnvironment} from './environment.js?v=offer-32';
+import {createStudioEnvironment} from './environment.js?v=merchant-33';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 
-export function createLivePreview({host,scene,contact,invalidate,onExpand}){
+export function createLivePreview({host,scene,contact,invalidate,getProduct,onExpand}){
   const camera=new THREE.PerspectiveCamera(34,1,.1,60);
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'low-power'});
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.25));renderer.setClearColor(0,0);
@@ -21,7 +22,7 @@ export function createLivePreview({host,scene,contact,invalidate,onExpand}){
   orient('front');
   return {
     get failed(){return failed;},orient,setActive(value){active=value&&!failed;controls.enabled=active;},
-    render(dt){if(!active)return false;const moving=controls.update(dt);const was=contact.visible;contact.visible=true;const environment=scene.environment;scene.environment=env.texture;renderer.render(scene,camera);scene.environment=environment;contact.visible=was;return moving;},
+    render(dt){if(!active)return false;const moving=controls.update(dt);const was=contact.visible;contact.visible=true;const environment=scene.environment;scene.environment=env.texture;presentPackaging(getProduct(),true);renderer.render(scene,camera);presentPackaging(getProduct(),false);scene.environment=environment;contact.visible=was;return moving;},
     dispose(){resize.disconnect();controls.dispose();env.dispose();renderer.dispose();}
   };
 }
