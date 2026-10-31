@@ -153,3 +153,12 @@ History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami r
 - Odsłonięcie po załadowaniu i dekodowaniu grafik pierwszego widoku oraz fontów. Studio czeka również na gotowy model, a koszyk na odczyt projektu. Obrazy dalszych sekcji nadal korzystają z lazy loading.
 - Krótki minimalny czas 450 ms i przejście 360 ms; reduced motion wyłącza animacje i minimalny czas. Limit oczekiwania 8 s, niezależne usunięcie ekranu po 10 s, obsługa powrotu z pamięci przeglądarki i brak ekranu przy wyłączonym JavaScript.
 - QA: desktop 1440 px i telefon 390 px; lokalny serwer z opóźnieniem grafik, prawidłowe białe logo bez prostokątnego tła, odsłonięcie gotowego hero i przywrócenie przewijania. Kontrola składni JS oraz git diff --check.
+
+### Katalog i parametry produktów (31.10.2026)
+
+`catalog/` i `configuration/` korzystają z mapy 109 modeli / 7 rodzin z audytu Bagpack. Format, sznurek, tasiemka, uszlachetnienie, technika i parametry nadruku przechodzą do projektu, koszyka oraz eksportu. Papier laminowany jest połączony z istniejącym studiem 2D/3D. Nowe konfiguracje są kierowane do wyceny.
+
+- [Mapa referencji i kontrakt Joomla](docs/BAGPACK-JOOMLA-MAP.md)
+- Dane audytu: `research/bagpack-2026-10-31/observed-options.json`
+- Regeneracja katalogu: `python3 tools/build-bag-catalog.py`
+- Sprawdzenie reguł: `node --test tests/configuration.test.mjs`

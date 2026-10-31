@@ -33,8 +33,10 @@ export async function complete(items,kind,contact={}){
   return receipt;
 }
 export const money=cents=>new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(cents/100);
-export const validQuantity=n=>Number.isInteger(Number(n))&&Number(n)>=50&&Number(n)<=10000;
-export const needsQuote=p=>!p.preset;
+export const validQuantity=(n,p)=>Number.isInteger(Number(n))&&Number(n)>=(p?.configuration?1:50)&&Number(n)<=(p?.configuration?100000:10000);
+export const needsQuote=p=>!!p.configuration||!p.preset;
+export const productName=p=>p.configuration?.productName||'Papier premium';
+export const productFormat=p=>p.configuration?.dimensions?.label||format;
 // Illustrative gross prices only. Replace with a server-validated merchant tariff.
 export function price(p){
   if(needsQuote(p))return null;

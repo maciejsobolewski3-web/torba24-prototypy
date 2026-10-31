@@ -20,7 +20,7 @@
     if (image.naturalWidth && image.decode) await image.decode().catch(() => {});
   };
   async function ready() {
-    const order = document.querySelector('#order-main');
+    const order = document.querySelector('#order-main,#configuration-main');
     if (order && order.dataset.ready !== 'true') {
       let orderObserver;
       await Promise.race([

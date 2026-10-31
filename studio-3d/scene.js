@@ -1,13 +1,14 @@
+import {colorHex} from '../configuration/config.js?v=catalog-22';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
-import {createEditOverlay} from './edit-overlay.js?v=brand-7';
+import {createEditOverlay} from './edit-overlay.js?v=catalog-22';
 import {createLivePreview} from './live-preview.js?v=workbench-4';
 import {initColorControls} from './color-controls.js?v=flow-6';
 import {readLogo} from '../logo-file.js';
-import {BAG,palette,createBag} from './model.js?v=rgb-5';
+import {BAG,palette,createBag} from './model.js?v=catalog-22';
 
-export async function initStudio(){
+export async function initStudio(configuration){
   const $=selector=>document.querySelector(selector),host=$('#scene'),status=$('#studio-status');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'low-power'});
@@ -28,7 +29,7 @@ export async function initStudio(){
   scene.add(new THREE.HemisphereLight(0xffffff,0x84967a,.85));
   const key=new THREE.DirectionalLight(0xfff8e9,2.2);key.position.set(-3,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=5;key.shadow.camera.bottom=-4;key.shadow.normalBias=.035;key.shadow.bias=-.0001;key.shadow.radius=4;scene.add(key);
   const fill=new THREE.DirectionalLight(0xe5f5f1,.7);fill.position.set(4,4,-5);scene.add(fill);
-  const bag=createBag();scene.add(bag.group);
+  const bag=createBag(configuration);if(configuration){bag.setHandleColor(colorHex(configuration.options.cord?.display));bag.setFinish(configuration.options.finish?.display.toLowerCase().includes('błysk'));}scene.add(bag.group);
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);
@@ -177,7 +178,7 @@ export async function initStudio(){
   $('#toggle-guides').addEventListener('click',()=>{const value=$('#toggle-guides').getAttribute('aria-pressed')!=='true';$('#toggle-guides').setAttribute('aria-pressed',String(value));overlay.setGuides(value);});
   draw('front');draw('back');syncPanel();setMode('2d');$('#scene-loading').remove();invalidate();
   return {
-    details:()=>({color:{...color},preset,faces:Object.fromEntries(Object.entries(drafts).map(([s,d])=>[s,{kind:d.kind}]))}),
+    details:()=>({configuration,color:{...color},preset,faces:Object.fromEntries(Object.entries(drafts).map(([s,d])=>[s,{kind:d.kind}]))}),
     async snapshot(){
       if(pendingFiles)throw new Error('Poczekaj na przygotowanie pliku.');
       const faces={};
@@ -195,7 +196,7 @@ export async function initStudio(){
           thumbnails[s]=out.toDataURL('image/jpeg',.87);
         }
       }finally{contact.visible=contactVisible;renderer.setPixelRatio(ratio);renderer.setSize(originalSize.x,originalSize.y,false);invalidate();}
-      return {version:1,product:'premium',color:{...color},preset,faces,thumbnails};
+      return {version:configuration?2:1,product:configuration?.productId||'premium',configuration:configuration?{...configuration,bodyColor:color.body}:undefined,color:{...color},preset,faces,thumbnails};
     },
     async restore(project){
       for(const s of ['front','back']){

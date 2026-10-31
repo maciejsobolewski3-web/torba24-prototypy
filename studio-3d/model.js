@@ -35,7 +35,9 @@ function sideGeometry(sign){
   for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const a=j*(nx+1)+i,b=a+1,c=a+nx+1,d=c+1;idx.push(a,b,d,a,d,c);}
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();return geo;
 }
-export function createBag(){
+export function createBag(configuration){
+  if(configuration?.dimensions){const d=configuration.dimensions,k=Math.min(3.2/d.width,2.8/d.height);BAG.width=d.width*k;BAG.height=d.height*k;BAG.depth=Math.max(.2,d.depth*k);}
+
   const group=new THREE.Group(),grain=paperGrain();
   const paper=new THREE.MeshStandardMaterial({color:palette.green.body,roughness:.83,bumpMap:grain,bumpScale:.009,side:THREE.DoubleSide});
   const inner=new THREE.MeshStandardMaterial({color:palette.green.inside,roughness:.93,side:THREE.DoubleSide});
@@ -45,28 +47,29 @@ export function createBag(){
     const body=new THREE.Mesh(panelGeometry(back),paper);body.castShadow=true;body.receiveShadow=true;group.add(body);
     const print=new THREE.Mesh(panelGeometry(back,.003),new THREE.MeshStandardMaterial({transparent:true,alphaTest:.015,roughness:.86,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));
     print.userData.side=side;group.add(print);printMeshes[side]=print;
-    const fold=new THREE.Mesh(new THREE.BoxGeometry(3.19,.23,.014),inner);fold.position.set(0,2.55,back?-.526:.526);group.add(fold);
-    const edge=new THREE.Mesh(new THREE.BoxGeometry(3.2,.012,.023),paper);edge.position.set(0,2.67,back?-.54:.54);group.add(edge);
+    const fold=new THREE.Mesh(new THREE.BoxGeometry(BAG.width-.01,.23,.014),inner);fold.position.set(0,BAG.bottom+BAG.height-.12,(back?-1:1)*(BAG.depth/2-.014));group.add(fold);
+    const edge=new THREE.Mesh(new THREE.BoxGeometry(BAG.width,.012,.023),paper);edge.position.set(0,BAG.bottom+BAG.height,(back?-1:1)*BAG.depth/2);group.add(edge);
   }
   for(const sign of [-1,1]){const side=new THREE.Mesh(sideGeometry(sign),paper);side.castShadow=true;side.receiveShadow=true;group.add(side);}
-  const bottom=new THREE.Mesh(new THREE.BoxGeometry(3.04,.025,1.04),inner);bottom.position.y=.08;bottom.receiveShadow=true;group.add(bottom);
+  const bottom=new THREE.Mesh(new THREE.BoxGeometry(BAG.width-.16,.025,BAG.depth-.04),inner);bottom.position.y=.08;bottom.receiveShadow=true;group.add(bottom);
   const ropeCanvas=document.createElement('canvas');ropeCanvas.width=ropeCanvas.height=128;const rc=ropeCanvas.getContext('2d');
   rc.fillStyle='#aaa';rc.fillRect(0,0,128,128);rc.strokeStyle='#eee';rc.lineWidth=3;
   for(let i=-128;i<256;i+=12){rc.beginPath();rc.moveTo(i,0);rc.lineTo(i+100,128);rc.stroke();}
   const ropeTexture=new THREE.CanvasTexture(ropeCanvas);ropeTexture.wrapS=ropeTexture.wrapT=THREE.RepeatWrapping;ropeTexture.repeat.set(18,2);
   const ropeMat=new THREE.MeshStandardMaterial({color:'#e5d8b9',roughness:.96,bumpMap:ropeTexture,bumpScale:.012});
   const eyelet=new THREE.MeshStandardMaterial({color:'#79867c',metalness:.65,roughness:.4});
+  const ropeMaterials=[ropeMat];
   for(const sign of [-1,1]){
-    const z=sign*.57;
-    const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.88,2.43,z),new THREE.Vector3(-.8,3.05,z+sign*.08),new THREE.Vector3(-.48,3.72,z+sign*.09),new THREE.Vector3(0,3.94,z+sign*.08),new THREE.Vector3(.48,3.72,z+sign*.09),new THREE.Vector3(.8,3.05,z+sign*.08),new THREE.Vector3(.88,2.43,z)]);
+    const z=sign*(BAG.depth/2+.03),w=BAG.width/3.2,top=BAG.bottom+BAG.height-.24;
+    const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.88*w,top,z),new THREE.Vector3(-.8*w,top+.62,z+sign*.08),new THREE.Vector3(-.48*w,top+1.29,z+sign*.09),new THREE.Vector3(0,top+1.51,z+sign*.08),new THREE.Vector3(.48*w,top+1.29,z+sign*.09),new THREE.Vector3(.8*w,top+.62,z+sign*.08),new THREE.Vector3(.88*w,top,z)]);
     const handle=new THREE.Mesh(new THREE.TubeGeometry(curve,96,.043,10,false),ropeMat);handle.castShadow=true;group.add(handle);
     const frames=curve.computeFrenetFrames(240,false);
     for(const phase of [0,Math.PI]){
       const strandPoints=[];
       for(let i=0;i<=240;i++){const angle=i/240*Math.PI*2*38+phase;strandPoints.push(curve.getPointAt(i/240).addScaledVector(frames.normals[i],Math.cos(angle)*.042).addScaledVector(frames.binormals[i],Math.sin(angle)*.042));}
-      const strand=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(strandPoints),360,.004,4,false),new THREE.MeshStandardMaterial({color:'#cfc3a9',roughness:1}));group.add(strand);
+      const strand=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(strandPoints),360,.004,4,false),new THREE.MeshStandardMaterial({color:'#cfc3a9',roughness:1}));group.add(strand);ropeMaterials.push(strand.material);
     }
-    for(const x of [-.88,.88]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.059,.011,8,20),eyelet);ring.position.set(x,2.43,z);group.add(ring);}
+    for(const x of [-.88,.88]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.059,.011,8,20),eyelet);ring.position.set(x*w,top,z);group.add(ring);}
   }
-  return {group,printMeshes,setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);}};
+  return {group,printMeshes,setHandleColor(hex){ropeMaterials.forEach(m=>m.color.set(hex));},setFinish(gloss){paper.roughness=gloss?.3:.83;for(const mesh of Object.values(printMeshes))mesh.material.roughness=gloss?.3:.86;},setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);}};
 }
