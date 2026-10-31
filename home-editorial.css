@@ -9,3 +9,6 @@
 .pb-home-filters{display:flex;gap:8px;margin:0 0 30px}.pb-home-filters button{border:1px solid #cbd9ce;border-radius:30px;padding:12px 24px;font-size:13px;transition:background 180ms,color 180ms}.pb-home-filters button[aria-pressed=true]{background:#174f3d;border-color:#174f3d;color:white}.pb-home-filters button:hover{border-color:#174f3d}.pb-models .section-heading{margin-bottom:24px}@media(max-width:600px){.pb-home-filters{gap:6px;margin-bottom:22px}.pb-home-filters button{padding:11px 19px;font-size:12px}}@media(prefers-reduced-motion:reduce){.pb-home-filters button{transition:none}}
 
 .pb-models .merchant-stage{aspect-ratio:1}
+
+/* Keep every home collection in complete rows. */
+@media(min-width:601px){.pb-models .product-grid:has(> :nth-child(4):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}}
