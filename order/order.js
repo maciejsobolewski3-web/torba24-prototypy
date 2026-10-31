@@ -5,7 +5,7 @@ const root=document.querySelector('#order-main'),status=document.querySelector('
 const params=new URLSearchParams(location.search),step=params.get('step')||'cart';
 let currentProject,cart=[],checkoutItems=[],receipt,busy=false,undoItem,quantitySaving=null;
 const href=(step,extra={})=>'?'+new URLSearchParams({step,...extra});
-const editor=(p,from='review')=>`../${p.configuration?'configuration':'studio-3d'}/?project=${encodeURIComponent(p.id)}&from=${from}`;
+const editor=(p,from='review')=>`../studio-3d/?project=${encodeURIComponent(p.id)}&from=${from}`;
 const projectCount=n=>`${n} ${n===1?'projekt':n%10>=2&&n%10<=4&&(n%100<12||n%100>14)?'projekty':'projektów'}`;
 const faceName=s=>s==='front'?'Przód':'Tył';
 const printName=f=>f.kind==='none'?'Bez nadruku':f.kind==='example'?'Tekst startowy':f.name;

@@ -1,4 +1,4 @@
-import {mountCatalog} from './configuration/catalog.js?v=photos-24';
+import {mountCatalog} from './configuration/catalog.js?v=unified-25';
 import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 import {initHistoryTimeline} from './history-timeline.js?v=history-16';
 import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=nav-17';
@@ -101,7 +101,7 @@ initExampleReveals();
 initDimensions();
 initHeroUpload({getSelection:()=>config,openStudio:async logo=>{
  const product=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';
- try{const {startConfiguration}=await import('./configuration/start.js?v=catalog-22');await startConfiguration({product,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
+ try{const {startConfiguration}=await import('./configuration/start.js?v=unified-25');await startConfiguration({product,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
 }});
 window.addEventListener('popstate',()=>{if(location.pathname!==renderedPath)location.reload();});
 document.body.insertAdjacentHTML('beforeend',`<dialog id="modal" aria-label="Printbag24 — szczegóły"></dialog><div id="toast" role="status" aria-live="polite"></div>`);

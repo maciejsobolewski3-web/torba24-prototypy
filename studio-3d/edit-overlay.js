@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {BAG} from './model.js?v=catalog-22';
+import {BAG,surfacePoint} from './model.js?v=unified-25';
 
 // DOM handles stay crisp at any pixel ratio; their coordinates follow the model UVs.
 export function createEditOverlay({host,camera,getDraft,getSide,bounds,onChange,onCommit}){
@@ -10,7 +10,7 @@ export function createEditOverlay({host,camera,getDraft,getSide,bounds,onChange,
   let enabled=true,guides=true,gesture=null;
   function project(u,v){
     const sign=getSide()==='front'?1:-1;
-    const point=new THREE.Vector3(sign*(u-.5)*(BAG.width-.12*(1-v)),BAG.bottom+v*BAG.height,sign*(BAG.depth/2+.04)).project(camera);
+    const point=new THREE.Vector3(...surfacePoint(u,v,sign===-1,.04)).project(camera);
     return {x:(point.x+1)/2*host.clientWidth,y:(1-point.y)/2*host.clientHeight};
   }
   function rect(b){const tl=project(b.x-b.w/2,b.y+b.h/2),br=project(b.x+b.w/2,b.y-b.h/2);return {x:tl.x,y:tl.y,w:br.x-tl.x,h:br.y-tl.y};}

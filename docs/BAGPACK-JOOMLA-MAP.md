@@ -135,3 +135,26 @@ Rzeczywista oferta i dostawcy/SKU, dopuszczalne formaty i kolory, MOQ i progi, t
 ## Weryfikacja
 
 Automatycznie: `node --test tests/configuration.test.mjs` porównuje listy wszystkich opcji z audytem, sprawdza zależności, wyjątki, serializację i kompatybilność projektu v1. Ręcznie w przeglądarce: parametry → 3D → review → koszyk → edycja; GiftBox z osobną tasiemką i logo; filtry, widok mobilny i eksport paczki.
+
+### Unified frontend studio (2026-10-31)
+
+All catalog products now enter `/studio-3d/?sku=<productId>`. The older
+`/configuration/` URL redirects with its full query (including project/from) to
+this studio. `fallback=1` deliberately retains the simple editor for WebGL
+failures; do not use it as a normal catalog destination.
+
+`studio-3d/product-controls.js` maps the same catalog fields into the studio.
+Changing product/format rebuilds the model while retaining uploaded artwork.
+2D uses a perpendicular orthographic camera; 3D and the live preview share its
+mesh and print textures. Cotton/jute use textile surfaces and flat handles;
+drawstring products use side cords. Models show representative constructions,
+not supplier CAD/dielines. Standard size, cord, laminate and gift ribbon options
+update the preview. Special finish/handle requests remain quote requirements,
+not simulated production effects.
+
+The existing version-2 project payload, IndexedDB storage, quote workflow and
+Joomla field mapping are unchanged. The studio exports only printable sides;
+linked identical sides share artwork/position, and no-print exports no artwork.
+Review/cart edit links return to this same studio. Integration must preserve
+`configuration.options`, dimensions, requests, faces (including original blobs),
+colour, quantity and both thumbnails together.

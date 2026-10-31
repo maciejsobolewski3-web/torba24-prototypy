@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="../styles.css?v=feedback-20">
-<script type="module" src="./editor.js?v=catalog-22"></script>
+<script type="module">if(new URLSearchParams(location.search).get('fallback')==='1'){await import('./editor.js?v=catalog-22');}else{location.replace('../studio-3d/'+location.search+location.hash);}</script>
 <link rel="stylesheet" href="../printbag.css?v=feedback-20">
 <link rel="stylesheet" href="../process-motion.css?v=motion-11">
 <link rel="stylesheet" href="../product-interactions.css?v=dual-studio-2">
