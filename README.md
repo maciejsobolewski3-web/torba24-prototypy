@@ -146,3 +146,10 @@ History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami r
 - Usunięte numery etapów animacji i napis „Twoja seria” z pudełka. Nagłówek hero ma dwie pełne linie, ze skalą dopasowaną do szerokości kolumny. Zieleń bawełny jest mniej nasycona.
 - Studio opisuje model jako torbę papierową premium. Przy wyborze strony znajduje się widoczny blok nadruku dwustronnego z aktualnym stanem stron i informacją, że kopiowanie jest jednorazowe; strony pozostają niezależne.
 - QA: desktop 1440/1920 i telefon 390 px, brak przepełnienia, usunięte elementy procesu, przełączanie materiału/koloru. Skopiowano nadruk na tył, przesunięto przód o dwa kroki, sprawdzono niezmieniony tył i po ponownej kopii pozycję 2 na tyle. Brak błędów konsoli, kontrola składni JS i diff poprawna.
+
+## Ekran startowy — intro-21
+
+- Zielone tło, białe logo z istniejącego pliku i delikatny wskaźnik ładowania. Krytyczny styl i ekran są w HTML, przed uruchomieniem aplikacji.
+- Odsłonięcie po załadowaniu i dekodowaniu grafik pierwszego widoku oraz fontów. Studio czeka również na gotowy model, a koszyk na odczyt projektu. Obrazy dalszych sekcji nadal korzystają z lazy loading.
+- Krótki minimalny czas 450 ms i przejście 360 ms; reduced motion wyłącza animacje i minimalny czas. Limit oczekiwania 8 s, niezależne usunięcie ekranu po 10 s, obsługa powrotu z pamięci przeglądarki i brak ekranu przy wyłączonym JavaScript.
+- QA: desktop 1440 px i telefon 390 px; lokalny serwer z opóźnieniem grafik, prawidłowe białe logo bez prostokątnego tła, odsłonięcie gotowego hero i przywrócenie przewijania. Kontrola składni JS oraz git diff --check.

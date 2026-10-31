@@ -17,6 +17,16 @@
 <link rel="stylesheet" href="../brand-shell.css?v=brand-7">
 <link rel="stylesheet" href="../home-editorial.css?v=history-14">
 <link rel="stylesheet" href="../navigation-account.css?v=nav-18">
+<style id="page-intro-style">
+html.page-is-loading{overflow:hidden;background:#123f32}.page-is-loading .hero-copy,.page-is-loading .hero-bag{animation-play-state:paused!important}
+#page-intro{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#123f32;transition:opacity 360ms ease,visibility 360ms;pointer-events:auto}
+#page-intro.is-ready{opacity:0;visibility:hidden;pointer-events:none}.page-intro-brand{background:#123f32;width:min(340px,68vw);text-align:center}.page-intro-logo{width:100%;aspect-ratio:2/1;object-fit:contain;filter:grayscale(1) invert(1) contrast(8);mix-blend-mode:screen}.page-intro-line{width:64px;height:2px;margin:4px auto 0;background:#ffffff26;overflow:hidden;border-radius:2px}.page-intro-line::after{content:'';display:block;width:45%;height:100%;background:#fff;animation:intro-progress 1.15s ease-in-out infinite}.page-intro-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@keyframes intro-progress{from{transform:translateX(-110%)}to{transform:translateX(330%)}}
+@media(prefers-reduced-motion:reduce){#page-intro{transition:none}.page-intro-brand,.page-intro-line::after{animation:none}.page-intro-line::after{width:100%}}
+</style>
+<script>document.documentElement.classList.add('page-is-loading');window.printbagIntroTimeout=setTimeout(function(){document.documentElement.classList.remove('page-is-loading');document.getElementById('page-intro')?.remove();},10000);addEventListener('pageshow',function(e){if(e.persisted){document.documentElement.classList.remove('page-is-loading');document.getElementById('page-intro')?.remove();}});</script>
+<noscript><style>#page-intro{display:none}</style></noscript>
+<script defer src="../page-intro.js?v=intro-21"></script>
 </head>
-<body data-page="catalog"><a href="#app" class="skip-link">Przejdź do treści</a><div id="app"></div><noscript>Włącz JavaScript, aby korzystać z konfiguratora i koszyka.</noscript></body>
+<body data-page="catalog"><div id="page-intro" role="status" aria-label="Ładowanie strony Printbag24"><div class="page-intro-brand"><img class="page-intro-logo" src="../assets/printbag24-logo.png" alt="" width="340" height="170" fetchpriority="high"><div class="page-intro-line" aria-hidden="true"></div><span class="page-intro-label">Przygotowujemy stronę…</span></div></div><a href="#app" class="skip-link">Przejdź do treści</a><div id="app"></div><noscript>Włącz JavaScript, aby korzystać z konfiguratora i koszyka.</noscript></body>
 </html>

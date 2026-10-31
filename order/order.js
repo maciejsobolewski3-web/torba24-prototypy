@@ -96,4 +96,4 @@ window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();
 try{
   cart=await list('cart');document.querySelector('#cart-count').textContent=`(${cart.length})`;
   if(step==='review')await review();else if(step==='checkout'||step==='quote')checkout(step==='quote');else if(step==='done')await confirmation();else await renderCart();
-}catch{errorPage();}
+}catch{errorPage();}finally{root.dataset.ready="true";}
