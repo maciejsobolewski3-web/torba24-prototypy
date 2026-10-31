@@ -106,3 +106,5 @@ QA motion-8: automatyczne przejście od etapu 1 do 4, ręczny wybór zatrzymuje 
 Motion-9: większa ekspozycja toreb, delikatne kołysanie, naniesienie nadruku, animowana akceptacja i kaskadowe pojawianie się serii. Animacje respektują reduced motion i zatrzymanie sekcji poza ekranem.
 
 Motion-10: etap „Wybierz bazę” pokazuje dwie duże torby (papier i bawełna) zamiast miniatury w etykiecie. Papier odsuwa się, a bawełna przesuwa na środek przed nadrukiem. Sprawdzono desktop 1440 px, telefon 390 px, przejście do nadruku i brak błędów konsoli.
+
+Motion-11: dekoracyjny kursor wybiera bawełnę (najazd, kliknięcie, impuls i zaznaczenie). Efekty korzystają ze wspólnego zegara pokazu, zatrzymują się poza ekranem i respektują reduced motion. Sprawdzono klatki przed/po kliknięciu, zaznaczenie na telefonie 390 px i brak błędów konsoli.

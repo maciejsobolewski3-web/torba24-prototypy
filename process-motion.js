@@ -15,7 +15,7 @@ export function process(){return `<section class="section pm-section" id="jak-za
     <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Wybierz etap, aby przyjrzeć się szczegółom. <button type="button" class="pm-resume" hidden>Wznów animację</button></p></div>
     <div class="pm-player">
       <div class="pm-scene" id="pm-scene" role="img" aria-label="${stages[0][1]}">
-        <div class="pm-base-options" aria-hidden="true"><div class="pm-paper-option"><div class="pm-paper-product"><img src="${asset('paper.webp')}" alt="" width="600" height="800" loading="lazy"></div><span>Papier</span></div><span class="pm-cotton-label">${check} Bawełna</span></div>
+        <div class="pm-base-options" aria-hidden="true"><div class="pm-paper-option"><div class="pm-paper-product"><img src="${asset('paper.webp')}" alt="" width="600" height="800" loading="lazy"></div><span>Papier</span></div><span class="pm-cotton-label">${check} Bawełna</span><span class="pm-choice-click"></span><span class="pm-choice-pointer"><svg viewBox="0 0 32 40" fill="none"><path d="M3 2v29l8-7 6 13 6-3-6-12h12L3 2Z" fill="#fff" stroke="#174f3d" stroke-width="2.2" stroke-linejoin="round"/></svg></span></div>
         <div class="pm-series" aria-hidden="true">${bag('pm-copy pm-copy-left')}${bag('pm-copy pm-copy-right')}</div>
         <div class="pm-main" aria-hidden="true">${bag('pm-original')}<div class="pm-print-frame"><i></i><i></i><i></i><i></i><span>PODGLĄD NADRUKU</span></div></div>
         <div class="pm-file" aria-hidden="true"><span class="pm-file-icon">↥</span><div><strong>Twoje logo.svg</strong><span>Gotowe do podglądu</span></div><i>${check}</i></div>
@@ -35,7 +35,9 @@ export function initProcessMotion(){
   const duration=2600;
   const resume=root.querySelector('.pm-resume');
   let stage=0,elapsed=0,last=0,frame=0,inView=false,playing=!reduced.matches;
+  function selectionTime(){root.style.setProperty('--pm-selection-delay',`-${reduced.matches||!playing?duration:elapsed}ms`);}
   function paint(){
+    selectionTime();
     root.dataset.stage=String(stage);
     root.dataset.motion=playing&&inView&&!document.hidden?'on':'off';
     resume.hidden=playing||reduced.matches;
@@ -50,6 +52,7 @@ export function initProcessMotion(){
     if(elapsed>=duration){
       stage=(stage+1)%4;elapsed=0;paint();
     }
+    if(stage===0)selectionTime();
     frame=requestAnimationFrame(tick);
   }
   function sync(){cancelAnimationFrame(frame);frame=0;last=0;paint();if(playing&&inView&&!document.hidden)frame=requestAnimationFrame(tick);}

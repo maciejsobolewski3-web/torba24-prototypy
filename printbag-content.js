@@ -1,6 +1,6 @@
 import {groupFooter} from './brand-shell.js?v=brand-7';
 import {dimensions} from './product-interactions.js?v=brand-7';
-import { process } from './process-motion.js?v=motion-10';
+import { process } from './process-motion.js?v=motion-11';
 export { process };
 // Content for the selected Printbag24 direction. Product data is illustrative.
 const base = new URL('./', import.meta.url);
