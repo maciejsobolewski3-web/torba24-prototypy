@@ -1,5 +1,5 @@
-import {initHistoryTree} from './history-tree.js?v=history-15';
-import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=history-15';
+import {initHistoryTimeline} from './history-timeline.js?v=history-16';
+import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=history-16';
 import {list as listStudioCart} from './order/store.js?v=brand-7';
 import * as pb from './printbag-content.js?v=editorial-12';
 import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=brand-7';
@@ -83,7 +83,7 @@ function observeReveals(){if(window.matchMedia('(prefers-reduced-motion: reduce)
 document.body.classList.add('theme-'+page);
 window.addEventListener('resize',()=>{if(document.querySelector('#print-content'))updatePrint();});
 if(page==='history'){document.title='Nasza historia — Printbag24 / EASOLUTION';app.innerHTML=nav()+historyPage()+footer();}else if(page==='gallery')renderGallery();else if(page==='catalog')renderCatalog();else if(page==='creator')renderCreator();else if(['projects','how-to','contact','product'].includes(page)){document.title='Printbag24 — '+({'projects':'realizacje i inspiracje','how-to':'jak zamawiać','contact':'kontakt i wycena','product':'wybierz torbę'})[page];app.innerHTML=nav()+pb.renderPage(page,{products,photo,icon,esc})+footer();pb.initQuote(products);}else renderLanding();
-initHistoryTree();
+initHistoryTimeline();
 document.querySelector('.pb-home-filters')?.addEventListener('click',event=>{
  const button=event.target.closest('[data-home-material]');if(!button)return;
  const material=button.dataset.homeMaterial;

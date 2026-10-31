@@ -128,3 +128,9 @@ QA history-14: przeglądarka 1440 i 390 px; automatyczne zakończenie na 2026, r
 
 
 History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami rysowanymi od góry do dołu. EASOLUTION u góry, marki w trzech rzędach, nowe połączenie Printbag24 wyróżnione zielenią. Bez pnia, liści i korzeni; dotychczasowe sterowanie i okresy zachowane.
+
+## Oś czasu według referencji PrintDTF — history-16
+
+- Historię przedstawia pionowa oś czasu: najnowsze wydarzenia u góry, daty i znaczniki kalendarza pośrodku, karty naprzemiennie po bokach. Zachowane dziewięć okresów i dotychczasowe fakty dotyczące firmy.
+- Linia wypełnia się podczas przewijania, karty pojawiają się jednokrotnie po wejściu w widok. Bez automatycznego pokazu i kontrolek odtwarzania. Reduced motion wyłącza przejścia i od razu pokazuje całą linię oraz treść.
+- Telefon: oś z datami po lewej, opisy po prawej. QA w przeglądarce: desktop 1440 px i telefon 390 px, dziewięć wydarzeń, wzrost wypełnienia linii i pojawianie się dalszych kart podczas przewijania, brak poziomego przepełnienia i błędów konsoli.
