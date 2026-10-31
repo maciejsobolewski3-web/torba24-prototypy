@@ -15,7 +15,7 @@ export function process(){return `<section class="section pm-section" id="jak-za
     <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Wybierz etap, aby przyjrzeć się szczegółom. <button type="button" class="pm-resume" hidden>Wznów animację</button></p></div>
     <div class="pm-player">
       <div class="pm-scene" id="pm-scene" role="img" aria-label="${stages[0][1]}">
-        <div class="pm-materials" aria-hidden="true"><span class="pm-material-paper"><img src="${asset('paper.webp')}" alt="" width="80" height="100" loading="lazy">Papier</span><span class="pm-material-cotton">${check} Bawełna</span></div>
+        <div class="pm-base-options" aria-hidden="true"><div class="pm-paper-option"><div class="pm-paper-product"><img src="${asset('paper.webp')}" alt="" width="600" height="800" loading="lazy"></div><span>Papier</span></div><span class="pm-cotton-label">${check} Bawełna</span></div>
         <div class="pm-series" aria-hidden="true">${bag('pm-copy pm-copy-left')}${bag('pm-copy pm-copy-right')}</div>
         <div class="pm-main" aria-hidden="true">${bag('pm-original')}<div class="pm-print-frame"><i></i><i></i><i></i><i></i><span>PODGLĄD NADRUKU</span></div></div>
         <div class="pm-file" aria-hidden="true"><span class="pm-file-icon">↥</span><div><strong>Twoje logo.svg</strong><span>Gotowe do podglądu</span></div><i>${check}</i></div>
