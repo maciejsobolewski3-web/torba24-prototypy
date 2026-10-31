@@ -117,3 +117,11 @@ Motion-11: dekoracyjny kursor wybiera bawełnę (najazd, kliknięcie, impuls i z
 - Inspiracje pokazują pakowanie zakupów w butiku i torbę w mieście. Są koncepcjami wizualnymi, nie realizacjami dla klientów ani potwierdzeniem dostępnych wariantów.
 - Pięć nowych grafik wygenerowano wbudowanym image_gen i zoptymalizowano do WebP. Dokładne prompty i nazwy plików: `assets/editorial-prompts.json`.
 - QA: desktop 1440 px i telefon 390 px, wczytanie wszystkich nowych grafik, brak poziomego przepełnienia, otwarcie produktu z karty, kategoria papieru i zapytanie z wybranym modelem premium; konsola bez błędów.
+
+## Kolekcja i animowane drzewo historii — history-14
+
+- Home ma jedną kolekcję z filtrami Wszystkie / Papier / Bawełna; usunięto osobny wybór materiału i powtarzające się nagłówki. Hero zachowany.
+- `/nasza-historia/`: rosnące drzewo SVG z korzeniami EASOLUTION, pięcioma okresami i sześcioma klikalnymi markami. Treść pochodzi z dotychczasowej historii firmy; pełne daty i technologie pozostają w rozwijanym panelu. Układ gałęzi obrazuje rodzinę marek, nie relacje prawne ani daty powstania każdej z nich.
+- Automatyczny pokaz trwa 16 sekund i kończy się w 2026 roku. Ręczny wybór okresu zatrzymuje pokaz; przycisk pozwala wznowić lub odtworzyć od początku. Zegar zatrzymuje się poza widokiem i w nieaktywnej karcie. Reduced motion pokazuje od razu całe drzewo i wyłącza przejścia. Wcześniejsze okresy można nadal wybierać.
+
+QA history-14: przeglądarka 1440 i 390 px; automatyczne zakończenie na 2026, ręczny powrót do 2000 i zatrzymanie, wybór 2019–2025 (dwie marki) oraz wznowienie do 2026 (sześć marek). Filtry kolekcji pokazują odpowiednio trzy, dwa i jeden model. Brak poziomego przepełnienia na telefonie i błędów konsoli. Tryb reduced motion obsłużony w CSS/JS; nie był osobno emulowany w przeglądarce.
