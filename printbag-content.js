@@ -1,3 +1,5 @@
+import { process } from './process-motion.js?v=1';
+export { process };
 // Content for the selected Printbag24 direction. Product data is illustrative.
 const base = new URL('./', import.meta.url);
 const link = path => new URL(path, base).href;
@@ -10,12 +12,6 @@ export const specs = {
  'cotton-green': {size:'38 × 42 cm',handle:'Długi',finish:'Naturalny splot',weight:'220 g/m²'},
  gift: {size:'18 × 8 × 24 cm',handle:'Sznurkowy',finish:'Gładki',weight:'—'}
 };
-export function process(){return `<section class="section pb-process" id="jak-zamawiac"><div class="section-heading"><div><span class="eyebrow">OD WYBORU DO GOTOWEJ TORBY</span><h2>Twój pomysł. Prosty proces.</h2></div><a class="text-link" href="${link('how-to/')}">Jak zamawiać ${arrow}</a></div><div class="pb-process-grid">${[
- ['Wybierz torbę','Papier lub bawełna. Dobierz format, kolor i nakład.'],
- ['Dodaj swój znak','Wgraj logo i zobacz jego położenie na torbie.'],
- ['Zaakceptuj projekt','Przed produkcją potrzebna będzie akceptacja finalnego projektu.'],
- ['Odbierz swoją serię','Termin produkcji i dostawy zostanie ustalony przy wycenie.']
- ].map(([title,text],i)=>`<article><span class="pb-step">0${i+1}</span><h3>${title}</h3><p>${text}</p></article>`).join('')}</div><p class="pb-note">Prezentujemy docelowy proces. W tej wersji możesz przygotować podgląd i pobrać zapytanie.</p></section>`;}
 const faqItems = [
  ['Czy mogę zobaczyć swoje logo na torbie?','Tak. Wybierz model i otwórz studio nadruku. Dodaj PNG, JPG lub SVG do 5 MB, a następnie ustaw wielkość i położenie. Podgląd jest orientacyjny i nie zastępuje finalnego projektu do akceptacji.'],
  ['Jak przygotować plik?','Do podglądu najlepiej sprawdzi się PNG z przezroczystym tłem lub SVG. Oryginalny plik wektorowy zachowaj do przygotowania produkcji. Wymagania druku zostaną potwierdzone przy wycenie.'],

@@ -41,3 +41,7 @@ python3 -m http.server 8767 --bind 127.0.0.1
 ## Walidacja 2026-10-31
 
 Sprawdzono w przeglądarce układ komputerowy oraz szerokości 390 i 360 px, menu mobilne, animację pokazu nadruku, konfigurację materiał/kolor, filtr uchwytu, kartę modelu, przekazanie nakładu 137 szt., wgranie PNG, edycję tekstu i klawiaturą, stronę nadruku, podsumowanie, koszyk i powrót do edycji, przekazanie konfiguracji do zapytania, pobranie TXT, FAQ i wybór inspiracji. Brak błędów konsoli w sprawdzonych ścieżkach. Sprawdzono składnię JS i diff whitespace.
+
+## Animowany proces
+
+Sekcja „Od pustej torby do Twojej marki” korzysta z `process-motion.js` i `process-motion.css`. Pokazuje wybór materiału, dodanie logo, akceptację oraz gotową serię z paczką. Sekwencja trwa 16 sekund, odtwarza się raz po wejściu w obszar widoczny i ma pauzę, powtórzenie oraz ręczny wybór etapów (także strzałkami klawiatury). Zmiana karty lub opuszczenie sekcji zatrzymuje zegar. Przy `prefers-reduced-motion` nie ma automatycznego startu, a efekty przestrzenne nie są animowane. To responsywna animacja HTML/CSS/JS, nie osadzony film MP4.

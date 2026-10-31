@@ -1,4 +1,5 @@
-import * as pb from './printbag-content.js';
+import * as pb from './printbag-content.js?v=motion-1';
+import { initProcessMotion } from './process-motion.js?v=1';
 const BASE = new URL('./', import.meta.url);
 const url = (path = '') => new URL(path, BASE).href;
 const asset = name => url(`assets/${name}`);
@@ -74,6 +75,7 @@ function observeReveals(){if(window.matchMedia('(prefers-reduced-motion: reduce)
 document.body.classList.add('theme-'+page);
 if(page==='creator')window.addEventListener('resize',()=>{if(document.querySelector('#print-content'))updatePrint();});
 if(page==='gallery')renderGallery();else if(page==='catalog')renderCatalog();else if(page==='creator')renderCreator();else if(['projects','how-to','contact','product'].includes(page)){document.title='Printbag24 — '+({'projects':'realizacje i inspiracje','how-to':'jak zamawiać','contact':'kontakt i wycena','product':'wybierz torbę'})[page];app.innerHTML=nav()+pb.renderPage(page,{products,photo,icon,esc})+footer();pb.initQuote(products);}else renderLanding();
+initProcessMotion();
 document.body.insertAdjacentHTML('beforeend',`<dialog id="modal" aria-label="Printbag24 — szczegóły"></dialog><div id="toast" role="status" aria-live="polite"></div>`);
 observeReveals();
 document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
