@@ -19,7 +19,7 @@ body.account-is-open{overflow:hidden}.account-dialog{position:fixed;inset:0;marg
 .site-nav.shop-header .shop-dropdown summary{font-size:inherit}
 .site-nav.shop-header .shop-dropdown>div a{font-size:16px;line-height:1.45}
 @media(min-width:1101px){
- .site-nav.shop-header .main-nav{font-size:clamp(20px,1.25vw,22px);min-height:68px;gap:clamp(26px,2.2vw,42px)}
+ .site-nav.shop-header .main-nav{font-size:clamp(20px,1.25vw,22px);min-height:68px;width:100%;justify-content:space-between;gap:24px}
  .site-nav.shop-header .main-nav> a,.site-nav.shop-header .shop-dropdown summary{padding-block:19px}
  .site-nav.shop-header .shop-dropdown summary{gap:11px}
 }
