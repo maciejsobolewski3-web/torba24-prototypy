@@ -1,9 +1,13 @@
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
+document.querySelector('.studio-layout').inert = true;
 try {
-  const {initStudio} = await import('./scene.js?v=rgb-5');
-  await initStudio();
+  const {initStudio} = await import('./scene.js?v=flow-6');
+  const studio = await initStudio();
+  const {initOrderBridge} = await import('./order-bridge.js?v=flow-6');
+  await initOrderBridge(studio);
   panel.classList.remove('is-loading');
+  document.querySelector('.studio-layout').inert = false;
 } catch (error) {
   console.error('Studio 3D could not start:', error);
   document.querySelector('#scene').hidden = true;
@@ -12,6 +16,7 @@ try {
   document.querySelector('#stage-controls').hidden = true;
   document.querySelector('#scene-fallback').hidden = false;
   panel.classList.remove('is-loading');
+  document.querySelector('.studio-layout').inert = false;
   panel.querySelectorAll('button,input').forEach(el => el.disabled = true);
   document.querySelector('#studio-status').textContent = 'Widok 3D jest niedostępny. Skorzystaj z klasycznego konfiguratora.';
 }

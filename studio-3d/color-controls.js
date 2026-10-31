@@ -9,7 +9,7 @@ function customColor(hex){
 }
 export function initColorControls({palette,onChange}){
   const $=s=>document.querySelector(s),picker=$('#bag-color'),hexField=$('#bag-hex'),rgbFields=channels.map(c=>$('#bag-'+c)),error=$('#color-error');
-  let current=palette.green;
+  let current=palette.green,currentPreset='green';
   function clearError(){error.textContent='';[hexField,...rgbFields].forEach(el=>el.removeAttribute('aria-invalid'));}
   function sync(preset=null){
     const hex=current.body.toUpperCase(),rgb=fromHex(hex);
@@ -20,9 +20,9 @@ export function initColorControls({palette,onChange}){
   }
   function apply(hex,preset=null,editing=null){
     const value=editing?.value;
-    current=preset?palette[preset]:customColor(hex.toLowerCase());sync(preset);
+    currentPreset=preset;current=preset?palette[preset]:customColor(hex.toLowerCase());sync(preset);
     if(editing)editing.value=value;
-    onChange(current);
+    onChange(current,preset);
   }
   function invalid(input,message){input.setAttribute('aria-invalid','true');error.textContent=message;}
   picker.addEventListener('input',()=>apply(picker.value));
@@ -33,7 +33,7 @@ export function initColorControls({palette,onChange}){
     if(hex.length===3)hex=[...hex].map(c=>c+c).join('');return '#'+hex;
   }
   hexField.addEventListener('input',()=>{const hex=readHex();if(hex)apply(hex,null,hexField);else clearError();});
-  const commitHex=()=>{const hex=readHex();if(hex)apply(hex);else invalid(hexField,'Wpisz kolor HEX, np. #246BFD.');};
+  const commitHex=()=>{const hex=readHex();if(hex){if(hex.toLowerCase()===current.body.toLowerCase())sync(currentPreset);else apply(hex);}else invalid(hexField,'Wpisz kolor HEX, np. #246BFD.');};
   hexField.addEventListener('change',commitHex);hexField.addEventListener('blur',commitHex);
   for(const field of rgbFields){
     field.addEventListener('input',()=>{
@@ -47,4 +47,5 @@ export function initColorControls({palette,onChange}){
     field.addEventListener('change',validateChannel);field.addEventListener('blur',validateChannel);
   }
   sync('green');
+  return {set(hex,preset=null){apply(hex,preset);}};
 }

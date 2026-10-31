@@ -3,7 +3,7 @@ import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
 import {createEditOverlay} from './edit-overlay.js?v=workbench-4';
 import {createLivePreview} from './live-preview.js?v=workbench-4';
-import {initColorControls} from './color-controls.js?v=rgb-5';
+import {initColorControls} from './color-controls.js?v=flow-6';
 import {readLogo} from '../logo-file.js';
 import {BAG,palette,createBag} from './model.js?v=rgb-5';
 
@@ -32,9 +32,9 @@ export async function initStudio(){
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);
-  let mode='2d',color=palette.green,side='front',frame=0,tween=null,lastTime=0,drag=null,disposed=false;
+  let mode='2d',color=palette.green,preset='green',side='front',frame=0,tween=null,lastTime=0,drag=null,disposed=false;
   const drafts={front:{kind:'example',image:null,url:null,name:'Twoja marka.',size:48,x:0,y:0,sequence:0},back:{kind:'none',image:null,url:null,name:'',size:48,x:0,y:0,sequence:0}};
-  let overlay=null,preview=null;
+  let overlay=null,preview=null,pendingFiles=0;
   const wide=matchMedia('(min-width: 1100px)');
   const textures={};
   for(const s of ['front','back']){const c=document.createElement('canvas');c.width=1024;c.height=1024;textures[s]={canvas:c,texture:new THREE.CanvasTexture(c)};textures[s].texture.colorSpace=THREE.SRGBColorSpace;textures[s].texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());bag.printMeshes[s].material.map=textures[s].texture;}
@@ -55,7 +55,7 @@ export async function initStudio(){
       if(d.image)ctx.drawImage(d.image,x,y,w,h);
       else{ctx.fillStyle=color.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`500 ${h*.47}px Georgia,serif`;ctx.fillText('Twoja',x+w/2,y+h*.29,w);ctx.font=`italic 500 ${h*.47}px Georgia,serif`;ctx.fillText('marka.',x+w/2,y+h*.78,w);}
     }
-    textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=d.kind!=='none';overlay?.update();invalidate();
+    textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=d.kind!=='none';overlay?.update();invalidate();document.dispatchEvent(new Event('studio-project-change'));
   }
   function syncPanel(){const d=drafts[side];$('#copy-print').disabled=d.kind==='none';$('#copy-print').textContent=side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Przykładowy nadruk':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
   function setRotation(value){value=value&&mode==='3d';controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
@@ -133,13 +133,13 @@ export async function initStudio(){
   window.addEventListener('scroll',invalidate,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();});
   reduced.addEventListener('change',()=>{if(reduced.matches){tween=null;setRotation(false);}invalidate();});
-  initColorControls({palette,onChange:next=>{color=next;bag.setColor(color);draw('front');draw('back');}});
+  const colorControls=initColorControls({palette,onChange:(next,key)=>{color=next;preset=key;bag.setColor(color);draw('front');draw('back');document.dispatchEvent(new Event('studio-project-change'));}});
   document.querySelectorAll('[data-side]').forEach(b=>b.addEventListener('click',()=>selectSide(b.dataset.side)));
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(['front','back'].includes(b.dataset.view))selectSide(b.dataset.view);else goView(b.dataset.view);}));
   $('#rotate').addEventListener('click',()=>{tween=null;setRotation(!controls.autoRotate);});
   $('#upload').addEventListener('click',()=>$('#logo-file').click());
-  $('#logo-file').addEventListener('change',async event=>{const file=event.target.files[0];event.target.value='';if(!file)return;const selected=side,d=drafts[selected],sequence=++d.sequence;status.textContent='Przygotowuję logo…';
-    try{const next=await readLogo(file),img=new Image();img.src=next.url;await img.decode();if(sequence!==d.sequence||disposed){URL.revokeObjectURL(next.url);return;}if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,{kind:'image',image:img,url:next.url,name:next.name,x:0,y:0});draw(selected);syncPanel();status.textContent=`Logo dodane na ${selected==='front'?'przód':'tył'} torby.`;}catch(error){if(sequence===d.sequence)status.textContent=error.message;}
+  $('#logo-file').addEventListener('change',async event=>{const file=event.target.files[0];event.target.value='';if(!file)return;const selected=side,d=drafts[selected],sequence=++d.sequence;status.textContent='Przygotowuję logo…';pendingFiles++;
+    try{const next=await readLogo(file),img=new Image();img.src=next.url;await img.decode();if(sequence!==d.sequence||disposed){URL.revokeObjectURL(next.url);return;}if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,{kind:'image',image:img,url:next.url,name:next.name,x:0,y:0});draw(selected);syncPanel();status.textContent=`Logo dodane na ${selected==='front'?'przód':'tył'} torby.`;}catch(error){if(sequence===d.sequence)status.textContent=error.message;}finally{pendingFiles--;}
   });
   $('#remove-logo').addEventListener('click',()=>{const d=drafts[side];d.sequence++;if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,{kind:'none',image:null,url:null,name:''});draw(side);syncPanel();status.textContent='Nadruk usunięty z wybranej strony.';});
   $('#example').addEventListener('click',()=>{Object.assign(drafts[side],{kind:'example',name:'Twoja marka.',x:0,y:0,size:48});draw(side);syncPanel();});
@@ -148,12 +148,12 @@ export async function initStudio(){
     const source={...drafts[side]},target=side==='front'?'back':'front',d=drafts[target];
     if(source.kind==='none')return;const sequence=++d.sequence;
     // Each side owns its object URL so removing one print cannot break the other.
-    let url=null;
+    let url=null;pendingFiles++;
     try{if(source.url)url=URL.createObjectURL(await (await fetch(source.url)).blob());
       if(d.sequence!==sequence||disposed){if(url)URL.revokeObjectURL(url);return;}
       if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,source,{url,sequence});draw(target);
       status.textContent=`Nadruk skopiowany na ${target==='back'?'tył':'przód'}. Możesz edytować obie strony osobno.`;
-    }catch{if(url)URL.revokeObjectURL(url);status.textContent='Nie udało się skopiować nadruku. Spróbuj ponownie.';}
+    }catch{if(url)URL.revokeObjectURL(url);status.textContent='Nie udało się skopiować nadruku. Spróbuj ponownie.';}finally{pendingFiles--;}
   });
   $('#center-logo').addEventListener('click',()=>{drafts[side].x=drafts[side].y=0;syncPanel();draw(side);});
   // Drag a print in UV space. The sliders remain a keyboard/touch alternative.
@@ -176,4 +176,36 @@ export async function initStudio(){
   overlay=createEditOverlay({host,camera:flatCamera,getDraft:()=>drafts[side],getSide:()=>side,bounds,onChange:()=>{syncPanel();draw(side);},onCommit:()=>{}});
   $('#toggle-guides').addEventListener('click',()=>{const value=$('#toggle-guides').getAttribute('aria-pressed')!=='true';$('#toggle-guides').setAttribute('aria-pressed',String(value));overlay.setGuides(value);});
   draw('front');draw('back');syncPanel();setMode('2d');$('#scene-loading').remove();invalidate();
+  return {
+    details:()=>({color:{...color},preset,faces:Object.fromEntries(Object.entries(drafts).map(([s,d])=>[s,{kind:d.kind}]))}),
+    async snapshot(){
+      if(pendingFiles)throw new Error('Poczekaj na przygotowanie pliku.');
+      const faces={};
+      for(const s of ['front','back']){
+        const d={...drafts[s]};
+        faces[s]={kind:d.kind,name:d.name,size:d.size,x:d.x,y:d.y,blob:d.url?await(await fetch(d.url)).blob():null};
+      }
+      const thumbnails={},originalSize=renderer.getSize(new THREE.Vector2()),ratio=renderer.getPixelRatio(),contactVisible=contact.visible;
+      const photoCamera=new THREE.OrthographicCamera(-2,2,2.34,-2.34,.1,60);
+      try{
+        renderer.setPixelRatio(1);renderer.setSize(480,560,false);contact.visible=false;
+        for(const s of ['front','back']){
+          photoCamera.position.set(0,2.02,s==='front'?9:-9);photoCamera.lookAt(0,2.02,0);photoCamera.updateMatrixWorld();renderer.render(scene,photoCamera);
+          const out=document.createElement('canvas');out.width=480;out.height=560;const ctx=out.getContext('2d');ctx.fillStyle='#e5ede3';ctx.fillRect(0,0,480,560);ctx.drawImage(canvas,0,0);
+          thumbnails[s]=out.toDataURL('image/jpeg',.87);
+        }
+      }finally{contact.visible=contactVisible;renderer.setPixelRatio(ratio);renderer.setSize(originalSize.x,originalSize.y,false);invalidate();}
+      return {version:1,product:'premium',color:{...color},preset,faces,thumbnails};
+    },
+    async restore(project){
+      for(const s of ['front','back']){
+        const saved=project.faces[s],d=drafts[s];let url=null,img=null;
+        if(saved.blob){url=URL.createObjectURL(saved.blob);img=new Image();img.src=url;try{await img.decode();}catch(error){URL.revokeObjectURL(url);throw error;}}
+        if(d.url)URL.revokeObjectURL(d.url);
+        Object.assign(d,{...saved,url,image:img,sequence:d.sequence+1});
+      }
+      colorControls.set(project.color.body,project.preset);draw('front');draw('back');syncPanel();setMode('2d');
+      status.textContent='Projekt przywrócony razem z plikami i nadrukami obu stron.';
+    }
+  };
 }

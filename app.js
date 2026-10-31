@@ -1,3 +1,4 @@
+import {list as listStudioCart} from './order/store.js?v=flow-6';
 import * as pb from './printbag-content.js?v=dual-studio-2';
 import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=dual-studio-2';
 import {readLogo} from './logo-file.js';
@@ -111,10 +112,10 @@ document.addEventListener('click',e=>{
  if(b.dataset.removeCart!==undefined){cart.splice(Number(b.dataset.removeCart),1);saveCart();showCart();}
  const a=b.dataset.action;
  if(a==='preview-print'){const active=document.querySelector('.glassy-hero').classList.toggle('print-visible');b.setAttribute('aria-pressed',active);b.innerHTML=(active?'Ukryj nadruk':document.querySelector('.glassy-hero').classList.contains('has-own-logo')?'Pokaż swoje logo':'Zobacz efekt nadruku');}
- if(a==='product-design'){location.href=url('creator/?product='+encodeURIComponent(b.dataset.product)+'&quantity='+clampQty(document.querySelector('#product-qty').value));}
+ if(a==='product-design'){location.href=url(b.dataset.product==='premium'?'studio-3d/?quantity='+clampQty(document.querySelector('#product-qty').value):'creator/?product='+encodeURIComponent(b.dataset.product)+'&quantity='+clampQty(document.querySelector('#product-qty').value));}
 
  if(a==='close')document.querySelector('#modal').close();
- if(a==='cart')showCart();
+ if(a==='cart')location.href=url('order/?step=cart');
  if(a==='configure'){config.quantity=clampQty(document.querySelector('[data-quantity-input=config]').value);let id=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';location.href=url('creator/?product='+id+'&quantity='+config.quantity);}
  if(a==='clear-filters'){filters={handle:'all',finish:'all',weight:'all',material:'all',color:'all',format:'all',search:'',sort:'recommended'};document.querySelector('#search').value='';document.querySelector('#sort').value='recommended';updateResults();}
  if(a==='upload')document.querySelector('#logo-file')?.click();
@@ -151,3 +152,5 @@ function setupCreatorControls(){
 setupCreatorControls();
 
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:hover)').matches){document.querySelectorAll('.parallax').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--mx',((e.clientX-r.left)/r.width-.5)*12+'px');el.style.setProperty('--my',((e.clientY-r.top)/r.height-.5)*8+'px');});el.addEventListener('pointerleave',()=>{el.style.setProperty('--mx','0px');el.style.setProperty('--my','0px');});});}
+
+listStudioCart('cart').then(items=>document.querySelectorAll('.cart-count').forEach(el=>el.textContent=items.length)).catch(()=>{});

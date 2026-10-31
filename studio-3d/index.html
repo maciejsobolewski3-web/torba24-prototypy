@@ -4,13 +4,13 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#174f3d"><meta name="description" content="Zaprojektuj nadruk na wprost w 2D i obejrzyj tę samą torbę w 3D. Studio Printbag24.">
 <title>Studio 2D / 3D — Printbag24</title>
-<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../styles.css?v=printbag-1"><link rel="stylesheet" href="./studio.css?v=rgb-5">
+<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../styles.css?v=printbag-1"><link rel="stylesheet" href="./studio.css?v=flow-6">
 <script type="importmap">{"imports":{"three":"../vendor/three/three.module.js"}}</script>
-<script type="module" src="./boot.js?v=rgb-5"></script>
+<script type="module" src="./boot.js?v=flow-6"></script>
 </head>
 <body class="studio-body">
 <a class="skip-link" href="#studio">Przejdź do studia</a>
-<header class="studio-header"><a class="studio-brand" href="../glassy/" aria-label="Printbag24 — strona główna"><img src="../assets/printbag24-logo.png" alt="printbag24.pl"></a><span class="studio-header-label">STUDIO NADRUKU</span><a class="studio-return" href="../glassy/">Wróć do sklepu</a></header>
+<header class="studio-header"><a class="studio-brand" href="../glassy/" aria-label="Printbag24 — strona główna"><img src="../assets/printbag24-logo.png" alt="printbag24.pl"></a><span class="studio-header-label">STUDIO NADRUKU</span><a class="studio-return" href="../order/?step=cart">Twój koszyk</a></header>
 <main id="studio" class="studio-shell">
 <div class="studio-heading"><div><span class="studio-eyebrow">JEDNA TORBA. DWA SPOJRZENIA.</span><h1>Twój projekt. W każdym wymiarze.</h1></div><p>Dodaj logo w 2D. Obejrzyj efekt w 3D.<br> Jeden projekt, wszystkie detale.</p></div>
 <div class="studio-layout">
@@ -28,7 +28,7 @@
 <div class="studio-field"><div class="field-heading"><h3>Strona nadruku</h3><span id="side-label">Przód</span></div><div class="studio-segments" role="group" aria-label="Wybierz stronę nadruku"><button data-side="front" aria-pressed="true">Przód</button><button data-side="back" aria-pressed="false">Tył</button></div></div>
 <div class="studio-field logo-field"><div class="field-heading"><h3>Twój znak</h3><span id="logo-kind">Przykładowy nadruk</span></div><button class="studio-upload" id="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7v10M7 12h10"/></svg><span id="upload-label">Wgraj swoje logo</span></button><input id="logo-file" type="file" accept="image/png,image/jpeg,image/svg+xml" hidden><p class="upload-help">PNG, JPG lub SVG · do 5 MB<br>Plik pozostaje w Twojej przeglądarce.</p><div id="logo-actions" class="logo-actions"><span id="file-name">Twoja marka.</span><button id="remove-logo">Usuń nadruk</button></div><button id="example" class="example-button" hidden>Dodaj przykładowy nadruk</button></div>
 <fieldset class="logo-settings" id="logo-settings"><legend class="sr-only">Położenie nadruku</legend><div class="slider-heading"><label for="logo-size">Wielkość</label><output for="logo-size" id="size-value">48%</output></div><input id="logo-size" type="range" min="20" max="68" value="48"><div class="position-sliders"><div><label for="logo-x">W lewo / w prawo</label><input id="logo-x" type="range" min="-100" max="100" value="0"></div><div><label for="logo-y">W dół / w górę</label><input id="logo-y" type="range" min="-100" max="100" value="0"></div></div><button id="center-logo" class="quiet-button">Wyśrodkuj nadruk</button><p class="drag-tip">Możesz też przeciągnąć nadruk bezpośrednio na torbie.</p></fieldset>
-<button id="copy-print" class="quiet-button">Skopiuj nadruk na tył</button><div class="panel-bottom"><button id="save-preview" class="button primary full">Pobierz podgląd PNG</button><p>Model i pole nadruku są poglądowe.<br>Projekt do druku potwierdzimy osobno.</p></div>
+<button id="copy-print" class="quiet-button">Skopiuj nadruk na tył</button><div class="panel-bottom"><div class="order-config"><span class="studio-eyebrow">PAPIER PREMIUM · FORMAT DEMO</span><strong>32 × 12 × 26 cm</strong><label for="order-quantity">Nakład (szt.)</label><input id="order-quantity" type="number" min="50" max="10000" step="1" value="100" required><small>Zakres testowy: 50–10 000 szt.</small><span class="studio-eyebrow">WYCENA DEMONSTRACYJNA</span><strong id="order-price">690,00 zł</strong><small id="order-price-note">Przykładowa cena brutto</small></div><button id="review-project" class="button primary full">Sprawdź projekt</button><button id="save-preview" class="quiet-button">Pobierz podgląd PNG</button><p>Model i pole nadruku są poglądowe.<br>Logo i ustawienia zapiszemy lokalnie po kliknięciu „Sprawdź projekt”.</p></div>
 <p id="studio-status" class="studio-status" role="status" aria-live="polite"></p>
 </aside>
 </div><footer class="studio-footer"><span>PRINTBAG24 / STUDIO 2D + 3D</span><span>Wersja prezentacyjna · bez składania zamówień</span><a href="../creator/?product=premium">Otwórz klasyczny konfigurator</a></footer>

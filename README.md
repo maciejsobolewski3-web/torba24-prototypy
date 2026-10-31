@@ -17,9 +17,9 @@ Wybrany kierunek Soft glass, nazwa printbag24.pl i logo przekazane przez klienta
 
 ## Zakres prezentacji
 
-Produkty, grafiki produktowe, wymiary i gramatury są przykładowe. Nie są potwierdzoną ofertą. Brak prawdziwych cen, płatności, zamówień i kontaktu serwerowego. Dane firmy, cennik, minimalne nakłady, terminy i rzeczywiste realizacje wymagają uzupełnienia przed uruchomieniem sprzedaży.
+Produkty, grafiki produktowe, wymiary i gramatury są przykładowe. Nie są potwierdzoną ofertą. Brak prawdziwych cen, płatności, zamówień i kontaktu serwerowego. Nowy proces zakupowy korzysta z jawnie oznaczonego przykładowego cennika brutto. Dane firmy, cennik, minimalne nakłady, terminy i rzeczywiste realizacje wymagają uzupełnienia przed uruchomieniem sprzedaży.
 
-Wgrane logo nie opuszcza przeglądarki i nie jest zapisywane w localStorage. Zapis projektu i koszyk zachowują ustawienia, nie plik; po ponownym otwarciu trzeba dodać logo. Formularz kontaktowy pobiera plik lokalnie — niczego nie wysyła.
+Wgrane logo nie opuszcza przeglądarki. Nowe studio 2D/3D zapisuje pliki i ustawienia obu stron w IndexedDB po kliknięciu „Sprawdź projekt”. Starszy konfigurator `/creator/` zachowuje tylko ustawienia, bez pliku logo. Formularz kontaktowy pobiera plik lokalnie — niczego nie wysyła.
 
 ## Uruchomienie
 
@@ -75,6 +75,18 @@ Sprawdzono PNG, przezroczyste SVG, uszkodzony PNG (zachowanie wcześniejszego lo
 - Three.js 0.187.0 (MIT), pliki z oficjalnego pakietu npm w `vendor/three/`; licencja zachowana. Brak CDN dla silnika 3D i brak kroku budowania.
 - Trzy kolory; kamera przód/tył/detal/cała torba, ręczny obrót, opcjonalna rotacja; osobne projekty obu stron; upload PNG/JPG/SVG do 5 MB poprzez wspólny walidator.
 - Logo nakładane na UV powierzchni. Skala i przesunięcie ograniczone do poglądowego obszaru. Przeciąganie nadruku myszką; suwaki dostępne klawiaturą i na telefonie. Przykładowy napis dostosowuje kolor do papieru; kolory wgranego logo pozostają zachowane.
-- PNG zawiera aktualny kadr i oznaczenie podglądu. To obraz prezentacyjny, nie plik produkcyjny. Logo pozostaje wyłącznie w pamięci bieżącej strony; nie jest wysyłane ani zapisywane między wizytami.
+- PNG zawiera aktualny kadr i oznaczenie podglądu. To obraz prezentacyjny, nie plik produkcyjny. Logo nie jest wysyłane. Od wersji flow-6 kliknięcie „Sprawdź projekt” zapisuje plik i ustawienia lokalnie w IndexedDB; koszyk przywraca oba nadruki bez ponownego wgrywania.
 - Renderowanie na żądanie, limit pixel ratio 1.75, zatrzymanie poza ekranem / w tle, obsługa reduced motion i awarii WebGL z linkiem do klasycznego konfiguratora.
 - QA w przeglądarce: render WebGL na desktopie i układ mobilny (433 CSS px), brak poziomego przepełnienia; trzy kolory; przód/tył/detal; rotacja start/stop; przeciąganie nadruku i suwaki; wgranie SVG na tył z zachowaniem przodu; odrzucenie uszkodzonego PNG bez utraty nadruku; usunięcie/przywrócenie przykładu; pobranie i wizualna inspekcja PNG; przejście z hero do studia. Wydajność na fizycznym telefonie i fallback WebGL nie były osobno emulowane.
+
+## Proces zakupowy 2D / 3D — flow-6
+
+- Zakres: papier premium, poglądowy format 32 × 12 × 26 cm. Pozostałe modele nadal korzystają z klasycznego konfiguratora. Główna akcja na karcie Papier premium prowadzi do nowego studia i przekazuje nakład.
+- Studio → sprawdzenie frontu i tyłu → koszyk → dane → potwierdzenie demonstracji. Widok kontrolny zawsze jest na wprost. Nadruk przykładowy jest oznaczony i wymaga świadomego potwierdzenia.
+- `order/store.js`: natywny IndexedDB (projekty, koszyk, podsumowania). Zachowuje zwalidowane pliki jako Blob, kolor/preset, oba nadruki, położenie, skalę, ilość i miniatury. SVG przechodzi wspólny sanitizer. Nie zapisujemy tymczasowych blob URL ani danych formularza.
+- Trzy presety kolorów mają cennik DEMO, progi ilości i dopłatę za drugą stronę. Kolor RGB/HEX kieruje do osobnej wyceny. Koszyk mieszany wyklucza pozycje do wyceny z sumy ścieżki zakupowej. Wszystkie kwoty i limity są demonstracyjne.
+- Koszyk ma zmianę ilości, niezależną kopię, usuwanie z cofnięciem i powrót do edycji. Zmiany projektu są zatwierdzane na ekranie kontrolnym i aktualizują istniejącą pozycję. Starszy koszyk jest rozpoznawany i ma linki do wcześniejszych projektów.
+- Formularz końcowy ma walidację, nie wysyła danych i nie uruchamia płatności. Zakończenie przenosi wyłącznie właściwą grupę projektów do lokalnego podsumowania. Paczkę z plikami i ustawieniami można pobrać jako JSON. Nie jest to plik do druku.
+- Produkcja wymaga backendu, zatwierdzonego asortymentu/cennika, trwałego uploadu i repozytorium projektów, integracji płatności, wysyłki zapytań oraz panelu akceptacji proofów. GitHub Pages obsługuje tu wyłącznie demonstrację.
+
+QA: logo SVG na obu stronach, odświeżenie i odtworzenie pliku, zmiana skali tylnego nadruku, aktualizacja bez duplikowania pozycji, niezależna kopia RGB, nakład i progi cen, koszyk mieszany, usunięcie/cofnięcie, walidacja pustego formularza, pełne zakończenie zakupowe i wycenowe, eksport JSON (oba logo, położenie/rozmiar, podglądy; bez danych formularza). Układ desktop i mobilny 390 px bez poziomego przepełnienia.
