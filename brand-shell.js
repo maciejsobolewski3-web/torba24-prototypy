@@ -1,3 +1,4 @@
+import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 const base=new URL('./',import.meta.url);
 const link=path=>new URL(path,base).href;
 const asset=name=>link('assets/'+name);
@@ -21,9 +22,11 @@ export function mountStandaloneShell(){
     header.querySelector('.studio-brand')?.remove();
     const history=document.createElement('a');history.className='ea-header-history';history.href=link('nasza-historia/');history.textContent='Nasza historia';
     header.querySelector('.studio-header-label')?.replaceWith(history);
+    header.insertAdjacentHTML('beforeend',accountButton());
   }
   document.querySelector('.order-footer,.studio-footer')?.remove();
   if(!document.querySelector('.ea-footer'))document.body.insertAdjacentHTML('beforeend',groupFooter());
+  initAccountUI();
 }
 const timeline=[
   ['2000','Początek w Rzeszowie','Małe studio poligraficzne w garażu. Pierwsze pomysły, pierwsze projekty i początek własnej drogi.'],

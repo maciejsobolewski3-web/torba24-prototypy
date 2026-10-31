@@ -134,3 +134,9 @@ History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami r
 - Historię przedstawia pionowa oś czasu: najnowsze wydarzenia u góry, daty i znaczniki kalendarza pośrodku, karty naprzemiennie po bokach. Zachowane dziewięć okresów i dotychczasowe fakty dotyczące firmy.
 - Linia wypełnia się podczas przewijania, karty pojawiają się jednokrotnie po wejściu w widok. Bez automatycznego pokazu i kontrolek odtwarzania. Reduced motion wyłącza przejścia i od razu pokazuje całą linię oraz treść.
 - Telefon: oś z datami po lewej, opisy po prawej. QA w przeglądarce: desktop 1440 px i telefon 390 px, dziewięć wydarzeń, wzrost wypełnienia linii i pojawianie się dalszych kart podczas przewijania, brak poziomego przepełnienia i błędów konsoli.
+
+## Nawigacja i nakładka konta — nav-17
+
+- Menu wyśrodkowane względem strony, większe napisy (16–17 px), osobny przycisk konta. Na mniejszych ekranach menu przechodzi do hamburgera, a konto pozostaje dostępne jako ikona. Wspólna nakładka dostępna też w studiu 2D/3D i koszyku.
+- Logowanie, rejestracja i reset hasła w natywnym dialogu: walidacja pól i zgodności haseł, pokaż/ukryj hasło, zamykanie Escape oraz powrót fokusu. To interfejs do podłączenia backendu: nie zapisuje ani nie wysyła danych logowania i nie symuluje udanej autoryzacji lub wysłania maila.
+- QA: menu wyśrodkowane przy 1440 i 1920 px; telefon 390 i 320 px bez poziomego przepełnienia. Sprawdzone wymagane pola, niezgodne hasła, wszystkie trzy widoki, Escape, koszyk i nagłówek studia. Kontrola składni JS i git diff --check zakończone poprawnie.

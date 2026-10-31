@@ -1,4 +1,4 @@
-import {mountStandaloneShell} from '../brand-shell.js?v=brand-7';
+import {mountStandaloneShell} from '../brand-shell.js?v=nav-17';
 mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');

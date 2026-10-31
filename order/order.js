@@ -1,4 +1,4 @@
-import {mountStandaloneShell} from '../brand-shell.js?v=brand-7';
+import {mountStandaloneShell} from '../brand-shell.js?v=nav-17';
 mountStandaloneShell();
 import {get,list,put,remove,id,addToCart,complete,money,price,needsQuote,shipping,format,esc,validQuantity} from './store.js?v=brand-7';
 const root=document.querySelector('#order-main'),status=document.querySelector('#order-status');
