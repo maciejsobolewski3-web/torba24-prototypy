@@ -45,3 +45,14 @@ Sprawdzono w przeglądarce układ komputerowy oraz szerokości 390 i 360 px, men
 ## Animowany proces
 
 Sekcja „Od pustej torby do Twojej marki” korzysta z `process-motion.js` i `process-motion.css`. Pokazuje wybór materiału, dodanie logo, akceptację oraz gotową serię z paczką. Sekwencja trwa 16 sekund, odtwarza się raz po wejściu w obszar widoczny i ma pauzę, powtórzenie oraz ręczny wybór etapów (także strzałkami klawiatury). Zmiana karty lub opuszczenie sekcji zatrzymuje zegar. Przy `prefers-reduced-motion` nie ma automatycznego startu, a efekty przestrzenne nie są animowane. To responsywna animacja HTML/CSS/JS, nie osadzony film MP4.
+
+## Interakcje produktu
+
+- Hero: lokalny podgląd własnego PNG/JPG/SVG na papierze i bawełnie, zmiana oraz usuwanie pliku. Animacja przeniesienia znaku na materiał. Na telefonie podgląd przewija się w obszar widoczny po wgraniu.
+- Przejście z hero do studia zachowuje plik w pamięci, materiał, kolor i nakład. Plik nie trafia do localStorage ani na serwer. Odświeżenie dokumentu wymaga ponownego dodania logo.
+- `logo-file.js` waliduje rozmiar i typ, oczyszcza SVG i sprawdza dekodowanie obrazu. Błędny plik nie zastępuje działającego podglądu.
+- Inspiracje: nadruk pojawia się na hover i po kliknięciu/dotknięciu; przyciski mają stan aria-pressed i działają klawiaturą.
+- Karty modeli: przycisk „Sprawdź rozmiar” odsłania schemat wymiarów korpusu. Papier ma szerokość/głębokość/wysokość, bawełna szerokość/wysokość. Dane nadal są jawnie przykładowe.
+- Nowe interakcje znajdują się w `product-interactions.js` i `product-interactions.css`; respektują ograniczenie ruchu.
+
+Sprawdzono PNG, przezroczyste SVG, uszkodzony PNG (zachowanie wcześniejszego logo), przekazanie pliku i nakładu 137 szt. do studia, edycję i podsumowanie po przejściu, przełączanie inspiracji oraz schemat bawełny i papieru. Widoki mobilne sprawdzone przy 390 px.

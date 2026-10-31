@@ -1,4 +1,6 @@
-import * as pb from './printbag-content.js?v=motion-1';
+import * as pb from './printbag-content.js?v=interactions-1';
+import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=1';
+import {readLogo} from './logo-file.js';
 import { initProcessMotion } from './process-motion.js?v=1';
 const BASE = new URL('./', import.meta.url);
 const url = (path = '') => new URL(path, BASE).href;
@@ -32,9 +34,11 @@ const products = [
 const colors = {green:'#174f3d',natural:'#ece4d4',kraft:'#bb9670',white:'#ffffff',silver:'#b9c3c0',black:'#192b24'};
 let cart = [];
 try {cart=JSON.parse(localStorage.getItem('printbag24-cart') || '[]'); if (!Array.isArray(cart)) cart=[];} catch {}
-const page = document.body.dataset.page || 'gallery';
+let renderedPath=location.pathname;
+let page = document.body.dataset.page || 'gallery';
 const app = document.querySelector('#app');
 let config = {material:'paper',color:'green',quantity:100};
+let editorUploadSequence=0;
 let editor = {product:'cotton',quantity:100,ink:'#174f3d',size:42,x:50,y:58,text:'TWOJA MARKA',logo:null,side:'front'};
 let filters = {handle:'all',finish:'all',weight:'all',material:new URLSearchParams(location.search).get('material') || 'all',color:'all',format:'all',search:'',sort:'recommended'};
 
@@ -45,7 +49,7 @@ function nav(editorMode=false){return `<div class="pb-demo-bar">Wersja prezentac
 function photo(product,cls='',lazy=true){return `<img class="product-image ${product.filter||''} ${cls}" src="${asset(product.image)}" alt="${esc(product.name)}" ${lazy?'loading="lazy"':'fetchpriority="high"'} draggable="false">`;}
 function swatches(selected='green', attr='config-color', options=['green','natural','kraft']){return `<div class="swatches">${options.map(c=>`<button class="swatch ${selected===c?'selected':''}" style="--swatch:${colors[c]||c}" data-${attr}="${c}" aria-label="${({green:'Zielony',natural:'Naturalny',kraft:'Kraft',white:'Biały',silver:'Srebrny',black:'Czarny'})[c]||c}" aria-pressed="${selected===c}"></button>`).join('')}</div>`;}
 function quantity(value=100,kind='config'){return `<div class="stepper"><button data-quantity="-1" data-kind="${kind}" aria-label="Zmniejsz ilość o 1">−</button><input type="number" min="1" max="10000" step="1" value="${value}" data-quantity-input="${kind}" aria-label="Liczba sztuk"><span>szt.</span><button data-quantity="1" data-kind="${kind}" aria-label="Zwiększ ilość o 1">+</button></div>`;}
-function configure(vertical=false){return `<form class="quick-config glass ${vertical?'vertical':''}" onsubmit="return false"><h2>${vertical?'Dopasuj swoją torbę':'Stwórz swoją torbę'}</h2><div class="config-field"><span>Materiał</span><div class="segments"><button class="selected" data-material="paper" aria-pressed="true">Papier</button><button data-material="cotton" aria-pressed="false">Bawełna</button></div></div><div class="config-field"><span>Kolor</span>${swatches()}</div><div class="config-field"><span>Nakład</span>${quantity()}</div><button class="button primary" data-action="configure">Dodaj swoje logo ${icon('arrow')}</button></form>`;}
+function configure(vertical=false){return `<form class="quick-config glass ${vertical?'vertical':''}" onsubmit="return false"><h2>${vertical?'Dopasuj swoją torbę':'Stwórz swoją torbę'}</h2><div class="config-field"><span>Materiał</span><div class="segments"><button class="selected" data-material="paper" aria-pressed="true">Papier</button><button data-material="cotton" aria-pressed="false">Bawełna</button></div></div><div class="config-field"><span>Kolor</span>${swatches()}</div><div class="config-field"><span>Nakład</span>${quantity()}</div>${page==='glassy'?heroUpload():`<button class="button primary" data-action="configure">Dodaj swoje logo ${icon('arrow')}</button>`}</form>`;}
 function productCards(items=products.slice(0,3)){return items.map(p=>`<article class="product-card reveal"><a class="product-stage" href="${url('product/?id='+p.id)}">${photo(p)}<span class="stage-cta">Zobacz model ${icon('diagonal')}</span></a><div class="product-info"><div><h3><a href="${url('product/?id='+p.id)}">${p.name}</a></h3><p>${p.desc}</p><small class="pb-product-spec">${pb.specs[p.id].size}</small></div><a class="circle-button" href="${url('product/?id='+p.id)}" aria-label="Zobacz model ${p.name}">${icon('arrow')}</a></div></article>`).join('');}
 function categories(){return `<section class="section categories" id="kolekcja"><div class="section-heading"><div><span class="eyebrow">ZACZNIJ OD MATERIAŁU</span><h2>Dwie bazy. Wiele możliwości.</h2></div><a class="text-link" href="${url('catalog/')}">Cała kolekcja ${icon('arrow')}</a></div><div class="category-grid pb-two">${[['Torby papierowe','Od codziennych zakupów po wyjątkowy prezent.',products[0],'paper'],['Torby bawełniane','Na wydarzenie, do pracy i na każdy dzień.',products[1],'cotton']].map(([name,desc,p,m])=>`<a class="category-card" href="${url('catalog/?material='+m)}"><h3>${name}</h3><p>${desc}</p>${photo(p)}<span class="circle-button">${icon('arrow')}</span></a>`).join('')}</div></section>`;}
 
@@ -73,17 +77,29 @@ function showSummary(){const p=products.find(p=>p.id===editor.product);modal(`<s
 function observeReveals(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.reveal').forEach(e=>e.classList.add('is-visible'));return;}const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');observer.unobserve(e.target);}}),{threshold:0.08});document.querySelectorAll('.reveal:not(.is-visible)').forEach(e=>observer.observe(e));}
 
 document.body.classList.add('theme-'+page);
-if(page==='creator')window.addEventListener('resize',()=>{if(document.querySelector('#print-content'))updatePrint();});
+window.addEventListener('resize',()=>{if(document.querySelector('#print-content'))updatePrint();});
 if(page==='gallery')renderGallery();else if(page==='catalog')renderCatalog();else if(page==='creator')renderCreator();else if(['projects','how-to','contact','product'].includes(page)){document.title='Printbag24 — '+({'projects':'realizacje i inspiracje','how-to':'jak zamawiać','contact':'kontakt i wycena','product':'wybierz torbę'})[page];app.innerHTML=nav()+pb.renderPage(page,{products,photo,icon,esc})+footer();pb.initQuote(products);}else renderLanding();
 initProcessMotion();
+initExampleReveals();
+initDimensions();
+initHeroUpload({getSelection:()=>config,openStudio:logo=>{
+ const id=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';
+ config.quantity=clampQty(document.querySelector('[data-quantity-input=config]').value);
+ history.pushState(null,'',url('creator/?product='+id+'&quantity='+config.quantity));
+ renderedPath=location.pathname;document.body.classList.remove('theme-'+page);page='creator';document.body.dataset.page=page;document.body.classList.add('theme-creator');
+ editor={...editor,logo:logo.url,text:''};renderCreator();setupCreatorControls();
+ document.querySelector('#file-label').textContent=logo.name;document.querySelector('.remove-logo').hidden=false;
+ window.scrollTo({top:0,behavior:'instant'});document.querySelector('.editor-heading h1').setAttribute('tabindex','-1');document.querySelector('.editor-heading h1').focus({preventScroll:true});
+}});
+window.addEventListener('popstate',()=>{if(location.pathname!==renderedPath)location.reload();});
 document.body.insertAdjacentHTML('beforeend',`<dialog id="modal" aria-label="Printbag24 — szczegóły"></dialog><div id="toast" role="status" aria-live="polite"></div>`);
 observeReveals();
 document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='modal'){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
 document.querySelector('#concept-select')?.addEventListener('change',e=>location.href=url(e.target.value+'/'));
 document.addEventListener('click',e=>{
  const b=e.target.closest('button,[data-action]');if(!b)return;
- if(b.dataset.material){config.material=b.dataset.material;config.color=config.material==='cotton'?'natural':'green';document.querySelectorAll('[data-material]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x.dataset.configColor===config.color);x.setAttribute('aria-pressed',x.dataset.configColor===config.color);});document.querySelector('.hero')?.classList.toggle('cotton-selected',config.material==='cotton');document.querySelector('.quick-config .swatches').outerHTML=swatches(config.color,'config-color',config.material==='cotton'?['natural','green']:['green','natural','kraft']);document.querySelectorAll('.hero-bag.paper img,.hero-bag.cotton img').forEach(img=>img.className='product-image');}
- if(b.dataset.configColor){config.color=b.dataset.configColor;document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});const img=document.querySelector(config.material==='cotton'?'.hero-bag.cotton img':'.hero-bag.paper img');if(img)img.className='product-image '+(config.material==='cotton'?(config.color==='green'?'green-cotton':''):(config.color==='natural'?'white-bag':config.color==='kraft'?'kraft-tint':''));}
+ if(b.dataset.material){config.material=b.dataset.material;config.color=config.material==='cotton'?'natural':'green';document.querySelectorAll('[data-material]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x.dataset.configColor===config.color);x.setAttribute('aria-pressed',x.dataset.configColor===config.color);});document.querySelector('.hero')?.classList.toggle('cotton-selected',config.material==='cotton');document.querySelector('.quick-config .swatches').outerHTML=swatches(config.color,'config-color',config.material==='cotton'?['natural','green']:['green','natural','kraft']);document.querySelectorAll('.hero-bag.paper > img,.hero-bag.cotton > img').forEach(img=>img.className='product-image');}
+ if(b.dataset.configColor){config.color=b.dataset.configColor;document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});const img=document.querySelector(config.material==='cotton'?'.hero-bag.cotton > img':'.hero-bag.paper > img');if(img)img.className='product-image '+(config.material==='cotton'?(config.color==='green'?'green-cotton':''):(config.color==='natural'?'white-bag':config.color==='kraft'?'kraft-tint':''));}
  if(b.dataset.quantity){let kind=b.dataset.kind;let next=clampQty((kind==='editor'?editor.quantity:config.quantity)+Number(b.dataset.quantity));if(kind==='editor')editor.quantity=next;else config.quantity=next;document.querySelector(`[data-quantity-input="${kind}"]`).value=next;}
  if(b.dataset.filterMaterial){filters.material=b.dataset.filterMaterial;filters.handle=filters.finish=filters.weight='all';updateResults();}
  if(b.dataset.filterColor){filters.color=filters.color===b.dataset.filterColor?'all':b.dataset.filterColor;updateResults();}
@@ -94,15 +110,15 @@ document.addEventListener('click',e=>{
  if(b.dataset.zoom){let z=Math.max(.7,Math.min(1.3,(window.editorZoom||1)+Number(b.dataset.zoom)));window.editorZoom=z;document.querySelector('#editor-product').style.setProperty('--zoom',z);document.querySelector('#zoom-output').textContent=Math.round(z*100)+'%';}
  if(b.dataset.removeCart!==undefined){cart.splice(Number(b.dataset.removeCart),1);saveCart();showCart();}
  const a=b.dataset.action;
- if(a==='preview-print'){const active=document.querySelector('.glassy-hero').classList.toggle('print-visible');b.setAttribute('aria-pressed',active);b.innerHTML=(active?'Zobacz torby bez nadruku':'Zobacz efekt nadruku')+' '+icon('diagonal');}
+ if(a==='preview-print'){const active=document.querySelector('.glassy-hero').classList.toggle('print-visible');b.setAttribute('aria-pressed',active);b.innerHTML=(active?'Ukryj nadruk':document.querySelector('.glassy-hero').classList.contains('has-own-logo')?'Pokaż swoje logo':'Zobacz efekt nadruku')+' '+icon('diagonal');}
  if(a==='product-design'){location.href=url('creator/?product='+encodeURIComponent(b.dataset.product)+'&quantity='+clampQty(document.querySelector('#product-qty').value));}
 
  if(a==='close')document.querySelector('#modal').close();
  if(a==='cart')showCart();
- if(a==='configure'){let id=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';location.href=url('creator/?product='+id+'&quantity='+config.quantity);}
+ if(a==='configure'){config.quantity=clampQty(document.querySelector('[data-quantity-input=config]').value);let id=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';location.href=url('creator/?product='+id+'&quantity='+config.quantity);}
  if(a==='clear-filters'){filters={handle:'all',finish:'all',weight:'all',material:'all',color:'all',format:'all',search:'',sort:'recommended'};document.querySelector('#search').value='';document.querySelector('#sort').value='recommended';updateResults();}
  if(a==='upload')document.querySelector('#logo-file')?.click();
- if(a==='remove-logo'){if(editor.logo)URL.revokeObjectURL(editor.logo);editor.logo=null;document.querySelector('#file-label').textContent='Dodaj własne logo';b.hidden=true;updatePrint();}
+ if(a==='remove-logo'){editorUploadSequence++;if(editor.logo)URL.revokeObjectURL(editor.logo);editor.logo=null;document.querySelector('#file-label').textContent='Dodaj własne logo';b.hidden=true;updatePrint();}
  if(a==='text-focus')document.querySelector('#print-text').focus();
  if(a==='color-focus')document.querySelector('[data-ink]').focus();
  if(a==='save'){try{localStorage.setItem('printbag24-project',JSON.stringify({...editor,logo:null}));toast(editor.logo?'Ustawienia zapisane. Przy powrocie wgraj ponownie plik logo.':'Projekt zapisany w tej przeglądarce.');}catch{toast('Nie udało się zapisać projektu w tej przeglądarce.');}}
@@ -116,7 +132,22 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{if(e.target.dataset.specFilter){filters[e.target.dataset.specFilter]=e.target.value;updateResults();}if(e.target.dataset.quantityInput){let val=clampQty(e.target.value);e.target.value=val;if(e.target.dataset.quantityInput==='editor')editor.quantity=val;else config.quantity=val;}if(e.target.dataset.checkMaterial){filters.material=e.target.checked?e.target.dataset.checkMaterial:'all';filters.handle=filters.finish=filters.weight='all';updateResults();}});
 document.querySelector('#search')?.addEventListener('input',e=>{filters.search=e.target.value;updateResults();});
 document.querySelector('#sort')?.addEventListener('change',e=>{filters.sort=e.target.value;updateResults();});
-document.querySelector('#print-text')?.addEventListener('input',e=>{editor.text=e.target.value;updatePrint();});
-document.querySelector('#print-size')?.addEventListener('input',e=>{editor.size=Number(e.target.value);updatePrint();});
-document.querySelector('#logo-file')?.addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;if(file.size>5*1024*1024){toast('Wybierz plik mniejszy niż 5 MB.');return;}if(!['image/png','image/jpeg','image/svg+xml'].includes(file.type)){toast('Wybierz plik PNG, JPG lub SVG.');return;}let source=file;if(file.type==='image/svg+xml'){const doc=new DOMParser().parseFromString(await file.text(),'image/svg+xml');if(doc.querySelector('parsererror')||doc.documentElement.localName!=='svg'){toast('Ten plik SVG jest nieprawidłowy.');return;}doc.querySelectorAll('script,foreignObject,iframe,object,embed,style').forEach(x=>x.remove());doc.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.name.startsWith('on')||a.name==='style'||((a.name==='href'||a.name==='xlink:href')&&!a.value.startsWith('#')))x.removeAttribute(a.name);}));source=new Blob([new XMLSerializer().serializeToString(doc)],{type:'image/svg+xml'});}if(editor.logo)URL.revokeObjectURL(editor.logo);editor.logo=URL.createObjectURL(source);document.querySelector('#file-label').textContent=file.name;document.querySelector('.remove-logo').hidden=false;updatePrint();if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.querySelector('#print-content').animate([{opacity:0},{opacity:1}],{duration:200,easing:'cubic-bezier(0.23,1,0.32,1)'});e.target.value='';toast('Logo dodane. Możesz przesunąć je na torbie.');});
+function setupCreatorControls(){
+ document.querySelector('#print-text')?.addEventListener('input',e=>{editor.text=e.target.value;updatePrint();});
+ document.querySelector('#print-size')?.addEventListener('input',e=>{editor.size=Number(e.target.value);updatePrint();});
+
+ document.querySelector('#logo-file')?.addEventListener('change',async e=>{
+  const file=e.target.files[0];e.target.value='';if(!file)return;
+  const current=++editorUploadSequence;
+  try{
+   const next=await readLogo(file);if(current!==editorUploadSequence){URL.revokeObjectURL(next.url);return;}
+   if(editor.logo)URL.revokeObjectURL(editor.logo);editor.logo=next.url;
+   document.querySelector('#file-label').textContent=next.name;document.querySelector('.remove-logo').hidden=false;updatePrint();
+   if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.querySelector('#print-content').animate([{opacity:0},{opacity:1}],{duration:200,easing:'cubic-bezier(0.23,1,0.32,1)'});
+   toast('Logo dodane. Możesz przesunąć je na torbie.');
+  }catch(error){toast(error.message);}
+ });
+}
+setupCreatorControls();
+
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:hover)').matches){document.querySelectorAll('.parallax').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--mx',((e.clientX-r.left)/r.width-.5)*12+'px');el.style.setProperty('--my',((e.clientY-r.top)/r.height-.5)*8+'px');});el.addEventListener('pointerleave',()=>{el.style.setProperty('--mx','0px');el.style.setProperty('--my','0px');});});}
