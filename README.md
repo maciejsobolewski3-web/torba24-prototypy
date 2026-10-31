@@ -83,10 +83,20 @@ Sprawdzono PNG, przezroczyste SVG, uszkodzony PNG (zachowanie wcześniejszego lo
 
 - Zakres: papier premium, poglądowy format 32 × 12 × 26 cm. Pozostałe modele nadal korzystają z klasycznego konfiguratora. Główna akcja na karcie Papier premium prowadzi do nowego studia i przekazuje nakład.
 - Studio → sprawdzenie frontu i tyłu → koszyk → dane → potwierdzenie demonstracji. Widok kontrolny zawsze jest na wprost. Nadruk przykładowy jest oznaczony i wymaga świadomego potwierdzenia.
-- `order/store.js`: natywny IndexedDB (projekty, koszyk, podsumowania). Zachowuje zwalidowane pliki jako Blob, kolor/preset, oba nadruki, położenie, skalę, ilość i miniatury. SVG przechodzi wspólny sanitizer. Nie zapisujemy tymczasowych blob URL ani danych formularza.
+- `order/store.js`: natywny IndexedDB (projekty, koszyk, podsumowania). Zachowuje zwalidowane pliki jako Blob, kolor/preset, oba nadruki, położenie, skalę, ilość i miniatury. SVG przechodzi wspólny sanitizer. Nie zapisujemy tymczasowych blob URL. Od brand-7 dane formularza są przechowywane lokalnie razem z podsumowaniem i dołączane do eksportu JSON.
 - Trzy presety kolorów mają cennik DEMO, progi ilości i dopłatę za drugą stronę. Kolor RGB/HEX kieruje do osobnej wyceny. Koszyk mieszany wyklucza pozycje do wyceny z sumy ścieżki zakupowej. Wszystkie kwoty i limity są demonstracyjne.
 - Koszyk ma zmianę ilości, niezależną kopię, usuwanie z cofnięciem i powrót do edycji. Zmiany projektu są zatwierdzane na ekranie kontrolnym i aktualizują istniejącą pozycję. Starszy koszyk jest rozpoznawany i ma linki do wcześniejszych projektów.
 - Formularz końcowy ma walidację, nie wysyła danych i nie uruchamia płatności. Zakończenie przenosi wyłącznie właściwą grupę projektów do lokalnego podsumowania. Paczkę z plikami i ustawieniami można pobrać jako JSON. Nie jest to plik do druku.
 - Produkcja wymaga backendu, zatwierdzonego asortymentu/cennika, trwałego uploadu i repozytorium projektów, integracji płatności, wysyłki zapytań oraz panelu akceptacji proofów. GitHub Pages obsługuje tu wyłącznie demonstrację.
 
-QA: logo SVG na obu stronach, odświeżenie i odtworzenie pliku, zmiana skali tylnego nadruku, aktualizacja bez duplikowania pozycji, niezależna kopia RGB, nakład i progi cen, koszyk mieszany, usunięcie/cofnięcie, walidacja pustego formularza, pełne zakończenie zakupowe i wycenowe, eksport JSON (oba logo, położenie/rozmiar, podglądy; bez danych formularza). Układ desktop i mobilny 390 px bez poziomego przepełnienia.
+QA: logo SVG na obu stronach, odświeżenie i odtworzenie pliku, zmiana skali tylnego nadruku, aktualizacja bez duplikowania pozycji, niezależna kopia RGB, nakład i progi cen, koszyk mieszany, usunięcie/cofnięcie, walidacja pustego formularza, pełne zakończenie zakupowe i wycenowe, eksport JSON (oba logo, położenie/rozmiar, podglądy; bez danych formularza w wersji flow-6). Układ desktop i mobilny 390 px bez poziomego przepełnienia.
+
+## Wspólna identyfikacja EASOLUTION — brand-7
+
+- `brand-shell.js` i `brand-shell.css` dostarczają wspólny pasek serwisów, dwa logotypy, stopkę i stronę `/nasza-historia/`. Działają na stronie sklepu, w studiu oraz w koszyku. Na telefonie serwisy są rozwijane natywnym elementem details.
+- Logo EASOLUTION, znaki płatności, dane firmy, telefony i adresy serwisów pochodzą z https://zamowdruk.pl/ (sprawdzone 31.10.2026). Historia jest opracowana na podstawie https://zamowdruk.pl/nasza-historia. Zielono-srebrny styl Printbag24 pozostaje własny.
+- Regulamin, prywatność, reklamacje, poradniki i program lojalnościowy prowadzą do istniejących stron zamowdruk.pl; ich opisy linków wskazują serwis docelowy. Nie utworzono nowych dokumentów prawnych.
+- Interfejs sklepu ma docelowe teksty bez etykiet demo. Ceny pozostają szacunkową wyceną; płatność nie jest podłączona. Zapis podsumowania nie wysyła zamówienia: klient pobiera paczkę i przekazuje ją na info@easolution.pl. Archiwum koncepcji oraz dokumentacja techniczna nadal opisują prototyp.
+- Dane z formularza końcowego (kontakt/adres lub wiadomość) zapisują się lokalnie w IndexedDB w podsumowaniu i trafiają do pobieranego JSON wraz z projektem. Żadne dane nie są automatycznie wysyłane.
+
+QA brand-7: wspólny nagłówek na desktopie i telefonie 390 px, rozwijany pasek marek, mobilna stopka, historia, studio 2D/3D, koszyk, zakończenie formularza na danych testowych, eksport JSON z kontaktem/adresem i dwoma projektami; brak błędów konsoli.

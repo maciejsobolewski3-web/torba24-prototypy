@@ -4,7 +4,7 @@ import {BAG} from './model.js?v=1';
 // DOM handles stay crisp at any pixel ratio; their coordinates follow the model UVs.
 export function createEditOverlay({host,camera,getDraft,getSide,bounds,onChange,onCommit}){
   const layer=document.createElement('div');layer.className='edit-overlay';
-  layer.innerHTML=`<svg class="print-guides" aria-hidden="true"><polygon class="safe-outline"/><line class="align-x"/><line class="align-y"/></svg><span class="safe-label">Pole nadruku · poglądowe</span><div class="print-selection" role="group" aria-label="Zaznaczony nadruk"><button class="print-move" aria-label="Przesuń nadruk. Użyj strzałek klawiatury."></button>${['nw','ne','sw','se'].map(c=>`<button class="resize-handle ${c}" data-corner="${c}" aria-label="Skaluj nadruk — narożnik ${c}. Użyj strzałek klawiatury."></button>`).join('')}<span class="selection-size"></span></div>`;
+  layer.innerHTML=`<svg class="print-guides" aria-hidden="true"><polygon class="safe-outline"/><line class="align-x"/><line class="align-y"/></svg><span class="safe-label">Pole nadruku</span><div class="print-selection" role="group" aria-label="Zaznaczony nadruk"><button class="print-move" aria-label="Przesuń nadruk. Użyj strzałek klawiatury."></button>${['nw','ne','sw','se'].map(c=>`<button class="resize-handle ${c}" data-corner="${c}" aria-label="Skaluj nadruk — narożnik ${c}. Użyj strzałek klawiatury."></button>`).join('')}<span class="selection-size"></span></div>`;
   host.append(layer);
   const selection=layer.querySelector('.print-selection'),svg=layer.querySelector('svg');
   let enabled=true,guides=true,gesture=null;

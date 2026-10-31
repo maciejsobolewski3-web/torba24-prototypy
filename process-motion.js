@@ -28,7 +28,7 @@ export function process(){return `<section class="section pm-section" id="jak-za
       <div class="pm-player-controls"><button class="pm-play" type="button" aria-label="Wstrzymaj animację"><span class="pm-play-icon" aria-hidden="true">Ⅱ</span><span class="pm-play-label">Pauza</span></button><div class="pm-timeline" aria-hidden="true">${stages.map((_,i)=>`<span><i data-progress="${i}"></i></span>`).join('')}</div><span class="pm-duration">16 s</span></div>
     </div>
   </div>
-  <div class="pm-footnote"><span>Tak może wyglądać droga Twojego projektu. Wizualizacja poglądowa.</span><a href="${new URL('how-to/#pliki',base).href}">Jak przygotować logo?</a></div>
+  <div class="pm-footnote"><span>Twój pomysł. Nasze doświadczenie. Gotowa seria z Twoim znakiem.</span><a href="${new URL('how-to/#pliki',base).href}">Jak przygotować logo?</a></div>
 </section>`;}
 
 export function initProcessMotion(){

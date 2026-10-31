@@ -24,8 +24,8 @@ export const id=()=>crypto.randomUUID();
 export async function addToCart(project){
   await transaction(['projects','cart'],'readwrite',tx=>{tx.objectStore('projects').put(project);tx.objectStore('cart').put({...project,addedAt:Date.now()});});
 }
-export async function complete(items,kind){
-  const receipt={id:id(),createdAt:Date.now(),kind,items};
+export async function complete(items,kind,contact={}){
+  const receipt={id:id(),createdAt:Date.now(),kind,items,contact};
   await transaction(['cart','receipts'],'readwrite',tx=>{
     tx.objectStore('receipts').put(receipt);
     for(const item of items)tx.objectStore('cart').delete(item.id);

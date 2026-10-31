@@ -102,6 +102,6 @@ export function initDimensions() {
     const active = visual.classList.toggle('show-dimensions');
     button.setAttribute('aria-pressed', String(active));
     button.textContent = active ? 'Ukryj wymiary' : 'Sprawdź rozmiar';
-    visual.querySelector('.pb-size-note').textContent = active ? 'Wymiary przykładowe · schemat korpusu bez uchwytów' : 'Zobacz szerokość i wysokość korpusu torby.';
+    visual.querySelector('.pb-size-note').textContent = active ? 'Wymiary korpusu bez uchwytów' : 'Zobacz szerokość i wysokość korpusu torby.';
   });
 }

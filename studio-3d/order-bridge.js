@@ -1,4 +1,4 @@
-import {get,put,id,price,money,validQuantity} from '../order/store.js?v=flow-6';
+import {get,put,id,price,money,validQuantity} from '../order/store.js?v=brand-7';
 export async function initOrderBridge(studio){
   const $=s=>document.querySelector(s),params=new URLSearchParams(location.search);
   const projectId=params.get('project')||id(),quantity=$('#order-quantity'),button=$('#review-project'),status=$('#studio-status');
@@ -7,7 +7,7 @@ export async function initOrderBridge(studio){
     const p={...studio.details(),quantity:Number(quantity.value)};
     const result=validQuantity(p.quantity)?price(p):null;
     $('#order-price').textContent=!validQuantity(p.quantity)?'Wpisz nakład od 50 do 10 000 szt.':result?money(result.total):'Indywidualna wycena';
-    $('#order-price-note').textContent=result?`${money(result.unit)} / szt. · przykładowa cena brutto`:'Własny kolor RGB wymaga potwierdzenia materiału i ceny.';
+    $('#order-price-note').textContent=result?`${money(result.unit)} / szt. · szacunkowo brutto`:'Własny kolor RGB wymaga potwierdzenia materiału i ceny.';
   };
   if(params.has('project')){
     try{

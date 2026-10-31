@@ -1,10 +1,12 @@
+import {mountStandaloneShell} from '../brand-shell.js?v=brand-7';
+mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
 document.querySelector('.studio-layout').inert = true;
 try {
-  const {initStudio} = await import('./scene.js?v=flow-6');
+  const {initStudio} = await import('./scene.js?v=brand-7');
   const studio = await initStudio();
-  const {initOrderBridge} = await import('./order-bridge.js?v=flow-6');
+  const {initOrderBridge} = await import('./order-bridge.js?v=brand-7');
   await initOrderBridge(studio);
   panel.classList.remove('is-loading');
   document.querySelector('.studio-layout').inert = false;
