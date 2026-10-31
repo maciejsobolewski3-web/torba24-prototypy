@@ -68,5 +68,5 @@ export function createBag(){
     }
     for(const x of [-.88,.88]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.059,.011,8,20),eyelet);ring.position.set(x,2.43,z);group.add(ring);}
   }
-  return {group,printMeshes,setColor(key){paper.color.set(palette[key].body);inner.color.set(palette[key].inside);}};
+  return {group,printMeshes,setColor(value){const colors=typeof value==='string'?palette[value]:value;paper.color.set(colors.body);inner.color.set(colors.inside);}};
 }

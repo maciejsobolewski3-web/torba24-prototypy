@@ -3,8 +3,9 @@ import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
 import {createEditOverlay} from './edit-overlay.js?v=workbench-4';
 import {createLivePreview} from './live-preview.js?v=workbench-4';
+import {initColorControls} from './color-controls.js?v=rgb-5';
 import {readLogo} from '../logo-file.js';
-import {BAG,palette,createBag} from './model.js?v=1';
+import {BAG,palette,createBag} from './model.js?v=rgb-5';
 
 export async function initStudio(){
   const $=selector=>document.querySelector(selector),host=$('#scene'),status=$('#studio-status');
@@ -31,7 +32,7 @@ export async function initStudio(){
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);
-  let mode='2d',color='green',side='front',frame=0,tween=null,lastTime=0,drag=null,disposed=false;
+  let mode='2d',color=palette.green,side='front',frame=0,tween=null,lastTime=0,drag=null,disposed=false;
   const drafts={front:{kind:'example',image:null,url:null,name:'Twoja marka.',size:48,x:0,y:0,sequence:0},back:{kind:'none',image:null,url:null,name:'',size:48,x:0,y:0,sequence:0}};
   let overlay=null,preview=null;
   const wide=matchMedia('(min-width: 1100px)');
@@ -52,7 +53,7 @@ export async function initStudio(){
     if(d.kind!=='none'){
       const b=bounds(d),x=(b.x-b.w/2)*1024,y=(1-b.y-b.h/2)*1024,w=b.w*1024,h=b.h*1024;
       if(d.image)ctx.drawImage(d.image,x,y,w,h);
-      else{ctx.fillStyle=palette[color].ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`500 ${h*.47}px Georgia,serif`;ctx.fillText('Twoja',x+w/2,y+h*.29,w);ctx.font=`italic 500 ${h*.47}px Georgia,serif`;ctx.fillText('marka.',x+w/2,y+h*.78,w);}
+      else{ctx.fillStyle=color.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`500 ${h*.47}px Georgia,serif`;ctx.fillText('Twoja',x+w/2,y+h*.29,w);ctx.font=`italic 500 ${h*.47}px Georgia,serif`;ctx.fillText('marka.',x+w/2,y+h*.78,w);}
     }
     textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=d.kind!=='none';overlay?.update();invalidate();
   }
@@ -132,7 +133,7 @@ export async function initStudio(){
   window.addEventListener('scroll',invalidate,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();});
   reduced.addEventListener('change',()=>{if(reduced.matches){tween=null;setRotation(false);}invalidate();});
-  document.querySelectorAll('[data-color]').forEach(b=>b.addEventListener('click',()=>{color=b.dataset.color;bag.setColor(color);$('#color-label').textContent=palette[color].name;document.querySelectorAll('[data-color]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw('front');draw('back');}));
+  initColorControls({palette,onChange:next=>{color=next;bag.setColor(color);draw('front');draw('back');}});
   document.querySelectorAll('[data-side]').forEach(b=>b.addEventListener('click',()=>selectSide(b.dataset.side)));
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(['front','back'].includes(b.dataset.view))selectSide(b.dataset.view);else goView(b.dataset.view);}));
   $('#rotate').addEventListener('click',()=>{tween=null;setRotation(!controls.autoRotate);});
