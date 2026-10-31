@@ -13,3 +13,13 @@ body.account-is-open{overflow:hidden}.account-dialog{position:fixed;inset:0;marg
 /* Centre the brand links independently of the contact details. */
 @media(min-width:1151px){.ea-topbar-inner{display:grid;grid-template-columns:minmax(200px,1fr) minmax(0,auto) minmax(200px,1fr);gap:16px}.ea-desktop-services{grid-column:2;justify-content:center;text-align:center}.ea-phones{grid-column:3;justify-self:end}}
 @media(min-width:1251px) and (max-width:1500px){.ea-desktop-services{font-size:10px;gap:9px}.ea-desktop-services>a+a{padding-left:9px}}
+
+/* Give the category row a clearer visual hierarchy below search. */
+.site-nav.shop-header .main-nav{font-size:18px;font-weight:550}
+.site-nav.shop-header .shop-dropdown summary{font-size:inherit}
+.site-nav.shop-header .shop-dropdown>div a{font-size:16px;line-height:1.45}
+@media(min-width:1101px){
+ .site-nav.shop-header .main-nav{font-size:clamp(20px,1.25vw,22px);min-height:68px;gap:clamp(26px,2.2vw,42px)}
+ .site-nav.shop-header .main-nav> a,.site-nav.shop-header .shop-dropdown summary{padding-block:19px}
+ .site-nav.shop-header .shop-dropdown summary{gap:11px}
+}
