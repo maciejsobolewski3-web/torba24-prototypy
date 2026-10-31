@@ -66,3 +66,15 @@ Sprawdzono PNG, przezroczyste SVG, uszkodzony PNG (zachowanie wcześniejszego lo
 - Sekcja hero używa overflow:clip, aby jej dekoracja nie tworzyła wewnętrznego obszaru przewijania przy ustawianiu fokusu.
 - Sprawdzone w przeglądarce: 390, 820, 1280 i 1440 px, równe segmenty, brak poziomego przepełnienia, zmiana materiału, podgląd nadruku, upload SVG i przeniesienie do studia, wymiary produktu, ręczny wybór etapu animacji. Konsola bez błędów JS.
 - Zakres oferty i specyfikacje pozostają przykładowe. Analiza konkurencji nie stanowi potwierdzenia asortymentu Printbag24.
+
+
+### Studio 3D — pierwszy model papierowy (31.10.2026)
+
+- Nowy adres `studio-3d/`, połączony ze stroną główną i kartą Papier premium. Klasyczny konfigurator pozostaje dostępny.
+- Proceduralna, otwarta bryła torby z bocznymi zakładkami, wewnętrznym zagięciem papieru, dnem, oczkami i plecionymi sznurkowymi uchwytami. Geometria pokazowa, nie zweryfikowany model produkcyjny.
+- Three.js 0.187.0 (MIT), pliki z oficjalnego pakietu npm w `vendor/three/`; licencja zachowana. Brak CDN dla silnika 3D i brak kroku budowania.
+- Trzy kolory; kamera przód/tył/detal/cała torba, ręczny obrót, opcjonalna rotacja; osobne projekty obu stron; upload PNG/JPG/SVG do 5 MB poprzez wspólny walidator.
+- Logo nakładane na UV powierzchni. Skala i przesunięcie ograniczone do poglądowego obszaru. Przeciąganie nadruku myszką; suwaki dostępne klawiaturą i na telefonie. Przykładowy napis dostosowuje kolor do papieru; kolory wgranego logo pozostają zachowane.
+- PNG zawiera aktualny kadr i oznaczenie podglądu. To obraz prezentacyjny, nie plik produkcyjny. Logo pozostaje wyłącznie w pamięci bieżącej strony; nie jest wysyłane ani zapisywane między wizytami.
+- Renderowanie na żądanie, limit pixel ratio 1.75, zatrzymanie poza ekranem / w tle, obsługa reduced motion i awarii WebGL z linkiem do klasycznego konfiguratora.
+- QA w przeglądarce: render WebGL na desktopie i układ mobilny (433 CSS px), brak poziomego przepełnienia; trzy kolory; przód/tył/detal; rotacja start/stop; przeciąganie nadruku i suwaki; wgranie SVG na tył z zachowaniem przodu; odrzucenie uszkodzonego PNG bez utraty nadruku; usunięcie/przywrócenie przykładu; pobranie i wizualna inspekcja PNG; przejście z hero do studia. Wydajność na fizycznym telefonie i fallback WebGL nie były osobno emulowane.

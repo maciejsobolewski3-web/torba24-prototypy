@@ -1,5 +1,5 @@
-import * as pb from './printbag-content.js?v=polish-2';
-import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=polish-2';
+import * as pb from './printbag-content.js?v=studio3d-1';
+import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=studio3d-1';
 import {readLogo} from './logo-file.js';
 import { initProcessMotion } from './process-motion.js?v=polish-2';
 const BASE = new URL('./', import.meta.url);
