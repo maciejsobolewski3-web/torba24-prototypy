@@ -1,0 +1,6 @@
+White paper product assets — 2026-10-31
+Built-in image_gen edits of assets/kraft.webp and assets/paper-flat-34.webp.
+Request: matte white uncoated paper, preserve silhouette, camera angle, folds and handle geometry; retain paper grain and shaded gussets, no blown highlights; transparent background, no logo.
+Outputs: assets/paper-white-twisted-39.webp and assets/paper-white-flat-39.webp.
+Converted generated PNGs with cwebp quality 90, alpha quality 100. Source originals retained in Codex generated_images.
+Hero now chooses a separate white photograph instead of the legacy brightness(2.8) filter. White flat-handle home card uses the same white asset with contain sizing and no color filter.

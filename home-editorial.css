@@ -12,3 +12,5 @@
 
 /* Keep every home collection in complete rows. */
 @media(min-width:601px){.pb-models .product-grid:has(> :nth-child(4):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.pb-models .pb-editorial-stage .product-image.home-white-paper{filter:none;object-fit:contain;padding:6%}
