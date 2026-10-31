@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
-import {createEditOverlay} from './edit-overlay.js?v=workbench-3';
-import {createLivePreview} from './live-preview.js?v=workbench-3';
+import {createEditOverlay} from './edit-overlay.js?v=workbench-4';
+import {createLivePreview} from './live-preview.js?v=workbench-4';
 import {readLogo} from '../logo-file.js';
 import {BAG,palette,createBag} from './model.js?v=1';
 
@@ -31,7 +31,7 @@ export async function initStudio(){
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);
-  let mode='2d',color='green',side='front',frame=0,tween=null,lastTime=0,inView=true,drag=null,disposed=false;
+  let mode='2d',color='green',side='front',frame=0,tween=null,lastTime=0,drag=null,disposed=false;
   const drafts={front:{kind:'example',image:null,url:null,name:'Twoja marka.',size:48,x:0,y:0,sequence:0},back:{kind:'none',image:null,url:null,name:'',size:48,x:0,y:0,sequence:0}};
   let overlay=null,preview=null;
   const wide=matchMedia('(min-width: 1100px)');
@@ -67,11 +67,14 @@ export async function initStudio(){
     }invalidate();
   }
   function selectSide(s){side=s;syncPanel();goView(s);preview?.orient(s);overlay?.update();status.textContent=s==='front'?'Edytujesz przód torby.':'Edytujesz tył torby. Nadruki obu stron ustawiasz osobno.';}
-  function tick(now){frame=0;if(disposed||document.hidden||!inView)return;const dt=Math.min((now-lastTime)/1000||.016,.05);lastTime=now;
+  function tick(now){frame=0;if(disposed||document.hidden||!stageVisible())return;const dt=Math.min((now-lastTime)/1000||.016,.05);lastTime=now;
     if(tween){const t=Math.min(1,(now-tween.start)/700),e=1-Math.pow(1-t,3);controls.target.lerpVectors(tween.targetFrom,tween.targetTo,e);const s=new THREE.Spherical(THREE.MathUtils.lerp(tween.from.radius,tween.to.radius,e),THREE.MathUtils.lerp(tween.from.phi,tween.to.phi,e),THREE.MathUtils.lerp(tween.from.theta,tween.to.theta,e));camera.position.setFromSpherical(s).add(controls.target);if(t===1)tween=null;}
     const moving=mode==='3d'&&controls.update(dt);renderer.render(scene,camera);overlay?.update();const previewMoving=preview?.render(dt);if(tween||controls.autoRotate||moving||previewMoving)invalidate();
   }
-  function invalidate(){if(!frame&&!disposed&&!document.hidden&&inView)frame=requestAnimationFrame(tick);}
+  // Check the actual stage bounds: observing an absolutely positioned canvas in a
+  // clipped sticky container can report a stale intersection after resizing.
+  function stageVisible(){const r=$('.studio-stage').getBoundingClientRect();return r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth;}
+  function invalidate(){if(!frame&&!disposed&&!document.hidden)frame=requestAnimationFrame(tick);}
   controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{tween=null;setRotation(false);document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed','false'));});
   // Both projections render the same model and print textures. In 2D the camera is
   // exactly perpendicular to the face: no perspective, side wall or orbit drift.
@@ -126,7 +129,7 @@ export async function initStudio(){
     flatCamera.left=-width/2;flatCamera.right=width/2;flatCamera.top=height/2;flatCamera.bottom=-height/2;flatCamera.updateProjectionMatrix();
     renderer.setSize(r.width,r.height);overlay?.update();updateHints();invalidate();
   });resize.observe(host);
-  const observer=new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)invalidate();else{cancelAnimationFrame(frame);frame=0;}},{threshold:0});observer.observe(host);
+  window.addEventListener('scroll',invalidate,{passive:true});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();});
   reduced.addEventListener('change',()=>{if(reduced.matches){tween=null;setRotation(false);}invalidate();});
   document.querySelectorAll('[data-color]').forEach(b=>b.addEventListener('click',()=>{color=b.dataset.color;bag.setColor(color);$('#color-label').textContent=palette[color].name;document.querySelectorAll('[data-color]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw('front');draw('back');}));
@@ -167,7 +170,7 @@ export async function initStudio(){
     if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();setRotation(false);tween=null;const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new THREE.Vector3(0,1,0),event.key==='ArrowLeft'?-.16:.16);camera.position.copy(controls.target).add(offset);controls.update();invalidate();});
   $('#save-preview').addEventListener('click',()=>{renderer.render(scene,camera);const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e7eee3';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);ctx.fillStyle='#456453';ctx.font=`${Math.max(12,output.width*.014)}px sans-serif`;ctx.fillText('PRINTBAG24 / PODGLĄD POGLĄDOWY',output.width*.04,output.height*.96);output.toBlob(blob=>{if(!blob){status.textContent='Nie udało się zapisać podglądu.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`printbag24-podglad-${mode}-${side==='front'?'przod':'tyl'}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Podgląd PNG został przygotowany do pobrania.';},'image/png');});
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();setRotation(false);$('#scene-fallback').hidden=false;$('.editor-tools').hidden=true;$('.live-preview').hidden=true;preview?.setActive(false);$('#stage-controls').hidden=true;$('#scene').hidden=true;$('#fallback-message').textContent='Widok 3D został zatrzymany. Odśwież stronę lub otwórz podgląd klasyczny.';document.querySelectorAll('.studio-panel button,.studio-panel input').forEach(el=>el.disabled=true);});
-  window.addEventListener('pagehide',event=>{cancelAnimationFrame(frame);frame=0;if(event.persisted)return;disposed=true;resize.disconnect();observer.disconnect();controls.dispose();preview?.dispose();for(const d of Object.values(drafts))if(d.url)URL.revokeObjectURL(d.url);scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const m of mats){m.map?.dispose();m.bumpMap?.dispose();m.dispose();}}});env.dispose();renderer.dispose();});
+  window.addEventListener('pagehide',event=>{cancelAnimationFrame(frame);frame=0;if(event.persisted)return;disposed=true;resize.disconnect();window.removeEventListener('scroll',invalidate);controls.dispose();preview?.dispose();for(const d of Object.values(drafts))if(d.url)URL.revokeObjectURL(d.url);scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const m of mats){m.map?.dispose();m.bumpMap?.dispose();m.dispose();}}});env.dispose();renderer.dispose();});
   window.addEventListener('pageshow',()=>invalidate());
   overlay=createEditOverlay({host,camera:flatCamera,getDraft:()=>drafts[side],getSide:()=>side,bounds,onChange:()=>{syncPanel();draw(side);},onCommit:()=>{}});
   $('#toggle-guides').addEventListener('click',()=>{const value=$('#toggle-guides').getAttribute('aria-pressed')!=='true';$('#toggle-guides').setAttribute('aria-pressed',String(value));overlay.setGuides(value);});
