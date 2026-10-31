@@ -44,7 +44,7 @@ Sprawdzono w przeglądarce układ komputerowy oraz szerokości 390 i 360 px, men
 
 ## Animowany proces
 
-Sekcja „Od pustej torby do Twojej marki” korzysta z `process-motion.js` i `process-motion.css`. Pokazuje wybór materiału, dodanie logo, akceptację oraz gotową serię z paczką. Sekwencja trwa 16 sekund, odtwarza się raz po wejściu w obszar widoczny i ma pauzę, powtórzenie oraz ręczny wybór etapów (także strzałkami klawiatury). Zmiana karty lub opuszczenie sekcji zatrzymuje zegar. Przy `prefers-reduced-motion` nie ma automatycznego startu, a efekty przestrzenne nie są animowane. To responsywna animacja HTML/CSS/JS, nie osadzony film MP4.
+Sekcja „Od pustej torby do Twojej marki” korzysta z `process-motion.js` i `process-motion.css`. Pokazuje wybór materiału, dodanie logo, akceptację oraz gotową serię z paczką. Sekwencja trwa 9,6 sekundy (2,4 s na etap), odtwarza się raz po wejściu w obszar widoczny. Ilustracja jest bezpośrednio na tle sekcji, bez ramki, osobnego tła i paska odtwarzacza. Ręczny wybór etapu (także strzałkami klawiatury) zatrzymuje automatyczne przechodzenie. Zmiana karty lub opuszczenie sekcji zatrzymuje zegar. Przy `prefers-reduced-motion` nie ma automatycznego startu, a efekty przestrzenne nie są animowane. To responsywna animacja HTML/CSS/JS, nie osadzony film MP4.
 
 ## Interakcje produktu
 
@@ -100,3 +100,5 @@ QA: logo SVG na obu stronach, odświeżenie i odtworzenie pliku, zmiana skali ty
 - Dane z formularza końcowego (kontakt/adres lub wiadomość) zapisują się lokalnie w IndexedDB w podsumowaniu i trafiają do pobieranego JSON wraz z projektem. Żadne dane nie są automatycznie wysyłane.
 
 QA brand-7: wspólny nagłówek na desktopie i telefonie 390 px, rozwijany pasek marek, mobilna stopka, historia, studio 2D/3D, koszyk, zakończenie formularza na danych testowych, eksport JSON z kontaktem/adresem i dwoma projektami; brak błędów konsoli.
+
+QA motion-8: automatyczne przejście od etapu 1 do 4, ręczny wybór zatrzymuje pokaz, tło przezroczyste i brak kontrolek odtwarzacza, desktop 1440 px oraz telefon 390 px bez poziomego przepełnienia; konsola bez błędów.
