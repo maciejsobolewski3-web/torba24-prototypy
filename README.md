@@ -140,3 +140,9 @@ History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami r
 - Menu wyśrodkowane względem strony, większe napisy (16–17 px), osobny przycisk konta. Na mniejszych ekranach menu przechodzi do hamburgera, a konto pozostaje dostępne jako ikona. Wspólna nakładka dostępna też w studiu 2D/3D i koszyku.
 - Logowanie, rejestracja i reset hasła w natywnym dialogu: walidacja pól i zgodności haseł, pokaż/ukryj hasło, zamykanie Escape oraz powrót fokusu. To interfejs do podłączenia backendu: nie zapisuje ani nie wysyła danych logowania i nie symuluje udanej autoryzacji lub wysłania maila.
 - QA: menu wyśrodkowane przy 1440 i 1920 px; telefon 390 i 320 px bez poziomego przepełnienia. Sprawdzone wymagane pola, niezgodne hasła, wszystkie trzy widoki, Escape, koszyk i nagłówek studia. Kontrola składni JS i git diff --check zakończone poprawnie.
+
+## Uwagi do strony i nadruku — feedback-20
+
+- Usunięte numery etapów animacji i napis „Twoja seria” z pudełka. Nagłówek hero ma dwie pełne linie, ze skalą dopasowaną do szerokości kolumny. Zieleń bawełny jest mniej nasycona.
+- Studio opisuje model jako torbę papierową premium. Przy wyborze strony znajduje się widoczny blok nadruku dwustronnego z aktualnym stanem stron i informacją, że kopiowanie jest jednorazowe; strony pozostają niezależne.
+- QA: desktop 1440/1920 i telefon 390 px, brak przepełnienia, usunięte elementy procesu, przełączanie materiału/koloru. Skopiowano nadruk na tył, przesunięto przód o dwa kroki, sprawdzono niezmieniony tył i po ponownej kopii pozycję 2 na tyle. Brak błędów konsoli, kontrola składni JS i diff poprawna.

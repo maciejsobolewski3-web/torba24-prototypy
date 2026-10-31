@@ -57,7 +57,7 @@ export async function initStudio(){
     }
     textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=d.kind!=='none';overlay?.update();invalidate();document.dispatchEvent(new Event('studio-project-change'));
   }
-  function syncPanel(){const d=drafts[side];$('#copy-print').disabled=d.kind==='none';$('#copy-print').textContent=side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
+  function syncPanel(){const d=drafts[side];$('#duplex-state').textContent=drafts.front.kind!=='none'&&drafts.back.kind!=='none'?'Przód i tył':drafts.front.kind!=='none'?'Tylko przód':drafts.back.kind!=='none'?'Tylko tył':'Bez nadruku';$('#copy-print').disabled=d.kind==='none';$('#copy-print').textContent=side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
   function setRotation(value){value=value&&mode==='3d';controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
   const views={front:{position:[0,2.2,9],target:[0,1.95,0]},back:{position:[0,2.2,-9],target:[0,1.95,0]},detail:{position:[3.2,4.25,4.4],target:[0,2.45,0]},perspective:{position:[5.3,3.3,7.5],target:[0,1.95,0]}};
   function goView(name){setRotation(false);if(mode==='2d'){alignFlatView();invalidate();return;}const view=views[name];document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));const to=new THREE.Vector3(...view.position),target=new THREE.Vector3(...view.target);
@@ -151,8 +151,8 @@ export async function initStudio(){
     let url=null;pendingFiles++;
     try{if(source.url)url=URL.createObjectURL(await (await fetch(source.url)).blob());
       if(d.sequence!==sequence||disposed){if(url)URL.revokeObjectURL(url);return;}
-      if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,source,{url,sequence});draw(target);
-      status.textContent=`Nadruk skopiowany na ${target==='back'?'tył':'przód'}. Możesz edytować obie strony osobno.`;
+      if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,source,{url,sequence});draw(target);syncPanel();
+      status.textContent=`Nadruk skopiowany na ${target==='back'?'tył':'przód'}. Kolejne zmiany nie przenoszą się automatycznie — skopiuj ponownie, aby wyrównać obie strony.`;
     }catch{if(url)URL.revokeObjectURL(url);status.textContent='Nie udało się skopiować nadruku. Spróbuj ponownie.';}finally{pendingFiles--;}
   });
   $('#center-logo').addEventListener('click',()=>{drafts[side].x=drafts[side].y=0;syncPanel();draw(side);});

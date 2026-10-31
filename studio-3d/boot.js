@@ -4,7 +4,7 @@ const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
 document.querySelector('.studio-layout').inert = true;
 try {
-  const {initStudio} = await import('./scene.js?v=brand-7');
+  const {initStudio} = await import('./scene.js?v=feedback-20');
   const studio = await initStudio();
   const {initOrderBridge} = await import('./order-bridge.js?v=brand-7');
   await initOrderBridge(studio);
