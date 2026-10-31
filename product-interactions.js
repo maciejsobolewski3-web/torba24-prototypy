@@ -1,9 +1,9 @@
 import { readLogo } from './logo-file.js';
 const motion = () => !matchMedia('(prefers-reduced-motion: reduce)').matches;
-const arrow = '<span aria-hidden="true">↗</span>';
+
 
 export function heroUpload() {
-  return `<div class="pb-hero-upload"><button type="button" class="button primary full" data-hero-upload><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></svg><span data-upload-label>Zobacz swoje logo</span></button><input type="file" id="hero-logo-file" accept="image/png,image/jpeg,image/svg+xml" hidden><div class="pb-hero-file-actions" hidden><span data-hero-filename></span><button type="button" data-hero-remove aria-label="Usuń logo z podglądu">Usuń</button></div><p class="pb-upload-status" role="status">PNG, JPG lub SVG · do 5 MB<br>Plik pozostaje w Twojej przeglądarce.</p><button type="button" class="text-link" data-action="configure">Przejdź do studia ${arrow}</button></div>`;
+  return `<div class="pb-hero-upload"><button type="button" class="button primary full" data-hero-upload><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></svg><span data-upload-label>Zobacz swoje logo</span></button><input type="file" id="hero-logo-file" accept="image/png,image/jpeg,image/svg+xml" hidden><div class="pb-hero-file-actions" hidden><span data-hero-filename></span><button type="button" data-hero-remove aria-label="Usuń logo z podglądu">Usuń</button></div><p class="pb-upload-status" role="status">PNG, JPG lub SVG · do 5 MB<br> Plik pozostaje w Twojej przeglądarce.</p><button type="button" class="text-link" data-action="configure">Przejdź do studia</button></div>`;
 }
 
 export function initHeroUpload({openStudio, getSelection}) {
@@ -24,9 +24,9 @@ export function initHeroUpload({openStudio, getSelection}) {
     hero.classList.remove('has-own-logo', 'print-visible');
     hero.querySelector('.pb-hero-file-actions').hidden = true;
     hero.querySelector('[data-upload-label]').textContent = 'Zobacz swoje logo';
-    hero.querySelector('[data-action="configure"]').innerHTML = `Przejdź do studia ${arrow}`;
+    hero.querySelector('[data-action="configure"]').innerHTML = `Przejdź do studia`;
     toggle.setAttribute('aria-pressed', 'false');
-    toggle.textContent = 'Zobacz efekt nadruku ↗';
+    toggle.textContent = 'Zobacz efekt nadruku';
     status.textContent = 'PNG, JPG lub SVG · do 5 MB. Plik pozostaje w Twojej przeglądarce.';
   }
   upload.addEventListener('click', () => input.click());
@@ -45,8 +45,8 @@ export function initHeroUpload({openStudio, getSelection}) {
       hero.querySelector('[data-upload-label]').textContent = 'Zmień logo';
       hero.querySelector('.pb-hero-file-actions').hidden = false;
       hero.querySelector('[data-hero-filename]').textContent = logo.name;
-      hero.querySelector('[data-action="configure"]').innerHTML = `Dopasuj nadruk w studiu ${arrow}`;
-      toggle.setAttribute('aria-pressed', 'true'); toggle.textContent = 'Ukryj nadruk ↗';
+      hero.querySelector('[data-action="configure"]').innerHTML = `Dopasuj nadruk w studiu`;
+      toggle.setAttribute('aria-pressed', 'true'); toggle.textContent = 'Ukryj nadruk';
       status.textContent = 'Twoje logo jest na obu torbach. Porównaj papier i bawełnę.';
       if (innerWidth <= 950) hero.querySelector('.hero-products').scrollIntoView({behavior:motion()?'smooth':'auto',block:'center'});
       if (motion() && innerWidth > 950) {
@@ -81,7 +81,7 @@ export function initExampleReveals() {
       button.classList.toggle('is-revealed', value);
       button.setAttribute('aria-pressed', String(value));
       button.setAttribute('aria-label', `${value ? 'Ukryj' : 'Pokaż'} nadruk: ${title}`);
-      button.querySelector('.pb-reveal-label').textContent = value ? 'Torba z charakterem ↗' : 'Zobacz nadruk +';
+      button.querySelector('.pb-reveal-label').textContent = value ? 'Torba z charakterem' : 'Zobacz nadruk +';
     };
     button.addEventListener('pointerenter', event => {if (event.pointerType === 'mouse' && matchMedia('(hover:hover)').matches) show(true);});
     button.addEventListener('pointerleave', () => {if (!pinned) show(false);});
@@ -101,7 +101,7 @@ export function initDimensions() {
   button.addEventListener('click', () => {
     const active = visual.classList.toggle('show-dimensions');
     button.setAttribute('aria-pressed', String(active));
-    button.textContent = active ? 'Ukryj wymiary ↗' : 'Sprawdź rozmiar ↗';
+    button.textContent = active ? 'Ukryj wymiary' : 'Sprawdź rozmiar';
     visual.querySelector('.pb-size-note').textContent = active ? 'Wymiary przykładowe · schemat korpusu bez uchwytów' : 'Zobacz szerokość i wysokość korpusu torby.';
   });
 }

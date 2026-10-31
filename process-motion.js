@@ -10,9 +10,9 @@ const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const bag = (cls='') => `<div class="pm-bag ${cls}"><img src="${asset('cotton.webp')}" alt="" width="600" height="800" loading="lazy"><span class="pm-print">Twoja<br><em>marka.</em></span></div>`;
 
 export function process(){return `<section class="section pm-section" id="jak-zamawiac" aria-labelledby="pm-heading">
-  <div class="section-heading"><div><span class="eyebrow">ZOBACZ, JAK POWSTAJE TWÓJ PROJEKT</span><h2 id="pm-heading">Od pustej torby<br>do Twojej marki.</h2></div><a class="text-link" href="${new URL('catalog/',base).href}">Zacznij od swojej torby <span aria-hidden="true">↗</span></a></div>
+  <div class="section-heading"><div><span class="eyebrow">ZOBACZ, JAK POWSTAJE TWÓJ PROJEKT</span><h2 id="pm-heading">Od pustej torby<br>do Twojej marki.</h2></div><a class="text-link" href="${new URL('catalog/',base).href}">Zacznij od swojej torby</a></div>
   <div class="pm-story" data-stage="0">
-    <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span><span class="pm-step-arrow" aria-hidden="true">↗</span></button>`).join('')}<p class="pm-instruction">Obejrzyj historię lub wybierz dowolny etap.</p></div>
+    <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-number">0${i+1}</span><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Obejrzyj historię lub wybierz dowolny etap.</p></div>
     <div class="pm-player">
       <div class="pm-scene" id="pm-scene" role="img" aria-label="${stages[0][1]}">
         <div class="pm-studio-label" aria-hidden="true"><span><i></i> PRINTBAG24 / STUDIO</span><span class="pm-scene-counter">01 / 04</span></div>
@@ -28,7 +28,7 @@ export function process(){return `<section class="section pm-section" id="jak-za
       <div class="pm-player-controls"><button class="pm-play" type="button" aria-label="Wstrzymaj animację"><span class="pm-play-icon" aria-hidden="true">Ⅱ</span><span class="pm-play-label">Pauza</span></button><div class="pm-timeline" aria-hidden="true">${stages.map((_,i)=>`<span><i data-progress="${i}"></i></span>`).join('')}</div><span class="pm-duration">16 s</span></div>
     </div>
   </div>
-  <div class="pm-footnote"><span>Tak może wyglądać droga Twojego projektu. Wizualizacja poglądowa.</span><a href="${new URL('how-to/#pliki',base).href}">Jak przygotować logo? <span aria-hidden="true">↗</span></a></div>
+  <div class="pm-footnote"><span>Tak może wyglądać droga Twojego projektu. Wizualizacja poglądowa.</span><a href="${new URL('how-to/#pliki',base).href}">Jak przygotować logo?</a></div>
 </section>`;}
 
 export function initProcessMotion(){

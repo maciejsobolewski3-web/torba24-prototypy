@@ -56,3 +56,13 @@ Sekcja „Od pustej torby do Twojej marki” korzysta z `process-motion.js` i `p
 - Nowe interakcje znajdują się w `product-interactions.js` i `product-interactions.css`; respektują ograniczenie ruchu.
 
 Sprawdzono PNG, przezroczyste SVG, uszkodzony PNG (zachowanie wcześniejszego logo), przekazanie pliku i nakładu 137 szt. do studia, edycję i podsumowanie po przejściu, przełączanie inspiracji oraz schemat bawełny i papieru. Widoki mobilne sprawdzone przy 390 px.
+
+
+### Dopracowanie interfejsu — 31.10.2026
+
+- Równe segmenty Papier/Bawełna, panel o wysokości wynikającej z treści i pełnej szerokości pola na telefonie.
+- Rozdzielona kompozycja papieru i bawełny, również po wgraniu własnego logo; zachowany ruch przy wyborze materiału.
+- Usunięte ozdobne strzałki z CTA, kart i etapów procesu. Samodzielne linki zastąpione etykietami Zobacz/Edytuj.
+- Sekcja hero używa overflow:clip, aby jej dekoracja nie tworzyła wewnętrznego obszaru przewijania przy ustawianiu fokusu.
+- Sprawdzone w przeglądarce: 390, 820, 1280 i 1440 px, równe segmenty, brak poziomego przepełnienia, zmiana materiału, podgląd nadruku, upload SVG i przeniesienie do studia, wymiary produktu, ręczny wybór etapu animacji. Konsola bez błędów JS.
+- Zakres oferty i specyfikacje pozostają przykładowe. Analiza konkurencji nie stanowi potwierdzenia asortymentu Printbag24.
