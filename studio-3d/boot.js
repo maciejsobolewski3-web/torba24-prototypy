@@ -1,12 +1,14 @@
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
 try {
-  const {initStudio} = await import('./scene.js?v=dual-2');
+  const {initStudio} = await import('./scene.js?v=workbench-3');
   await initStudio();
   panel.classList.remove('is-loading');
 } catch (error) {
   console.error('Studio 3D could not start:', error);
   document.querySelector('#scene').hidden = true;
+  document.querySelector('.editor-tools').hidden = true;
+  document.querySelector('.live-preview').hidden = true;
   document.querySelector('#stage-controls').hidden = true;
   document.querySelector('#scene-fallback').hidden = false;
   panel.classList.remove('is-loading');
