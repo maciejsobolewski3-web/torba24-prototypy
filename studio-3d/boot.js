@@ -13,7 +13,7 @@ try {
   else{const p=resolveProduct(params.get('sku')||params.get('id')||'premium');configuration=makeConfiguration(p,studioDefaults(p),baseColor(p));}
   const {initStudio} = await import('./scene.js?v=unified-25');
   const studio = await initStudio(configuration);
-  const {initOrderBridge} = await import('./order-bridge.js?v=unified-25');
+  const {initOrderBridge} = await import('./order-bridge.js?v=flow-26');
   await initOrderBridge(studio);
   mountProductControls(studio);
   panel.classList.remove('is-loading');

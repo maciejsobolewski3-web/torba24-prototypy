@@ -48,3 +48,4 @@
 #open-artwork{background:#174f3d;color:#fff;border:0;margin-top:18px;min-height:48px}
 #artwork-panel>.studio-field:first-child{margin-top:16px}.studio-panel{max-height:min(740px,calc(100dvh - 85px))}
 @media(max-width:760px){.studio-panel{max-height:none}.panel-tabs button{font-size:13px}}
+.studio-summary{margin-top:20px;border-top:1px solid var(--studio-line);padding-top:16px}.studio-summary summary{font-size:12px;cursor:pointer;min-height:32px}.studio-summary dl>div{display:flex;justify-content:space-between;gap:16px;font-size:11px;padding:8px 0;border-bottom:1px solid var(--studio-line)}.studio-summary dt{color:var(--studio-muted)}.studio-summary dd{text-align:right;max-width:65%}#add-variant{margin-top:10px;font-size:12px}

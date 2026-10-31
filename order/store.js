@@ -48,3 +48,10 @@ export function price(p){
 export const shipping=1900;
 export const format='32 × 12 × 26 cm';
 export const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// Local draft only: backend delivery must never be inferred from this receipt.
+export function makeQuoteDraft(items,contact){
+  if(!items.length||items.some(p=>!validQuantity(p.quantity,p)))throw new Error('Sprawdź warianty i nakład.');
+  if(!contact.name?.trim()||!contact.email?.trim())throw new Error('Uzupełnij dane kontaktowe.');
+  return {id:id(),createdAt:Date.now(),kind:'quote-draft',status:'saved-locally',items,contact};
+}

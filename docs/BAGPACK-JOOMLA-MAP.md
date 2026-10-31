@@ -158,3 +158,25 @@ linked identical sides share artwork/position, and no-print exports no artwork.
 Review/cart edit links return to this same studio. Integration must preserve
 `configuration.options`, dimensions, requests, faces (including original blobs),
 colour, quantity and both thumbnails together.
+
+### Three-screen quote flow (2026-10-31)
+
+The normal path is catalog → unified studio → `/order/?step=quote`.
+The studio saves its project and previews through `addToCart`, then opens the
+contact form directly. It no longer visits review or the cart screen.
+“Dodaj kolejny wariant” saves the current bag and returns to the catalog;
+existing variants are counted on the studio CTA and included in one query.
+The optional cart remains an edit/copy/remove list. Old review URLs open the
+saved project in the studio. The WebGL fallback also submits straight to quote.
+
+The contact screen includes collapsible previews/options and direct edit links.
+Draft contact fields survive editing within the same browser tab. Saving makes
+an explicit `quote-draft` receipt with `status: saved-locally`; it does not remove
+cart projects, send mail, charge payment or claim server delivery. Download and
+manual-email steps are absent from this new flow. Legacy receipts remain readable.
+
+Joomla integration point: the `checkout-form` submit branch in `order/order.js`.
+Replace local receipt persistence with the server submission of the complete
+project payload and artwork, and only show a sent confirmation after a successful
+server response. At that point change “Zapisz zapytanie” to “Wyślij do wyceny” and
+remove the local-save notice. Do not treat local receipt creation as delivery.
