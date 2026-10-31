@@ -2,23 +2,23 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#174f3d"><meta name="description" content="Obróć torbę, wybierz kolor i zobacz własne logo w studio 3D Printbag24. Interaktywna prezentacja.">
-<title>Twoja torba w 3D — Printbag24</title>
-<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../styles.css?v=printbag-1"><link rel="stylesheet" href="./studio.css?v=1">
+<meta name="theme-color" content="#174f3d"><meta name="description" content="Zaprojektuj nadruk na wprost w 2D i obejrzyj tę samą torbę w 3D. Studio Printbag24.">
+<title>Studio 2D / 3D — Printbag24</title>
+<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../styles.css?v=printbag-1"><link rel="stylesheet" href="./studio.css?v=dual-2">
 <script type="importmap">{"imports":{"three":"../vendor/three/three.module.js"}}</script>
-<script type="module" src="./boot.js?v=1"></script>
+<script type="module" src="./boot.js?v=dual-2"></script>
 </head>
 <body class="studio-body">
 <a class="skip-link" href="#studio">Przejdź do studia</a>
 <header class="studio-header"><a class="studio-brand" href="../glassy/" aria-label="Printbag24 — strona główna"><img src="../assets/printbag24-logo.png" alt="printbag24.pl"></a><span class="studio-header-label">STUDIO NADRUKU</span><a class="studio-return" href="../glassy/">Wróć do sklepu</a></header>
 <main id="studio" class="studio-shell">
-<div class="studio-heading"><div><span class="studio-eyebrow">PAPIER. PRZESTRZEŃ. TWOJA MARKA.</span><h1>Zobacz ją z każdej strony.</h1></div><p>Obróć torbę. Dodaj logo.<br>Sprawdź, jak wygląda Twój pomysł.</p></div>
+<div class="studio-heading"><div><span class="studio-eyebrow">JEDNA TORBA. DWA SPOJRZENIA.</span><h1>Twój projekt. W każdym wymiarze.</h1></div><p>Dodaj logo w 2D. Obejrzyj efekt w 3D.<br> Jeden projekt, wszystkie detale.</p></div>
 <div class="studio-layout">
-<section class="studio-stage" aria-label="Podgląd torby w 3D">
-<div class="stage-top"><span class="stage-pill"><i></i> Podgląd 3D</span><span class="stage-model">Papier premium / model pokazowy</span></div>
+<section class="studio-stage" data-mode="2d" aria-label="Podgląd torby w 2D">
+<div class="stage-top"><div class="mode-controls" role="group" aria-label="Tryb podglądu"><button data-mode="2d" aria-pressed="true">2D <span>Projektuj</span></button><button data-mode="3d" aria-pressed="false">3D <span>Obejrzyj</span></button></div><span class="stage-model" id="mode-label">Projektuj na wprost</span></div>
 <div id="scene" class="scene"><div class="scene-loading" id="scene-loading"><span></span>Przygotowuję Twoją torbę…</div></div>
-<div id="scene-fallback" class="scene-fallback" hidden><img src="../assets/paper.webp" alt="Papierowa torba premium"><h2>Otwórz podgląd klasyczny</h2><p id="fallback-message">Ta przeglądarka nie uruchomiła widoku 3D.</p><a class="button primary" href="../creator/?product=premium">Przejdź do studia 2D</a></div>
-<div class="stage-bottom" id="stage-controls"><p id="scene-hint">Przeciągnij, aby obrócić · przybliż kółkiem lub dwoma palcami</p><div class="view-controls" role="group" aria-label="Ustaw widok torby"><button data-view="front" aria-pressed="false">Przód</button><button data-view="back" aria-pressed="false">Tył</button><button data-view="detail" aria-pressed="false">Detal</button><span></span><button data-view="perspective" aria-label="Przywróć widok całej torby">Cała torba</button><button id="rotate" aria-pressed="false">Obrót 360°</button></div></div>
+<div id="scene-fallback" class="scene-fallback" hidden><img src="../assets/paper.webp" alt="Papierowa torba premium"><h2>Otwórz podgląd klasyczny</h2><p id="fallback-message">Ta przeglądarka nie uruchomiła widoku 3D.</p><a class="button primary" href="../creator/?product=premium">Otwórz klasyczny konfigurator</a></div>
+<div class="stage-bottom" id="stage-controls"><p id="scene-hint">Widok na wprost · ustaw logo i sprawdź efekt w 3D</p><div class="view-controls" role="group" aria-label="Ustaw widok torby"><button data-view="front" aria-pressed="true">Przód</button><button data-view="back" aria-pressed="false">Tył</button><button data-only-3d hidden data-view="detail" aria-pressed="false">Detal</button><span data-only-3d hidden></span><button data-only-3d hidden data-view="perspective" aria-label="Przywróć widok całej torby">Cała torba</button><button data-only-3d hidden id="rotate" aria-pressed="false">Obrót 360°</button></div></div>
 </section>
 <aside class="studio-panel" aria-label="Ustawienia torby"><div class="panel-heading"><span class="studio-eyebrow">TWÓJ PROJEKT</span><h2>Detal robi różnicę.</h2></div>
 <div class="studio-field"><div class="field-heading"><h3>Kolor torby</h3><span id="color-label">Leśna zieleń</span></div><div class="studio-colors" role="group" aria-label="Kolor torby"><button data-color="green" class="selected" aria-pressed="true" aria-label="Leśna zieleń" style="--color:#144d3a"><span></span></button><button data-color="ivory" aria-pressed="false" aria-label="Ciepła biel" style="--color:#eee8da"><span></span></button><button data-color="kraft" aria-pressed="false" aria-label="Naturalny kraft" style="--color:#b88e5d"><span></span></button></div></div>
@@ -28,6 +28,6 @@
 <div class="panel-bottom"><button id="save-preview" class="button primary full">Pobierz podgląd PNG</button><p>Model i pole nadruku są poglądowe.<br>Projekt do druku potwierdzimy osobno.</p></div>
 <p id="studio-status" class="studio-status" role="status" aria-live="polite"></p>
 </aside>
-</div><footer class="studio-footer"><span>PRINTBAG24 / STUDIO 3D</span><span>Wersja prezentacyjna · bez składania zamówień</span><a href="../creator/?product=premium">Otwórz klasyczny konfigurator</a></footer>
+</div><footer class="studio-footer"><span>PRINTBAG24 / STUDIO 2D + 3D</span><span>Wersja prezentacyjna · bez składania zamówień</span><a href="../creator/?product=premium">Otwórz klasyczny konfigurator</a></footer>
 </main>
 </body></html>

@@ -1,7 +1,7 @@
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
 try {
-  const {initStudio} = await import('./scene.js?v=1');
+  const {initStudio} = await import('./scene.js?v=dual-2');
   await initStudio();
   panel.classList.remove('is-loading');
 } catch (error) {

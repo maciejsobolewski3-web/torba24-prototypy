@@ -12,7 +12,9 @@ export async function initStudio(){
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
   const canvas=renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Torba papierowa 3D. Przeciągnij, aby obrócić. Użyj przycisków Przód, Tył i Detal, aby zmienić widok.');host.append(canvas);
-  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(34,1,.1,60);
+  const scene=new THREE.Scene(),perspectiveCamera=new THREE.PerspectiveCamera(34,1,.1,60);
+  const flatCamera=new THREE.OrthographicCamera(-2.5,2.5,2.5,-2.5,.1,60);
+  let camera=perspectiveCamera;
   camera.position.set(5.3,3.3,7.5);
   const controls=new OrbitControls(camera,canvas);controls.target.set(0,1.95,0);controls.enablePan=false;controls.enableDamping=true;controls.dampingFactor=.09;controls.minDistance=4.2;controls.maxDistance=13;controls.minPolarAngle=.4;controls.maxPolarAngle=Math.PI*.72;controls.autoRotateSpeed=.65;controls.update();
   // Keep ordinary one-finger page scrolling on phones; two fingers orbit/zoom.
@@ -27,7 +29,7 @@ export async function initStudio(){
   // A baked contact shadow anchors the bag without an expensive post-processing pass.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,8,64,64,64);gradient.addColorStop(0,'rgba(26,50,31,.22)');gradient.addColorStop(1,'rgba(26,50,31,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(4.8,2.7),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=.035;scene.add(contact);
-  let color='green',side='front',frame=0,tween=null,lastTime=0,inView=true,drag=null,disposed=false;
+  let mode='2d',color='green',side='front',frame=0,tween=null,lastTime=0,inView=true,drag=null,disposed=false;
   const drafts={front:{kind:'example',image:null,url:null,name:'Twoja marka.',size:48,x:0,y:0,sequence:0},back:{kind:'none',image:null,url:null,name:'',size:48,x:0,y:0,sequence:0}};
   const textures={};
   for(const s of ['front','back']){const c=document.createElement('canvas');c.width=1024;c.height=1024;textures[s]={canvas:c,texture:new THREE.CanvasTexture(c)};textures[s].texture.colorSpace=THREE.SRGBColorSpace;textures[s].texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());bag.printMeshes[s].material.map=textures[s].texture;}
@@ -51,9 +53,9 @@ export async function initStudio(){
     textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=d.kind!=='none';invalidate();
   }
   function syncPanel(){const d=drafts[side];$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Przykładowy nadruk':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
-  function setRotation(value){controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
+  function setRotation(value){value=value&&mode==='3d';controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
   const views={front:{position:[0,2.2,9],target:[0,1.95,0]},back:{position:[0,2.2,-9],target:[0,1.95,0]},detail:{position:[3.2,4.25,4.4],target:[0,2.45,0]},perspective:{position:[5.3,3.3,7.5],target:[0,1.95,0]}};
-  function goView(name){setRotation(false);const view=views[name];document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));const to=new THREE.Vector3(...view.position),target=new THREE.Vector3(...view.target);
+  function goView(name){setRotation(false);if(mode==='2d'){alignFlatView();invalidate();return;}const view=views[name];document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));const to=new THREE.Vector3(...view.position),target=new THREE.Vector3(...view.target);
     if(reduced.matches){camera.position.copy(to);controls.target.copy(target);controls.update();tween=null;}else{
       // Spherical interpolation keeps the camera outside the bag while changing sides.
       const fromS=new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));const toS=new THREE.Spherical().setFromVector3(to.clone().sub(target));let delta=toS.theta-fromS.theta;while(delta>Math.PI)delta-=Math.PI*2;while(delta<-Math.PI)delta+=Math.PI*2;toS.theta=fromS.theta+delta;
@@ -63,11 +65,53 @@ export async function initStudio(){
   function selectSide(s){side=s;syncPanel();goView(s);status.textContent=s==='front'?'Edytujesz przód torby.':'Edytujesz tył torby. Nadruki obu stron ustawiasz osobno.';}
   function tick(now){frame=0;if(disposed||document.hidden||!inView)return;const dt=Math.min((now-lastTime)/1000||.016,.05);lastTime=now;
     if(tween){const t=Math.min(1,(now-tween.start)/700),e=1-Math.pow(1-t,3);controls.target.lerpVectors(tween.targetFrom,tween.targetTo,e);const s=new THREE.Spherical(THREE.MathUtils.lerp(tween.from.radius,tween.to.radius,e),THREE.MathUtils.lerp(tween.from.phi,tween.to.phi,e),THREE.MathUtils.lerp(tween.from.theta,tween.to.theta,e));camera.position.setFromSpherical(s).add(controls.target);if(t===1)tween=null;}
-    const moving=controls.update(dt);renderer.render(scene,camera);if(tween||controls.autoRotate||moving)invalidate();
+    const moving=mode==='3d'&&controls.update(dt);renderer.render(scene,camera);if(tween||controls.autoRotate||moving)invalidate();
   }
   function invalidate(){if(!frame&&!disposed&&!document.hidden&&inView)frame=requestAnimationFrame(tick);}
   controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{tween=null;setRotation(false);document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed','false'));});
-  const resize=new ResizeObserver(()=>{const r=host.getBoundingClientRect();if(!r.width||!r.height)return;camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height);controls.touches.ONE=innerWidth<=760?null:THREE.TOUCH.ROTATE;canvas.style.touchAction=innerWidth<=760?'pan-y':'none';$('.drag-tip').textContent=innerWidth<=760?'Dopasuj położenie nadruku suwakami powyżej.':'Możesz też przeciągnąć nadruk bezpośrednio na torbie.';$('#scene-hint').textContent=innerWidth<=760?'Dwoma palcami obróć i przybliż · lub wybierz widok poniżej':'Przeciągnij, aby obrócić · przybliż kółkiem lub dwoma palcami';invalidate();});resize.observe(host);
+  // Both projections render the same model and print textures. In 2D the camera is
+  // exactly perpendicular to the face: no perspective, side wall or orbit drift.
+  function alignFlatView(){
+    flatCamera.position.set(0,2.02,side==='front'?9:-9);
+    flatCamera.lookAt(0,2.02,0);flatCamera.updateMatrixWorld();
+    document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===side)));
+  }
+  function updateHints(){
+    const mobile=innerWidth<=760;
+    canvas.style.touchAction=mobile?'pan-y':'none';
+    controls.touches.ONE=mobile?null:THREE.TOUCH.ROTATE;
+    $('.drag-tip').textContent=mobile?'Dopasuj położenie nadruku suwakami powyżej.':'Możesz też przeciągnąć nadruk bezpośrednio na torbie.';
+    $('#scene-hint').textContent=mode==='2d'?'Widok na wprost · ustaw logo i sprawdź efekt w 3D':mobile?'Dwoma palcami obróć i przybliż · lub wybierz widok poniżej':'Przeciągnij, aby obrócić · przybliż kółkiem lub dwoma palcami';
+    canvas.setAttribute('aria-label',mode==='2d'?'Torba papierowa 2D, widok dokładnie na wprost. Strzałkami ustaw położenie nadruku.':'Torba papierowa 3D. Przeciągnij, aby obrócić. Strzałkami w lewo i w prawo obrócisz torbę.');
+  }
+  function setMode(next){
+    setRotation(false);tween=null;drag=null;mode=next;
+    controls.enabled=mode==='3d';camera=mode==='2d'?flatCamera:perspectiveCamera;
+    contact.visible=mode==='3d';
+    $('.studio-stage').dataset.mode=mode;
+    $('.studio-stage').setAttribute('aria-label',`Podgląd torby w ${mode.toUpperCase()}`);
+    $('#mode-label').textContent=mode==='2d'?'Projektuj na wprost':'Obejrzyj w przestrzeni';
+    document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+    document.querySelectorAll('[data-only-3d]').forEach(el=>el.hidden=mode==='2d');
+    if(mode==='2d')alignFlatView();
+    else {
+      // Start on the edited side; flush residual orbit damping before positioning.
+      controls.enableDamping=false;controls.update();controls.enableDamping=true;
+      camera.position.set(5.3,3.3,side==='front'?7.5:-7.5);controls.target.set(0,1.95,0);controls.update();
+      document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed','false'));
+    }
+    updateHints();invalidate();
+  }
+  document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{
+    if(b.dataset.mode===mode)return;setMode(b.dataset.mode);
+    status.textContent=mode==='2d'?'Widok 2D na wprost. Logo i ustawienia pozostają wspólne z 3D.':'Widok 3D. Oglądasz ten sam projekt, który ustawiasz w 2D.';
+  }));
+  const resize=new ResizeObserver(()=>{const r=host.getBoundingClientRect();if(!r.width||!r.height)return;
+    const aspect=r.width/r.height;perspectiveCamera.aspect=aspect;perspectiveCamera.updateProjectionMatrix();
+    const height=Math.max(4.65,3.75/aspect),width=height*aspect;
+    flatCamera.left=-width/2;flatCamera.right=width/2;flatCamera.top=height/2;flatCamera.bottom=-height/2;flatCamera.updateProjectionMatrix();
+    renderer.setSize(r.width,r.height);updateHints();invalidate();
+  });resize.observe(host);
   const observer=new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)invalidate();else{cancelAnimationFrame(frame);frame=0;}},{threshold:0});observer.observe(host);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else invalidate();});
   reduced.addEventListener('change',()=>{if(reduced.matches){tween=null;setRotation(false);}invalidate();});
@@ -88,11 +132,17 @@ export async function initStudio(){
   function hit(event){const r=canvas.getBoundingClientRect();pointer.set((event.clientX-r.left)/r.width*2-1,-(event.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);return ray.intersectObjects(Object.values(bag.printMeshes).filter(m=>m.visible))[0];}
   canvas.addEventListener('pointerdown',event=>{if(event.pointerType==='touch'||event.button!==0)return;const h=hit(event);if(!h)return;const s=h.object.userData.side,d=drafts[s],b=bounds(d);if(Math.abs(h.uv.x-b.x)>b.w/2||Math.abs(h.uv.y-b.y)>b.h/2)return;event.stopImmediatePropagation();event.preventDefault();setRotation(false);tween=null;side=s;syncPanel();drag={pointer:event.pointerId,side:s,offsetX:h.uv.x-b.x,offsetY:h.uv.y-b.y};controls.enabled=false;canvas.setPointerCapture(event.pointerId);},true);
   canvas.addEventListener('pointermove',event=>{if(!drag||event.pointerId!==drag.pointer)return;const h=hit(event);if(!h||h.object.userData.side!==drag.side)return;const d=drafts[drag.side],b=bounds(d);d.x=THREE.MathUtils.clamp((h.uv.x-drag.offsetX-.5)/Math.max(.005,(.72-b.w)/2)*100,-100,100);d.y=THREE.MathUtils.clamp((h.uv.y-drag.offsetY-.48)/Math.max(.005,(.56-b.h)/2)*100,-100,100);syncPanel();draw(drag.side);});
-  const endDrag=()=>{drag=null;controls.enabled=true;};canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
-  canvas.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();setRotation(false);tween=null;const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new THREE.Vector3(0,1,0),event.key==='ArrowLeft'?-.16:.16);camera.position.copy(controls.target).add(offset);controls.update();invalidate();});
-  $('#save-preview').addEventListener('click',()=>{renderer.render(scene,camera);const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e7eee3';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);ctx.fillStyle='#456453';ctx.font=`${Math.max(12,output.width*.014)}px sans-serif`;ctx.fillText('PRINTBAG24 / PODGLĄD POGLĄDOWY',output.width*.04,output.height*.96);output.toBlob(blob=>{if(!blob){status.textContent='Nie udało się zapisać podglądu.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='printbag24-podglad-3d.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Podgląd PNG został przygotowany do pobrania.';},'image/png');});
+  const endDrag=()=>{drag=null;controls.enabled=mode==='3d';};canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
+  canvas.addEventListener('keydown',event=>{
+    if(mode==='2d'){
+      const changes={ArrowLeft:['x',-4],ArrowRight:['x',4],ArrowUp:['y',4],ArrowDown:['y',-4]};
+      const change=changes[event.key];if(!change||drafts[side].kind==='none')return;
+      event.preventDefault();const [axis,amount]=change;drafts[side][axis]=THREE.MathUtils.clamp(drafts[side][axis]+amount,-100,100);syncPanel();draw(side);return;
+    }
+    if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();setRotation(false);tween=null;const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new THREE.Vector3(0,1,0),event.key==='ArrowLeft'?-.16:.16);camera.position.copy(controls.target).add(offset);controls.update();invalidate();});
+  $('#save-preview').addEventListener('click',()=>{renderer.render(scene,camera);const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;const ctx=output.getContext('2d');ctx.fillStyle='#e7eee3';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(canvas,0,0);ctx.fillStyle='#456453';ctx.font=`${Math.max(12,output.width*.014)}px sans-serif`;ctx.fillText('PRINTBAG24 / PODGLĄD POGLĄDOWY',output.width*.04,output.height*.96);output.toBlob(blob=>{if(!blob){status.textContent='Nie udało się zapisać podglądu.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`printbag24-podglad-${mode}-${side==='front'?'przod':'tyl'}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Podgląd PNG został przygotowany do pobrania.';},'image/png');});
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();setRotation(false);$('#scene-fallback').hidden=false;$('#stage-controls').hidden=true;$('#scene').hidden=true;$('#fallback-message').textContent='Widok 3D został zatrzymany. Odśwież stronę lub otwórz podgląd klasyczny.';document.querySelectorAll('.studio-panel button,.studio-panel input').forEach(el=>el.disabled=true);});
   window.addEventListener('pagehide',event=>{cancelAnimationFrame(frame);frame=0;if(event.persisted)return;disposed=true;resize.disconnect();observer.disconnect();controls.dispose();for(const d of Object.values(drafts))if(d.url)URL.revokeObjectURL(d.url);scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const m of mats){m.map?.dispose();m.bumpMap?.dispose();m.dispose();}}});env.dispose();renderer.dispose();});
   window.addEventListener('pageshow',()=>invalidate());
-  draw('front');draw('back');syncPanel();$('#scene-loading').remove();invalidate();
+  draw('front');draw('back');syncPanel();setMode('2d');$('#scene-loading').remove();invalidate();
 }
