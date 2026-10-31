@@ -1,12 +1,12 @@
-import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=merchant-33';
+import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=client-34';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
-import {createStudioEnvironment} from './environment.js?v=merchant-33';
-import {createEditOverlay} from './edit-overlay.js?v=merchant-33';
-import {createLivePreview} from './live-preview.js?v=merchant-33';
+import {createStudioEnvironment} from './environment.js?v=client-34';
+import {createEditOverlay} from './edit-overlay.js?v=client-34';
+import {createLivePreview} from './live-preview.js?v=client-34';
 import {initColorControls} from './color-controls.js?v=flow-6';
 import {readLogo} from '../logo-file.js';
-import {BAG,palette,createBag,presentPackaging} from './model.js?v=merchant-33';
+import {BAG,palette,createBag,presentPackaging} from './model.js?v=client-34';
 
 export async function initStudio(configuration){
   const $=selector=>document.querySelector(selector),host=$('#scene'),status=$('#studio-status');

@@ -1,6 +1,6 @@
-import {presentPackaging} from './model.js?v=merchant-33';
+import {presentPackaging} from './model.js?v=client-34';
 import * as THREE from 'three';
-import {createStudioEnvironment} from './environment.js?v=merchant-33';
+import {createStudioEnvironment} from './environment.js?v=client-34';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 
 export function createLivePreview({host,scene,contact,invalidate,getProduct,onExpand}){

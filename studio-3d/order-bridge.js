@@ -1,6 +1,6 @@
-import {availabilityHTML} from '../configuration/inventory.js?v=merchant-33';
-import {productById} from '../configuration/config.js?v=merchant-33';
-import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=merchant-33';
+import {availabilityHTML} from '../configuration/inventory.js?v=client-34';
+import {productById} from '../configuration/config.js?v=client-34';
+import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=client-34';
 export async function initOrderBridge(studio){
   const $=s=>document.querySelector(s),params=new URLSearchParams(location.search);
   const projectId=params.get('project')||id(),quantity=$('#order-quantity'),button=$('#review-project'),status=$('#studio-status');
@@ -16,7 +16,7 @@ export async function initOrderBridge(studio){
     $('#studio-summary-details').innerHTML=p.configuration?Object.values(p.configuration.options).map(o=>`<div><dt>${esc(o.label)}</dt><dd>${esc(o.display)}</dd></div>`).join('')+(p.configuration.printing?`<div><dt>Technologia</dt><dd>${esc(p.configuration.printing.label)}</dd></div>`:'')+(p.configuration.requests||[]).map(o=>`<div><dt>Na zamówienie</dt><dd>${esc(o.value)}</dd></div>`).join(''):'';
     const result=validQuantity(p.quantity,p)?price(p):null;
     $('#order-price').textContent=!validQuantity(p.quantity,p)?(p.configuration?'Wpisz nakład od 1 do 100 000 szt.':'Wpisz nakład od 50 do 10 000 szt.'):result?money(result.total):'Indywidualna wycena';
-    $('#order-price-note').textContent=result?`${money(result.unit)} / szt. · szacunkowo brutto`:'Parametry, cena i termin wymagają potwierdzenia przy wycenie.';
+    $('#order-price-note').textContent=result?`${money(result.unit)} / szt. brutto${result.source==='merchant'?' · według cennika':' · szacunkowo'}`:'Parametry, cena i termin wymagają potwierdzenia przy wycenie.';
   };
   if(params.has('project')){
     try{

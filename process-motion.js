@@ -1,13 +1,13 @@
 const base = new URL('./', import.meta.url);
 const asset = name => new URL(`assets/${name}`, base).href;
 const stages = [
-  ['Wybierz bazę', 'Papier czy bawełna? Zacznij od torby, która pasuje do Twojego pomysłu.', 'Dobieramy materiał'],
+  ['Wybierz bazę', 'Kraft czy biały papier? Wybierz uchwyt płaski lub skręcany.', 'Dobieramy materiał'],
   ['Dodaj swój znak', 'Logo trafia na torbę. Dopasuj wielkość i położenie nadruku w podglądzie.', 'Twoja marka na materiale'],
   ['Zatwierdź projekt', 'Sprawdź każdy detal. Finalny projekt do druku wymaga Twojej akceptacji.', 'Czas na akceptację'],
   ['Odbierz swoją serię', 'Z jednego pomysłu powstaje cała seria. Termin i dostawę ustalimy przy wycenie.', 'Gotowe na Twoją historię']
 ];
 const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
-const bag = (cls='') => `<div class="pm-bag ${cls}"><div class="pm-bag-surface"><img src="${asset('cotton.webp')}" alt="" width="600" height="800" loading="lazy"><span class="pm-print">Twoja<br><em>marka.</em></span></div></div>`;
+const bag = (cls='') => `<div class="pm-bag ${cls}"><div class="pm-bag-surface"><img src="${asset('kraft.webp')}" alt="" width="600" height="800" loading="lazy"><span class="pm-print">Twoja<br><em>marka.</em></span></div></div>`;
 
 export function process(){return `<section class="section pm-section" id="jak-zamawiac" aria-labelledby="pm-heading">
   <div class="section-heading"><div><span class="eyebrow">ZOBACZ, JAK POWSTAJE TWÓJ PROJEKT</span><h2 id="pm-heading">Od pustej torby<br>do Twojej marki.</h2></div><a class="text-link" href="${new URL('catalog/',base).href}">Zacznij od swojej torby</a></div>
@@ -15,7 +15,7 @@ export function process(){return `<section class="section pm-section" id="jak-za
     <div class="pm-steps" role="group" aria-label="Etapy powstawania torby">${stages.map(([title,description],i)=>`<button type="button" class="pm-step ${i===0?'is-current':''}" data-stage-button="${i}" aria-pressed="${i===0}" aria-controls="pm-scene"><span class="pm-step-copy"><strong>${title}</strong><span>${description}</span></span></button>`).join('')}<p class="pm-instruction">Wybierz etap, aby przyjrzeć się szczegółom. <button type="button" class="pm-resume" hidden>Wznów animację</button></p></div>
     <div class="pm-player">
       <div class="pm-scene" id="pm-scene" role="img" aria-label="${stages[0][1]}">
-        <div class="pm-base-options" aria-hidden="true"><div class="pm-paper-option"><div class="pm-paper-product"><img src="${asset('paper.webp')}" alt="" width="600" height="800" loading="lazy"></div><span>Papier</span></div><span class="pm-cotton-label">${check} Bawełna</span><span class="pm-choice-click"></span><span class="pm-choice-pointer"><svg viewBox="0 0 32 40" fill="none"><path d="M3 2v29l8-7 6 13 6-3-6-12h12L3 2Z" fill="#fff" stroke="#174f3d" stroke-width="2.2" stroke-linejoin="round"/></svg></span></div>
+        <div class="pm-base-options" aria-hidden="true"><div class="pm-paper-option"><div class="pm-paper-product"><img src="${asset('paper-flat-34.webp')}" alt="" width="600" height="800" loading="lazy"></div><span>Płaski</span></div><span class="pm-cotton-label">${check} Skręcany</span><span class="pm-choice-click"></span><span class="pm-choice-pointer"><svg viewBox="0 0 32 40" fill="none"><path d="M3 2v29l8-7 6 13 6-3-6-12h12L3 2Z" fill="#fff" stroke="#174f3d" stroke-width="2.2" stroke-linejoin="round"/></svg></span></div>
         <div class="pm-series" aria-hidden="true">${bag('pm-copy pm-copy-left')}${bag('pm-copy pm-copy-right')}</div>
         <div class="pm-main" aria-hidden="true">${bag('pm-original')}<div class="pm-print-frame"><i></i><i></i><i></i><i></i><span>PODGLĄD NADRUKU</span></div></div>
         <div class="pm-file" aria-hidden="true"><span class="pm-file-icon">↥</span><div><strong>Twoje logo.svg</strong><span>Gotowe do podglądu</span></div><i>${check}</i></div>

@@ -1,7 +1,7 @@
-import {enhanceOptions} from './option-picker.js?v=merchant-33';
-import {createBasePicker} from './base-picker.js?v=merchant-33';
-import {catalogPhoto} from '../configuration/catalog-photos.js?v=merchant-33';
-import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,printingFor,escape as esc} from '../configuration/config.js?v=merchant-33';
+import {enhanceOptions} from './option-picker.js?v=client-34';
+import {createBasePicker} from './base-picker.js?v=client-34';
+import {catalogPhoto} from '../configuration/catalog-photos.js?v=client-34';
+import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,printingFor,escape as esc} from '../configuration/config.js?v=client-34';
 export function studioDefaults(product){
  const values=defaults(product),print=product.fields.find(f=>f.id==='printMode');
  if(print)values.printMode=(print.options.find(o=>o.label.includes('DTF'))||print.options.find(o=>o.label!=='bez nadruku')||print.options[0]).id;

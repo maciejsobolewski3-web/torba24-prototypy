@@ -1,4 +1,4 @@
-import {escape as esc,colorHex} from '../configuration/config.js?v=merchant-33';
+import {escape as esc,colorHex} from '../configuration/config.js?v=client-34';
 // Native selects retain their values and change events; the shop dialog supplies the visible UI.
 let dialog,active,sourceId;
 const fieldTitle=select=>[...(select.labels[0]?.childNodes||[])].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim()||'Wybierz opcję';

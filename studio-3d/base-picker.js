@@ -1,6 +1,7 @@
-import {enhanceOptions} from './option-picker.js?v=merchant-33';
-import {catalog,escape as esc} from '../configuration/config.js?v=merchant-33';
-import {catalogPhoto} from '../configuration/catalog-photos.js?v=merchant-33';
+import {catalogPriceLabel} from '../configuration/pricing.js?v=client-34';
+import {enhanceOptions} from './option-picker.js?v=client-34';
+import {catalog,escape as esc} from '../configuration/config.js?v=client-34';
+import {catalogPhoto} from '../configuration/catalog-photos.js?v=client-34';
 const normalize=value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ł/g,'l').toLowerCase().replace(/×/g,'x').replace(/\s*x\s*/g,'x').replace(/(\d)\s+(g|cm)/g,'$1$2');
 export function filterBases(products,{family='',query='',color=''}={}){
  const terms=normalize(query).trim().split(/\s+/).filter(Boolean);
@@ -17,7 +18,7 @@ export function createBasePicker({getSelected,onChoose}){
   $('#base-result-count').textContent=`Dostępne modele: ${products.length} / ${catalog.products.length}`;
   $('#base-results').innerHTML=products.length?products.map(p=>{
    const formats=p.fields.find(f=>f.id==='size');const specs=[p.acceptsFormatRequest?'Format do ustalenia':formats?`${formats.options.length} ${formats.options.length===1?'format':formats.options.length<5?'formaty':'formatów'}`:p.size,p.specs.Gramatura,p.specs.Uchwyt==='brak'?'':p.specs.Uchwyt].filter(Boolean);
-   return `<button type="button" class="base-card" data-base="${p.id}" aria-pressed="${selected===p.id}"><span class="base-card-photo"><img src="${catalogPhoto(p)}" alt="" width="480" height="480" loading="lazy">${selected===p.id?'<span class="base-selected">Wybrana baza</span>':''}</span><span class="base-card-name">${esc(p.name)}</span><span class="base-card-specs">${specs.map(esc).join(' · ')}</span><span class="base-card-action">${selected===p.id?'Zostaw tę bazę':'Wybierz i dopasuj'}</span></button>`;
+   return `<button type="button" class="base-card" data-base="${p.id}" aria-pressed="${selected===p.id}"><span class="base-card-photo"><img src="${catalogPhoto(p)}" alt="" width="480" height="480" loading="lazy">${selected===p.id?'<span class="base-selected">Wybrana baza</span>':''}</span><span class="base-card-name">${esc(p.name)}</span><span class="base-card-specs">${specs.map(esc).join(' · ')}</span><span class="base-card-price">${esc(catalogPriceLabel(p))}</span><span class="base-card-action">${selected===p.id?'Zostaw tę bazę':'Wybierz i dopasuj'}</span></button>`;
   }).join(''):'<div class="base-empty"><h3>Nie ma takiego połączenia.</h3><p>Zmień zapytanie lub usuń filtry.</p><button type="button" id="base-clear">Pokaż wszystkie modele</button></div>';
   dialog.querySelectorAll('[data-family]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.family===family)));
  }

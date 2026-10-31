@@ -1,0 +1,25 @@
+PRINTBAG24 — UWAGI KLIENTA, WERSJA CLIENT-34, 31.10.2026
+Zakres: osiem screenshotów przesłanych około 21:40. Rozwinięcie merchant-33, bez zmiany danych katalogu/aktualności zapisanych projektów.
+
+WDROŻONE
+- Nagłówek: mniejsze Printbag, większe EASOLUTION; widoczne pole wyszukiwarki kierujące do katalogu z q; wyśrodkowana belka serwisów. Osobny rząd menu: rozwijane Papierowe/Materiałowe/Gastronomia, Jak zamawiać, Kontakt, Nasza historia na końcu. Realizacje usunięte z menu.
+- Wspólny nagłówek/pomoc na stronie głównej, katalogu, kontakcie, historii, poradniku, studiu i zamówieniu. Menu mobilne zachowuje rozwijane podgrupy.
+- Hero: papier kraft/biały, uchwyt płaski/skręcany, nakład. Zmiana uchwytu zmienia zdjęcie. Przejście do studia bez logo oraz z lokalnie wgranym logo zachowuje wybór. Biała torba przekazywana przez stockColor=bialy; SKU określa uchwyt.
+- Pierwsze karty: kraft płaski/skręcany, biały płaski/skręcany, bawełna. Pozostałe grupy zachowane w filtrach.
+- Zamiast ATELIER nowa generowana fotografia kraftowej torby z zakupami. Nowy przezroczysty asset torby z płaskim papierowym uchwytem. Prompty: IMAGEGEN-CLIENT-34.txt; tryb wbudowany image_gen. Fotografie są reprezentacyjne.
+- Proces: główna i powielane torby to kraft ze skręcanym uchwytem; animacja kursora wybiera rodzaj uchwytu, miniatura płaskiej bazy jest nowym zdjęciem.
+- Stopka: Printbag u góry, EASOLUTION pod nim, ikony social, usunięty info@easolution.pl, serwisy i śledzenie zamówienia.
+- Pomoc: wzorzec interakcji zweryfikowany na https://zamowdruk.pl/ (kliknięcie Pomoc). Dialog, accordion, Esc, powrót fokusu, linki do właściwych tematów, informacje o dostawie/plikach/reklamacji, śledzenie zamówienia -> temat kontaktu.
+- Kontakt: obsługa zamówień/faktur/zapytań oraz produkcja/biuro. Telefony pionowo. info@printbag24.pl przyjęty z wiadomości klienta „Info@printbag24” i znanej domeny; nie testowano dostarczalności skrzynki. Formularz zmienia pola zależnie od sprawy; pobiera plik wiadomości, nie udaje wysyłki.
+- Katalog: lewy panel filtrów (rodzaj, uchwyt, kolor, format, tekst), na telefonie zwijany. Format + kolor muszą występować razem w variantMatrix. Przeniesienie wybranych parametrów do studia. Porównanie 2–3 modeli w dialogu, parametry i zdjęcia. Zachowany edytor 2D/3D.
+
+CENY I INTEGRACJA — NIE UDAWAĆ GOTOWEGO BACKENDU
+Klient nie przekazał cennika. Poproszono o niego. W aktywnym interfejsie nadal „Cena na zapytanie” / „Indywidualna wycena”. Nie skopiowano cen Allbag ani nie wymyślono stawek. configuration/pricing.js przygotowuje ścisłą granicę cennika: zatwierdzenie, waluta PLN, data ważności, dokładna konfiguracja, liczba zadrukowanych stron, progi ilości, kwoty netto w groszach, opłata startowa, VAT. Nakładające się progi, przeterminowany/brakujący cennik, parametry niestandardowe -> brak ceny. order/store.js i studio/order-bridge oraz katalog i wybór bazy korzystają z tej obsługi.
+Przed włączeniem cen: dostać zatwierdzony cennik i minima; endpoint Joomla musi ponownie wyliczyć i zweryfikować cenę, koszyk oraz termin. Nie ufać wycenie JS jako cenie zamówienia. Obecne przejście nadal prowadzi do zapytania, nie płatności.
+Filtr stanów magazynowych: nie wystawiono fikcyjnych stanów. Po podłączeniu inventory.js do Joomla dodać dostępność i filtry. Dane aktualnie nie pozwalają rzetelnie odróżnić „na stanie” od „brak”.
+Śledzenie: frontend informuje o numerze przesyłki i kieruje do kontaktu. Docelowy lookup wymaga autoryzacji właściciela zamówienia, np. konto lub numer + email + podpisany link. Nie ujawniać danych innych zamówień. Przycisk w zamowdruk.pl jest osobnym zadaniem w tamtym projekcie — ten deploy zmienia wyłącznie Printbag24.
+Kontakty: potwierdzić działanie info@printbag24.pl, ewentualne osobne adresy/telefony produkcji i faktur. Dotąd tylko wspólne numery przekazane w istniejącym projekcie.
+
+WERYFIKACJA
+22 testy Node: poprzednie 19 + warianty filtrów, białe presety, kalkulacja cennika na sztucznych danych WYŁĄCZNIE W TEŚCIE.
+Manualnie: panel pomocy/accordion/status, header search, porównanie dwóch papierowych baz, hero biały+płaski+250 -> studio biały/płaski/250, mobilny nagłówek i menu. Kontynuować testy po podłączeniu Joomla.

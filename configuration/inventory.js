@@ -1,4 +1,4 @@
-import {escape} from './config.js?v=merchant-33';
+import {escape} from './config.js?v=client-34';
 // Joomla supplies available units AFTER reservations. Empty means unknown, not zero.
 export const inventoryRecords = {};
 export function availability(config,quantity,records=inventoryRecords,now=Date.now()){

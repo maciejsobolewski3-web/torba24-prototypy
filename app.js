@@ -1,14 +1,15 @@
-import {catalog as merchantCatalog} from './configuration/config.js?v=merchant-33';
-import {catalogPhoto} from './configuration/catalog-photos.js?v=merchant-33';
-import {mountCatalog} from './configuration/catalog.js?v=merchant-33';
+import {initClientFeedback} from './client-feedback.js';
+import {catalog as merchantCatalog} from './configuration/config.js?v=client-34';
+import {catalogPhoto} from './configuration/catalog-photos.js?v=client-34';
+import {mountCatalog} from './configuration/catalog.js?v=client-34';
 import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 import {initHistoryTimeline} from './history-timeline.js?v=history-16';
-import {groupBar,groupBrand,groupFooter,historyPage,mainNavigation} from './brand-shell.js?v=merchant-33';
-import {list as listStudioCart} from './order/store.js?v=merchant-33';
-import * as pb from './printbag-content.js?v=merchant-33';
-import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=merchant-33';
+import {groupBar,groupBrand,groupFooter,historyPage,mainNavigation} from './brand-shell.js?v=client-34';
+import {list as listStudioCart} from './order/store.js?v=client-34';
+import * as pb from './printbag-content.js?v=client-34';
+import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=client-34';
 import {readLogo} from './logo-file.js';
-import { initProcessMotion } from './process-motion.js?v=merchant-33';
+import { initProcessMotion } from './process-motion.js?v=client-34';
 const BASE = new URL('./', import.meta.url);
 const url = (path = '') => new URL(path, BASE).href;
 const asset = name => url(`assets/${name}`);
@@ -44,7 +45,7 @@ let renderedPath=location.pathname;
 let page = document.body.dataset.page || 'gallery';
 if(page==='product')location.replace(url('studio-3d/?id='+(new URLSearchParams(location.search).get('id')||'premium')));
 const app = document.querySelector('#app');
-let config = {material:'paper',color:'kraft',quantity:100};
+let config = {material:'paper',color:'kraft',handle:'twisted',quantity:100};
 let editorUploadSequence=0;
 let editor = {product:'cotton',quantity:100,ink:'#174f3d',size:42,x:50,y:58,text:'TWOJA MARKA',logo:null,side:'front'};
 let filters = {handle:'all',finish:'all',weight:'all',material:new URLSearchParams(location.search).get('material') || 'all',color:'all',format:'all',search:'',sort:'recommended'};
@@ -56,12 +57,16 @@ function nav(editorMode=false){return `${groupBar()}<header class="site-nav">${b
 function photo(product,cls='',lazy=true){return `<img class="product-image ${product.filter||''} ${cls}" src="${asset(product.image)}" alt="${esc(product.name)}" ${lazy?'loading="lazy"':'fetchpriority="high"'} draggable="false">`;}
 function swatches(selected='kraft', attr='config-color', options=['green','natural','kraft']){return `<div class="swatches">${options.map(c=>`<button class="swatch ${selected===c?'selected':''}" style="--swatch:${colors[c]||c}" data-${attr}="${c}" aria-label="${({green:'Zielony',natural:'Naturalny',kraft:'Kraft',white:'Biały',silver:'Srebrny',black:'Czarny'})[c]||c}" aria-pressed="${selected===c}"></button>`).join('')}</div>`;}
 function quantity(value=100,kind='config'){return `<div class="stepper"><button data-quantity="-1" data-kind="${kind}" aria-label="Zmniejsz ilość o 1">−</button><input type="number" min="1" max="10000" step="1" value="${value}" data-quantity-input="${kind}" aria-label="Liczba sztuk"><span>szt.</span><button data-quantity="1" data-kind="${kind}" aria-label="Zwiększ ilość o 1">+</button></div>`;}
-function configure(vertical=false){return `<form class="quick-config glass ${vertical?'vertical':''}" onsubmit="return false"><h2>${vertical?'Dopasuj swoją torbę':'Stwórz swoją torbę'}</h2><div class="config-field"><span>Materiał</span><div class="segments"><button class="selected" data-material="paper" aria-pressed="true">Papier</button><button data-material="cotton" aria-pressed="false">Bawełna</button></div></div><div class="config-field"><span>Kolor</span>${swatches()}</div><div class="config-field"><span>Nakład</span>${quantity()}</div>${page==='glassy'?heroUpload():`<button class="button primary" data-action="configure">Dodaj swoje logo</button>`}</form>`;}
+function configure(vertical=false){return `<form class="quick-config glass ${vertical?'vertical':''}" onsubmit="return false"><h2>${vertical?'Dopasuj swoją torbę':'Stwórz swoją torbę'}</h2>${page==='glassy'?`<div class="config-field"><span>Papier</span><div class="segments"><button class="selected" data-paper="kraft" aria-pressed="true">Kraft</button><button data-paper="white" aria-pressed="false">Biały</button></div></div><div class="config-field"><span>Uchwyt</span><div class="segments"><button data-handle="flat" aria-pressed="false">Płaski</button><button class="selected" data-handle="twisted" aria-pressed="true">Skręcany</button></div></div>`:`<div class="config-field"><span>Materiał</span><div class="segments"><button class="selected" data-material="paper" aria-pressed="true">Papier</button><button data-material="cotton" aria-pressed="false">Bawełna</button></div></div><div class="config-field"><span>Kolor</span>${swatches()}</div>`}<div class="config-field"><span>Nakład</span>${quantity()}</div>${page==='glassy'?heroUpload():`<button class="button primary" data-action="configure">Dodaj swoje logo</button>`}</form>`;}
+function heroPreset(){return {product:config.handle==='flat'?'papier-plaski':'papier-skrecany',stockColor:config.color==='white'?'bialy':'brazowy-kraft'};}
+function updatePaperHero(){const img=document.querySelector('.glassy-hero .hero-bag.paper > img');if(!img)return;img.src=asset(config.handle==='flat'?'paper-flat-34.webp':'kraft.webp');img.className='product-image'+(config.color==='white'?' white-bag':'');img.alt=`Torba papierowa ${config.color==='white'?'biała':'kraft'} z uchwytem ${config.handle==='flat'?'płaskim':'skręcanym'}`;const preset=heroPreset();document.querySelectorAll('.glassy-hero a[href*="studio-3d"]').forEach(a=>a.href=url('studio-3d/?sku='+preset.product+'&stockColor='+preset.stockColor));}
+
 const editorialPhotos={premium:'catalog/kraft-brown.webp',cotton:'model-cotton-editorial.webp',kraft:'catalog/kraft-flat.webp'};
 function productCards(items=products.slice(0,3),editorial=false){return items.map(p=>`<article class="product-card reveal"><a class="product-stage ${editorial?'pb-editorial-stage':''}" href="${url('product/?id='+p.id)}">${photo(editorial?{...p,image:editorialPhotos[p.id]||p.image}:p)}<span class="stage-cta">Zobacz model</span></a><div class="product-info"><div><h3><a href="${url('product/?id='+p.id)}">${p.name}</a></h3><p>${p.desc}</p><small class="pb-product-spec">${pb.specs[p.id].size}</small></div><a class="pb-model-link" href="${url('product/?id='+p.id)}" aria-label="Zobacz model ${p.name}">Zobacz</a></div></article>`).join('');}
 function merchantCards(category='all'){
- const items=category==='all'?merchantCatalog.products.filter(p=>['papier-plaski','papier-skrecany','bawelna'].includes(p.id)):merchantCatalog.products.filter(p=>p.category===category);
- return items.map(p=>`<article class="product-card reveal"><a class="product-stage pb-editorial-stage merchant-stage" href="${url('studio-3d/?sku='+p.id)}"><img class="product-image" src="${catalogPhoto(p)}" alt="${esc(p.name)}" width="960" height="960" loading="lazy"><span class="stage-cta">Zaprojektuj nadruk</span></a><div class="product-info"><div><h3><a href="${url('studio-3d/?sku='+p.id)}">${esc(p.name)}</a></h3><p>${esc(p.cardNote||p.specs.Materiał||'')}</p><small class="pb-product-spec">${p.acceptsFormatRequest?'Format dobierany przy wycenie':p.fields.find(f=>f.id==='size').options.length===1?p.size+' · format':p.fields.find(f=>f.id==='size').options.length+' formatów do wyboru'}</small></div><a class="pb-model-link" href="${url('studio-3d/?sku='+p.id)}">Projektuj</a></div></article>`).join('');
+ const paper=[['papier-plaski','brazowy-kraft','Kraft · uchwyt płaski'],['papier-skrecany','brazowy-kraft','Kraft · uchwyt skręcany'],['papier-plaski','bialy','Biała · uchwyt płaski'],['papier-skrecany','bialy','Biała · uchwyt skręcany']].map(([id,color,name])=>({...merchantCatalog.products.find(p=>p.id===id),displayColor:color,displayName:name}));
+ const items=category==='all'?[...paper,merchantCatalog.products.find(p=>p.id==='bawelna')]:category==='paper'?paper:merchantCatalog.products.filter(p=>p.category===category);
+ return items.map(p=>{const target=url('studio-3d/?sku='+p.id+(p.displayColor?'&stockColor='+p.displayColor:''));return `<article class="product-card reveal"><a class="product-stage pb-editorial-stage merchant-stage" href="${target}"><img class="product-image ${p.displayColor==='bialy'&&p.id==='papier-plaski'?'home-white-paper':''}" src="${p.displayColor==='bialy'&&p.id==='papier-skrecany'?asset('catalog/kraft-white.webp'):catalogPhoto(p)}" alt="${esc(p.displayName||p.name)}" width="960" height="960" loading="lazy"><span class="stage-cta">Zaprojektuj nadruk</span></a><div class="product-info"><div><h3><a href="${target}">${esc(p.displayName||p.name)}</a></h3><p>${esc(p.cardNote||p.specs.Materiał||'')}</p><small class="pb-product-spec">${p.acceptsFormatRequest?'Format dobierany przy wycenie':p.fields.find(f=>f.id==='size').options.length===1?p.size+' · format':p.fields.find(f=>f.id==='size').options.length+' formatów do wyboru'}</small></div><a class="pb-model-link" href="${target}">Projektuj</a></div></article>`;}).join('');
 }
 function categories(){return `<section class="section categories" id="kolekcja"><div class="section-heading"><div><span class="eyebrow">ZACZNIJ OD MATERIAŁU</span><h2>Dwie bazy. Wiele możliwości.</h2></div><a class="text-link" href="${url('catalog/')}">Cała kolekcja</a></div><div class="category-grid pb-two">${[['Torby papierowe','Od codziennych zakupów po wyjątkowy prezent.',products[0],'paper'],['Torby bawełniane','Na wydarzenie, do pracy i na każdy dzień.',products[1],'cotton']].map(([name,desc,p,m])=>`<a class="category-card" href="${url('catalog/?material='+m)}"><h3>${name}</h3><p>${desc}</p>${photo(p)}</a>`).join('')}</div></section>`;}
 
@@ -93,6 +98,7 @@ document.body.classList.add('theme-'+page);
 window.addEventListener('resize',()=>{if(document.querySelector('#print-content'))updatePrint();});
 if(page==='history'){document.title='Nasza historia — Printbag24 / EASOLUTION';app.innerHTML=nav()+historyPage()+footer();}else if(page==='gallery')renderGallery();else if(page==='catalog')renderCatalog();else if(page==='creator')renderCreator();else if(['projects','how-to','contact','product'].includes(page)){document.title='Printbag24 — '+({'projects':'realizacje i inspiracje','how-to':'jak zamawiać','contact':'kontakt i wycena','product':'wybierz torbę'})[page];app.innerHTML=nav()+pb.renderPage(page,{products:page==='contact'?merchantCatalog.products:products,photo,icon,esc})+footer();pb.initQuote(merchantCatalog.products);}else renderLanding();
 initAccountUI();
+initClientFeedback();
 initHistoryTimeline();
 document.querySelector('.pb-home-filters')?.addEventListener('click',event=>{
  const button=event.target.closest('[data-home-material]');if(!button)return;
@@ -104,9 +110,10 @@ document.querySelector('.pb-home-filters')?.addEventListener('click',event=>{
 initProcessMotion();
 initExampleReveals();
 initDimensions();
+updatePaperHero();
 initHeroUpload({getSelection:()=>config,openStudio:async logo=>{
- const product=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';
- try{const {startConfiguration}=await import('./configuration/start.js?v=merchant-33');await startConfiguration({product,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
+ const preset=page==='glassy'?heroPreset():null; const product=preset?.product||(config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium');
+ try{const {startConfiguration}=await import('./configuration/start.js?v=client-34');await startConfiguration({product,stockColor:preset?.stockColor,quantity:clampQty(document.querySelector('[data-quantity-input=config]').value),logo,color:colors[config.color]});}catch{toast('Nie udało się zapisać projektu. Spróbuj ponownie.');}
 }});
 window.addEventListener('popstate',()=>{if(location.pathname!==renderedPath)location.reload();});
 document.body.insertAdjacentHTML('beforeend',`<dialog id="modal" aria-label="Printbag24 — szczegóły"></dialog><div id="toast" role="status" aria-live="polite"></div>`);
@@ -115,6 +122,7 @@ document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='
 document.querySelector('#concept-select')?.addEventListener('change',e=>location.href=url(e.target.value+'/'));
 document.addEventListener('click',e=>{
  const b=e.target.closest('button,[data-action]');if(!b)return;
+ if(b.dataset.paper||b.dataset.handle){if(b.dataset.paper)config.color=b.dataset.paper;if(b.dataset.handle)config.handle=b.dataset.handle;document.querySelectorAll('[data-paper]').forEach(x=>{const active=x.dataset.paper===config.color;x.classList.toggle('selected',active);x.setAttribute('aria-pressed',active);});document.querySelectorAll('[data-handle]').forEach(x=>{const active=x.dataset.handle===config.handle;x.classList.toggle('selected',active);x.setAttribute('aria-pressed',active);});updatePaperHero();}
  if(b.dataset.material){config.material=b.dataset.material;config.color=config.material==='cotton'?'natural':'kraft';document.querySelectorAll('[data-material]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x.dataset.configColor===config.color);x.setAttribute('aria-pressed',x.dataset.configColor===config.color);});document.querySelector('.hero')?.classList.toggle('cotton-selected',config.material==='cotton');document.querySelector('.quick-config .swatches').outerHTML=swatches(config.color,'config-color',config.material==='cotton'?['natural','green']:['green','natural','kraft']);document.querySelectorAll('.hero-bag.paper > img,.hero-bag.cotton > img').forEach(img=>img.className='product-image');}
  if(b.dataset.configColor){config.color=b.dataset.configColor;document.querySelectorAll('[data-config-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});const img=document.querySelector(config.material==='cotton'?'.hero-bag.cotton > img':'.hero-bag.paper > img');if(img)img.className='product-image '+(config.material==='cotton'?(config.color==='green'?'green-cotton':''):(config.color==='natural'?'white-bag':config.color==='green'?'green-cotton':''));}
  if(b.dataset.quantity){let kind=b.dataset.kind;let next=clampQty((kind==='editor'?editor.quantity:config.quantity)+Number(b.dataset.quantity));if(kind==='editor')editor.quantity=next;else config.quantity=next;document.querySelector(`[data-quantity-input="${kind}"]`).value=next;}
@@ -132,6 +140,7 @@ document.addEventListener('click',e=>{
 
  if(a==='close')document.querySelector('#modal').close();
  if(a==='cart')location.href=url('order/?step=cart');
+ if(a==='configure'&&page==='glassy'){const preset=heroPreset();location.href=url('studio-3d/?sku='+preset.product+'&stockColor='+preset.stockColor+'&quantity='+clampQty(document.querySelector('[data-quantity-input=config]').value));return;}
  if(a==='configure'){config.quantity=clampQty(document.querySelector('[data-quantity-input=config]').value);let id=config.material==='cotton'?(config.color==='green'?'cotton-green':'cotton'):config.color==='kraft'?'kraft':config.color==='natural'?'white':'premium';location.href=url('configuration/?id='+id+'&quantity='+config.quantity);}
  if(a==='clear-filters'){filters={handle:'all',finish:'all',weight:'all',material:'all',color:'all',format:'all',search:'',sort:'recommended'};document.querySelector('#search').value='';document.querySelector('#sort').value='recommended';updateResults();}
  if(a==='upload')document.querySelector('#logo-file')?.click();
@@ -144,7 +153,7 @@ document.addEventListener('click',e=>{
  if(a==='demo-finish')modal(`<div class="finish-mark">${icon('check')}</div><h2>Twój projekt jest gotowy.</h2><p>Projekt jest zapisany na tym urządzeniu. Skontaktuj się z nami, aby potwierdzić cenę i termin realizacji.</p><a class="button primary" href="${url()}">Wróć do sklepu</a>`);
  if(a==='help')modal(`<span class="eyebrow">JAK TO DZIAŁA</span><h2>Od pomysłu do podglądu.</h2><ol class="help-list"><li><strong>Wybierz torbę.</strong><p>Sprawdź papier, kraft i bawełnę w katalogu.</p></li><li><strong>Dodaj nadruk.</strong><p>Wgraj logo lub wpisz tekst. Dopasuj położenie i wielkość.</p></li><li><strong>Obejrzyj podsumowanie.</strong><p>Dodaj projekt do koszyka.</p></li></ol><a class="button primary" href="${url('catalog/')}">Zacznij od torby</a>`);
  if(a==='guide')modal(`<span class="eyebrow">ZACZNIJMY OD ZASTOSOWANIA</span><h2>Do czego potrzebujesz torby?</h2><div class="guide-options"><a href="${url('catalog/?material=paper')}"><strong>Pakuję produkty w sklepie</strong><span>Zobacz torby papierowe</span></a><a href="${url('catalog/?material=cotton')}"><strong>Przygotowuję wydarzenie</strong><span>Sprawdź torby bawełniane</span></a><a href="${url('creator/?product=gift')}"><strong>Pakuję prezent</strong><span>Wypróbuj torbę prezentową</span></a></div>`);
- if(a==='menu')modal(`<h2>Twoja torba.<br>Twój wybór.</h2><nav class="mobile-links"><a href="${url('catalog/?material=paper')}">Torby papierowe</a><a href="${url('catalog/?material=textile')}">Torby materiałowe</a><a href="${url('catalog/?material=gastro')}">Gastronomia</a><a href="${url('projects/')}">Realizacje</a><a href="${url('how-to/')}">Jak zamawiać</a><a href="${url('nasza-historia/')}">Nasza historia</a><a href="${url('contact/')}">Kontakt i wycena</a></nav><a class="button primary full" href="${url('catalog/')}">Dodaj swoje logo</a>`);
+ if(a==='menu')modal(`<h2>Twoja torba.<br>Twój wybór.</h2><nav class="mobile-links"><a href="${url('catalog/?material=paper')}">Torby papierowe</a><a href="${url('catalog/?material=textile')}">Torby materiałowe</a><a href="${url('catalog/?material=gastro')}">Gastronomia</a><a href="${url('how-to/')}">Jak zamawiać</a><a href="${url('contact/')}">Kontakt i wycena</a><a href="${url('nasza-historia/')}">Nasza historia</a></nav><a class="button primary full" href="${url('catalog/')}">Dodaj swoje logo</a>`);
 });
 document.addEventListener('change',e=>{if(e.target.dataset.specFilter){filters[e.target.dataset.specFilter]=e.target.value;updateResults();}if(e.target.dataset.quantityInput){let val=clampQty(e.target.value);e.target.value=val;if(e.target.dataset.quantityInput==='editor')editor.quantity=val;else config.quantity=val;}if(e.target.dataset.checkMaterial){filters.material=e.target.checked?e.target.dataset.checkMaterial:'all';filters.handle=filters.finish=filters.weight='all';updateResults();}});
 document.querySelector('#search')?.addEventListener('input',e=>{filters.search=e.target.value;updateResults();});

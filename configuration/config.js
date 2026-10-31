@@ -1,4 +1,4 @@
-import catalog from './catalog-data.js?v=merchant-33';
+import catalog from './catalog-data.js?v=client-34';
 import archive from './catalog-bagpack-archive.js';
 export {catalog};
 export const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

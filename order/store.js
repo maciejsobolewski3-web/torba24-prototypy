@@ -1,4 +1,5 @@
-import {productById,catalog} from '../configuration/config.js?v=merchant-33';
+import {quotePrice} from '../configuration/pricing.js?v=client-34';
+import {productById,catalog} from '../configuration/config.js?v=client-34';
 // Files and projects stay on this device. Never serialize temporary blob URLs.
 let database;
 function open(){
@@ -40,6 +41,7 @@ export const productName=p=>p.configuration?.productName||'Papier premium';
 export const productFormat=p=>p.configuration?.dimensions?.label||format;
 // Illustrative gross prices only. Replace with a server-validated merchant tariff.
 export function price(p){
+  if(p.configuration)return quotePrice(p);
   if(needsQuote(p))return null;
   const q=Number(p.quantity),sides=Object.values(p.faces).filter(f=>f.kind!=='none').length;
   const base=q>=500?490:q>=250?590:q>=100?690:790;
