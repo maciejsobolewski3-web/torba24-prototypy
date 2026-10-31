@@ -1,6 +1,7 @@
-import {createBasePicker} from './base-picker.js?v=base-27';
+import {enhanceOptions} from './option-picker.js?v=duplex-29';
+import {createBasePicker} from './base-picker.js?v=duplex-29';
 import {catalogPhoto} from '../configuration/catalog-photos.js?v=photos-24';
-import {catalog,resolveProduct,defaults,valuesFrom,configuration,baseColor,activeFields,escape as esc} from '../configuration/config.js?v=catalog-22';
+import {catalog,resolveProduct,defaults,valuesFrom,configuration,baseColor,activeFields,escape as esc} from '../configuration/config.js?v=duplex-29';
 export function studioDefaults(product){
  const values=defaults(product),print=product.fields.find(f=>f.id==='printMode');
  if(print)values.printMode=(print.options.find(o=>o.label.includes('DTF'))||print.options.find(o=>o.label!=='bez nadruku')||print.options[0]).id;
@@ -17,6 +18,7 @@ export function mountProductControls(studio){
   $('#studio-options').innerHTML=activeFields(product,values).map(f=>`<label for="option-${f.id}">${esc(f.label)}</label><select id="option-${f.id}" data-option="${f.id}">${f.options.map(o=>`<option value="${esc(o.id)}" ${o.id===values[f.id]?'selected':''}>${esc(o.label)}</option>`).join('')}</select>`).join('');
   $('#studio-special').hidden=product.family!=='laminated';
   for(const type of ['finish','handle'])$('#request-'+type).value=requests.find(r=>r.type===type)?.value||'';
+  enhanceOptions(root);
   document.querySelector('.panel-heading .studio-eyebrow').textContent=catalog.families.find(f=>f.id===product.family).name;
  }
  function apply(resetColor=false){
@@ -29,9 +31,16 @@ export function mountProductControls(studio){
   requests=[];apply(true);const params=new URLSearchParams(location.search);params.set('sku',product.id);history.replaceState(null,'','?'+params);
   document.querySelector('#studio-status').textContent='Baza zmieniona. Logo i jego ustawienia pozostają w projekcie.';
  }
+ document.addEventListener('studio-enable-back',()=>{
+  const mode=product.fields.find(f=>f.id==='printMode');
+  const both=mode?.options.find(o=>o.label.includes('różne'))||mode?.options.find(o=>o.label.includes('dwustronny'));
+  if(both)values.printMode=both.id;
+  else if(!requests.some(r=>r.type==='printSides'))requests.push({type:'printSides',value:'Nadruk dwustronny — do potwierdzenia przy wycenie'});
+  apply();
+ });
  const picker=createBasePicker({getSelected:()=>product.id,onChoose:choose});
  $('#choose-base').addEventListener('click',e=>picker.open(e.currentTarget));
- $('#studio-options').addEventListener('change',e=>{if(!e.target.dataset.option)return;const key=e.target.dataset.option;values[key]=e.target.value;apply();$('#option-'+key)?.focus();});
+ $('#studio-options').addEventListener('change',e=>{if(!e.target.dataset.option)return;const key=e.target.dataset.option;values[key]=e.target.value;apply();$('#option-'+key+'-trigger')?.focus();});
  for(const type of ['finish','handle'])$('#request-'+type).addEventListener('change',e=>{requests=requests.filter(r=>r.type!==type);if(e.target.value)requests.push({type,value:e.target.value});apply();});
  function showPanel(name){
   root.hidden=name!=='product';document.querySelector('#open-artwork').hidden=name!=='product';document.querySelector('#artwork-panel').hidden=name!=='artwork';

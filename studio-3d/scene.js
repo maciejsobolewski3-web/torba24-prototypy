@@ -1,4 +1,4 @@
-import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=catalog-22';
+import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=duplex-29';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
@@ -59,16 +59,17 @@ export async function initStudio(configuration){
     textures[s].texture.needsUpdate=true;bag.printMeshes[s].visible=printEnabled()&&(s==='front'||canBack())&&d.kind!=='none';overlay?.update();invalidate();document.dispatchEvent(new Event('studio-project-change'));if(sameSides()){const other=s==='front'?'back':'front';textures[other].canvas.getContext('2d').clearRect(0,0,1024,1024);textures[other].canvas.getContext('2d').drawImage(c,0,0);textures[other].texture.needsUpdate=true;bag.printMeshes[other].visible=printEnabled()&&d.kind!=='none';}
   }
   function printEnabled(){return !configuration||printMode(resolveProduct(configuration.productId),valuesFrom(configuration))!=='bez nadruku';}
-  function canBack(){return !configuration||backAllowed(resolveProduct(configuration.productId),valuesFrom(configuration));}
+  function canBack(){return !configuration||backAllowed(resolveProduct(configuration.productId),valuesFrom(configuration),configuration.requests);}
   function sameSides(){return !!configuration&&linkedSides(resolveProduct(configuration.productId),valuesFrom(configuration));}
   function renderDraft(s){return sameSides()?drafts.front:drafts[s];}
   function syncPanel(){const d=renderDraft(side);$('#no-print-note').hidden=printEnabled();
     document.querySelectorAll('[data-side="back"],[data-view="back"]').forEach(b=>b.disabled=!canBack());
-    for(const selector of ['.logo-field','#logo-settings','.duplex-print'])$(selector).hidden=!printEnabled();
-    $('.duplex-print').hidden=!printEnabled()||!canBack();
-    $('#copy-print').hidden=sameSides();
-    $('#duplex-help').textContent=sameSides()?'Obie strony są połączone. Zmiana logo, wielkości lub położenia aktualizuje przód i tył jednocześnie.':'Jednorazowa kopia. Później edytujesz strony osobno. Po zmianie położenia skopiuj ponownie, jeśli obie strony mają być identyczne.';
-$('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i tył · połączone':drafts.front.kind!=='none'&&drafts.back.kind!=='none'?'Przód i tył':drafts.front.kind!=='none'?'Tylko przód':drafts.back.kind!=='none'?'Tylko tył':'Bez nadruku';$('#copy-print').disabled=d.kind==='none';$('#copy-print').textContent=side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=!printEnabled()||d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
+    for(const selector of ['.logo-field','#logo-settings'])$(selector).hidden=!printEnabled();
+    $('.duplex-print').hidden=false;
+    $('#copy-print').hidden=false;
+    $('#duplex-help').textContent=!printEnabled()?'Najpierw wybierz technikę nadruku w parametrach torby.':!canBack()?'Skopiuj projekt również na drugą stronę. Dostępność tej opcji potwierdzimy przy wycenie.':sameSides()?'Obie strony są połączone. Zmiana logo, wielkości lub położenia aktualizuje przód i tył jednocześnie.':'Jednorazowa kopia. Później edytujesz strony osobno. Po zmianie położenia skopiuj ponownie, jeśli obie strony mają być identyczne.';
+if(configuration?.requests?.some(r=>r.type==='printSides')&&printEnabled())$('#duplex-help').textContent+=' Druk na obu stronach potwierdzimy przy wycenie.';
+$('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i tył · połączone':drafts.front.kind!=='none'&&drafts.back.kind!=='none'?'Przód i tył':drafts.front.kind!=='none'?'Tylko przód':drafts.back.kind!=='none'?'Tylko tył':'Bez nadruku';$('#copy-print').disabled=!printEnabled()||d.kind==='none';$('#copy-print').textContent=sameSides()?'Zobacz identyczny nadruk na tyle':side==='front'?'Skopiuj nadruk na tył':'Skopiuj nadruk na przód';$('#side-label').textContent=side==='front'?'Przód':'Tył';document.querySelectorAll('[data-side]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));$('#logo-kind').textContent=d.kind==='example'?'Tekst startowy':d.kind==='image'?'Twoje logo':'Bez nadruku';$('#upload-label').textContent=d.kind==='image'?'Zmień logo':'Wgraj swoje logo';$('#file-name').textContent=d.name;$('#logo-actions').hidden=d.kind==='none';$('#example').hidden=d.kind!=='none';$('#logo-settings').hidden=!printEnabled()||d.kind==='none';$('#logo-size').value=d.size;$('#size-value').value=d.size+'%';$('#logo-x').value=d.x;$('#logo-y').value=d.y;}
   function setRotation(value){value=value&&mode==='3d';controls.autoRotate=value;$('#rotate').setAttribute('aria-pressed',String(value));$('#rotate').textContent=value?'Zatrzymaj':'Obrót 360°';invalidate();}
   const views={front:{position:[0,2.2,9],target:[0,1.95,0]},back:{position:[0,2.2,-9],target:[0,1.95,0]},detail:{position:[3.2,4.25,4.4],target:[0,2.45,0]},perspective:{position:[5.3,3.3,7.5],target:[0,1.95,0]}};
   function goView(name){setRotation(false);if(mode==='2d'){alignFlatView();invalidate();return;}const view=views[name];document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));const to=new THREE.Vector3(...view.position),target=new THREE.Vector3(...view.target);
@@ -156,13 +157,16 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
   $('#example').addEventListener('click',()=>{Object.assign(renderDraft(side),{kind:'example',name:'Twoja marka.',x:0,y:0,size:48});draw(side);syncPanel();});
   for(const [id,key] of [['logo-size','size'],['logo-x','x'],['logo-y','y']])$('#'+id).addEventListener('input',event=>{renderDraft(side)[key]=Number(event.target.value);$('#size-value').value=renderDraft(side).size+'%';draw(side);});
   $('#copy-print').addEventListener('click',async()=>{
+    if(sameSides()){selectSide('back');return;}
+    if(!canBack())document.dispatchEvent(new Event('studio-enable-back'));
+    if(!canBack())return;
     const source={...drafts[side]},target=side==='front'?'back':'front',d=drafts[target];
     if(source.kind==='none')return;const sequence=++d.sequence;
     // Each side owns its object URL so removing one print cannot break the other.
     let url=null;pendingFiles++;
     try{if(source.url)url=URL.createObjectURL(await (await fetch(source.url)).blob());
       if(d.sequence!==sequence||disposed){if(url)URL.revokeObjectURL(url);return;}
-      if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,source,{url,sequence});draw(target);syncPanel();
+      if(d.url)URL.revokeObjectURL(d.url);Object.assign(d,source,{url,sequence});draw(target);selectSide(target);syncPanel();
       status.textContent=`Nadruk skopiowany na ${target==='back'?'tył':'przód'}. Kolejne zmiany nie przenoszą się automatycznie — skopiuj ponownie, aby wyrównać obie strony.`;
     }catch{if(url)URL.revokeObjectURL(url);status.textContent='Nie udało się skopiować nadruku. Spróbuj ponownie.';}finally{pendingFiles--;}
   });

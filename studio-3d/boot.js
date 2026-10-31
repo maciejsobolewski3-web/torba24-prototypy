@@ -1,6 +1,6 @@
 import {get} from '../order/store.js?v=catalog-22';
 import {resolveProduct,baseColor,configuration as makeConfiguration} from '../configuration/config.js?v=catalog-22';
-import {mountProductControls,studioDefaults} from './product-controls.js?v=base-27';
+import {mountProductControls,studioDefaults} from './product-controls.js?v=duplex-29';
 import {mountStandaloneShell} from '../brand-shell.js?v=nav-27';
 mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
@@ -11,7 +11,7 @@ try {
   let configuration;
   if(params.has('project')){const saved=await get(params.get('from')==='cart'?'cart':'projects',params.get('project'));configuration=saved?.configuration;}
   else{const p=resolveProduct(params.get('sku')||params.get('id')||'premium');configuration=makeConfiguration(p,studioDefaults(p),baseColor(p));}
-  const {initStudio} = await import('./scene.js?v=unified-25');
+  const {initStudio} = await import('./scene.js?v=duplex-29');
   const studio = await initStudio(configuration);
   const {initOrderBridge} = await import('./order-bridge.js?v=flow-26');
   await initOrderBridge(studio);

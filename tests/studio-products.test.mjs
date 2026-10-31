@@ -18,3 +18,13 @@ test('cotton defaults to full-colour printing without unrelated rear ink options
  const c=configuration(p,studioDefaults(p),baseColor(p));
  assert.match(c.options.printMode.display,/DTF/);assert.ok(c.options.dtfSize);assert.equal(c.options.inkBack,undefined);
 });
+test('rear print requests survive configuration without inventing supplier print options',async()=>{
+ const {backAllowed}=await import('../configuration/config.js');
+ const p=catalog.products.find(p=>p.family==='cotton'),v=studioDefaults(p);
+ assert.equal(backAllowed(p,v),false);
+ const c=configuration(p,v,baseColor(p),[{type:'printSides',value:'Nadruk dwustronny — do potwierdzenia przy wycenie'}]);
+ assert.equal(backAllowed(p,valuesFrom(c),c.requests),true);
+ assert.equal(c.options.printMode.value,v.printMode);
+ v.printMode=p.fields.find(f=>f.id==='printMode').options.find(o=>o.label==='bez nadruku').id;
+ assert.equal(backAllowed(p,v,c.requests),false);
+});

@@ -186,3 +186,9 @@ remove the local-save notice. Do not treat local receipt creation as delivery.
 Przycisk „Zmień bazę” otwiera galerię całego katalogu (109 pozycji w 7 rodzinach). Kategorie, wyszukiwarka nazw/rozmiarów/gramatur i filtr koloru działają na tych samych danych co katalog. Zdjęcie prowadzi do wyboru produktu w bieżącym studiu — bez dodatkowej strony konfiguracji. Format, papier, nadruk, uszlachetnienie i uchwyt pozostają parametrami wybranego produktu. Zmiana bazy zachowuje pliki nadruków i ich położenie; zgodne opcje są przenoszone w obrębie tej samej rodziny. Kolor materiału przyjmuje domyślny kolor nowej bazy. Implementacja: `studio-3d/base-picker.js` i `studio-3d/product-controls.js`.
 
 Studio i formularz zapytania korzystają z pełnej wspólnej nawigacji `mainNavigation()` z `brand-shell.js`, z menu mobilnym, nakładką konta oraz linkiem do koszyka. Przy integracji z Joomla źródło produktów można podmienić bez zmiany trzyekranowego flow.
+
+### Nadruk na drugiej stronie i wybory parametrów (31.10.2026)
+
+Blok „Nadruk dwustronny” jest stale widoczny nad parametrami i nadrukiem. Kopia zachowuje plik, skalę i położenie, po czym pokazuje stronę docelową. To niezależna kopia; tryb katalogowy „taki sam nadruk” nadal synchronizuje obie strony. Dla modelu z katalogową opcją dwustronną przycisk wybiera ją automatycznie. Jeśli katalog jej nie definiuje (np. bawełna DTF), dodaje `configuration.requests: [{type: 'printSides', value: 'Nadruk dwustronny — do potwierdzenia przy wycenie'}]`. Nie zmienia to listy potwierdzonych opcji dostawcy. Backend musi uwzględnić tę prośbę oraz oba pliki w wycenie. Wybór „bez nadruku” nadal wyłącza wydruk obu stron.
+
+`studio-3d/option-picker.js` wyświetla sklepowe nakładki dla parametrów i filtra koloru w galerii. Zachowane ukryte selecty przechowują wartości i zdarzenia `change`; UI dostarcza wyszukiwanie, kafelki, próbki kolorów, obsługę Escape oraz powrót fokusu. Bez dodatkowych zależności.
