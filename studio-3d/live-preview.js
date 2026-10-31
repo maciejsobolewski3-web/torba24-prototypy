@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {RoomEnvironment} from '../vendor/three/RoomEnvironment.js';
+import {createStudioEnvironment} from './environment.js?v=lighting-30';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 
 export function createLivePreview({host,scene,contact,invalidate,onExpand}){
@@ -8,7 +8,7 @@ export function createLivePreview({host,scene,contact,invalidate,onExpand}){
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.25));renderer.setClearColor(0,0);
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
   // Render-target textures belong to their WebGL context, so each view owns its environment.
-  const room=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(renderer),env=pmrem.fromScene(room,.05);room.dispose();pmrem.dispose();
+  const room=createStudioEnvironment(),pmrem=new THREE.PMREMGenerator(renderer),env=pmrem.fromScene(room,.05);room.dispose();pmrem.dispose();
   const canvas=renderer.domElement;host.append(canvas);canvas.tabIndex=0;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Podgląd 3D tego samego projektu. Przeciągnij, aby obrócić, lub użyj strzałek w lewo i w prawo.');
   const controls=new OrbitControls(camera,canvas);controls.target.set(0,1.95,0);controls.enablePan=false;controls.enableDamping=true;controls.dampingFactor=.09;controls.minDistance=6;controls.maxDistance=14;controls.minPolarAngle=.4;controls.maxPolarAngle=Math.PI*.72;
   let active=false,failed=false;

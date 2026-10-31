@@ -11,7 +11,7 @@ try {
   let configuration;
   if(params.has('project')){const saved=await get(params.get('from')==='cart'?'cart':'projects',params.get('project'));configuration=saved?.configuration;}
   else{const p=resolveProduct(params.get('sku')||params.get('id')||'premium');configuration=makeConfiguration(p,studioDefaults(p),baseColor(p));}
-  const {initStudio} = await import('./scene.js?v=duplex-29');
+  const {initStudio} = await import('./scene.js?v=lighting-30');
   const studio = await initStudio(configuration);
   const {initOrderBridge} = await import('./order-bridge.js?v=flow-26');
   await initOrderBridge(studio);
