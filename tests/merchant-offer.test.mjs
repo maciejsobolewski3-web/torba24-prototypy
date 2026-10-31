@@ -19,7 +19,7 @@ test('old artwork can reopen with its original model, but retired SKUs cannot be
  const old='torby-papierowe-laminowane-m';
  assert.equal(resolveProduct(old).family,'laminated');assert.equal(productById(old),undefined);
  assert.equal(resolveCurrentProduct(old).id,'papier-skrecany');
- assert.deepEqual(dimensions({family:'cotton',size:'38×42+10+10 cm',fields:[]},{}),{width:38,height:42,depth:10,label:'38×42+10+10 cm'});
+ assert.deepEqual(dimensions({family:'cotton',size:'38 × 42+10+10 cm',fields:[]},{}),{width:38,height:42,depth:10,label:'38 × 42+10+10 cm'});
  const contact={name:'Test',email:'test@example.com'};
  assert.throws(()=>makeQuoteDraft([{quantity:100,configuration:{productId:old}}],contact),/spoza aktualnej oferty/);
  const p=productById('papier-skrecany');

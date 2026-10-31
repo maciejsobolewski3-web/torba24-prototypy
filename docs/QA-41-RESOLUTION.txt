@@ -1,0 +1,139 @@
+PRINTBAG24 — WERYFIKACJA RAPORTU QA
+Data: 2026-11-01 | Wersja: qa-41
+Źródło: qa-printbag24-2026-10-31/findings.json (23 uwagi).
+
+ZASADA
+Poprawiamy potwierdzone usterki. Nie cofamy decyzji właściciela ani klienta.
+Nie tworzymy fikcyjnych cen, stanów, terminów ani działającej wysyłki.
+
+ROZSTRZYGNIĘCIE KAŻDEGO PUNKTU
+
+QA-01 — NAPRAWIONE
+Filtry kategorii zawijają się w obrębie kontenera. Dokument nie jest sztucznie
+przycinany. Test szerokości 320, 360, 390, 430 px: scrollWidth = viewport;
+po kliknięciu Gastronomia scrollX = 0.
+
+QA-02 — NAPRAWIONE
+Mobilne logo, odstępy i kontrolki dopasowane do 320 px. Menu, koszyk,
+logowanie i wyszukiwarka mieszczą się w ekranie. Oba logotypy pozostają.
+
+QA-03 — NAPRAWIONE
+Inspiracje przekazują aktualne identyfikatory. Zachowana zgodność ze starymi
+premium/cotton/white. Nieznany parametr nie wybiera pierwszego produktu;
+formularz prosi o wybór modelu lub pomoc. Test jednostkowy i przeglądarkowy.
+
+QA-04 — NAPRAWIONE
+W mobilnym studiu Pomoc jest zwykłym przyciskiem w panelu, pod akcjami.
+Nie zasłania wyceny ani ustawień. Otwiera ten sam modal wymagany przez klienta.
+Na komputerze zachowano pływający przycisk.
+
+QA-05 — NAPRAWIONE DLA NOWYCH WEJŚĆ; ZGODNOŚĆ STARYCH ZAPISÓW
+Link z „Jak zamawiać” i nowe wejścia /creator kierują do studia 2D/3D
+z zachowaniem modelu, nakładu i intencji otwarcia nadruku.
+Wyjątek: wcześniej zapisane projekty starszego edytora pozostają edytowalne
+w nim samym. Nie migrujemy automatycznie ich tekstu ani nie gubimy danych.
+Klasyczny konfigurator awaryjny dla niedostępnego WebGL pozostaje celowo.
+
+QA-06 — ZALEŻNOŚĆ OD JOOMLA; NIE PRZYWRACAMY NAPISÓW „DEMO”
+Użytkownik wyraźnie zamówił docelowe teksty i późniejsze podpięcie Joomla.
+Nie realizujemy zalecenia dodania oznaczenia demonstracji. Nie uznajemy jednak
+zapisu lokalnego za rzeczywistą wysyłkę: istniejąca informacja przed finalnym
+zapisem wprost mówi, że wysyłka nie jest dostępna. Kontaktu nie wysłano.
+Do integracji: endpoint wyceny, potwierdzenie odbioru, ceny, magazyn i terminy.
+
+QA-07 — NAPRAWIONE
+Na telefonie kompaktowy podgląd pozostaje przyklejony podczas edycji.
+Przycisk przy podglądzie otwiera ustawienia nadruku i przewija do wgrywania.
+Podgląd i suwaki mieszczą się jednocześnie na ekranie 390 × 844.
+Przy niskim ekranie poziomym podgląd nie zajmuje na stałe całej wysokości.
+
+QA-08 — CZĘŚCIOWO WDROŻONE, GŁÓWNA DECYZJA ZACHOWANA
+Usunięto zdublowany link „Otwórz studio 2D / 3D”. Pozostał jeden przycisk
+kontynuacji w panelu. „Zaprojektuj swoją torbę” i wgrywanie logo w hero zostają:
+użytkownik wyraźnie o nie prosił. Nie zastępujemy ich sugestią QA.
+
+QA-09 — UKŁAD ZACHOWANY; BEZ POWROTU DO NIEPEŁNEGO RZĘDU
+Użytkownik odrzucił puste miejsce po brakującym kafelku. Zachowano pełne rzędy
+zależne od kategorii. Konkretny układ 2×2 / 3×2 był sposobem realizacji tej
+uwagi, nie wymogiem klienta. Sama preferencja QA dla 3–4 kolumn nie uzasadnia
+kolejnego przestawiania zaakceptowanej sekcji. Czytelność parametrów: QA-16.
+
+QA-10 — NAPRAWIONE
+Przed tabelą widoczne nazwy wszystkich porównywanych modeli i informacja
+o przewijaniu. Pierwsza kolumna parametrów jest przypięta. Tabela ma nazwany,
+dostępny z klawiatury obszar przewijania. Sprawdzono dwa modele na 390 px.
+
+QA-11 — NAPRAWIONE
+Pusta lista pokazuje szukaną frazę, a pole w nagłówku ją zachowuje.
+Reset obok wyników jest dostępny także przy zwiniętych filtrach i usuwa
+zarówno frazę, jak i parametry filtrowania. Sprawdzono powrót do 12 modeli.
+
+QA-12 — ODPOWIEDŹ UZUPEŁNIONA; LICZB NIE WYMYŚLAMY
+FAQ mówi, że minimum zależy od modelu i technologii oraz wymaga potwierdzenia
+w wycenie. Brak zatwierdzonych minimów i SLA odpowiedzi nie jest błędem,
+który można naprawić wpisaniem przypadkowych danych. Czekają na klienta.
+
+QA-13 — NAPRAWIONE
+Zero, puste pole, ułamki i przekroczenie zakresu wyświetlają błąd przy polu;
+nie są po cichu zmieniane po wyjściu z pola. Nowy hero, studio i zapytanie
+stosują zakres techniczny 1–100 000 całych sztuk. To nie minimum produkcyjne.
+Walidacja blokuje nawigację, zapis i przejście z wgranym logo.
+
+QA-14 — NIE WDRAŻAMY SUGESTII SCHOWANIA DWUSTRONNOŚCI
+Użytkownik wcześniej zgłosił, że nie może znaleźć kopiowania nadruku na tył,
+i zażądał jego wyeksponowania. Funkcja pozostaje widoczna wraz z wyjaśnieniem,
+że kopia i późniejsze ustawienia obu stron wymagają świadomej kontroli.
+
+QA-15 — NAPRAWIONE
+Przed zapisaniem przykładowego napisu pojawia się modal: wróć i dodaj logo,
+kontynuuj bez przykładowego nadruku, świadomie zachowaj przykład albo anuluj.
+Zapytanie bez gotowego pliku jest nadal możliwe. Sprawdzono zapis bez napisu
+oraz wejście do formularza danych; żadnego zapytania nie wysłano.
+
+QA-16 — NAPRAWIONE
+Parametry kart powiększone do 14 px, także opisy w mobilnym katalogu.
+Zachowano nazwy, materiał i format w uporządkowanej kolejności.
+
+QA-17 — BEZ REDESIGNU ZAAKCEPTOWANEGO 3D
+Zachowano model i mechanikę studia 2D/3D, wcześniej zaakceptowane w rozmowie.
+Dodano krótką informację przy narzędziach o orientacyjnym podglądzie i
+potwierdzeniu materiału przed drukiem. Nie obiecujemy próby koloru na ekranie.
+
+QA-18 — NIE WDRAŻAMY SUBIEKTYWNEGO REDESIGNU
+Zielona paleta i stylistyka szkła stanowią zaakceptowany kierunek projektu.
+Raport nie wykazuje w tym punkcie usterki funkcjonalnej.
+
+QA-19 — NIE WDRAŻAMY OGRANICZENIA BRANDINGU GRUPY
+Klient wymaga obu logotypów, paska serwisów i wspólnej stopki; dodatkowo
+poprosił o większe logo grupy. Zachowano te elementy. Dopasowanie telefonu
+naprawiono w QA-02. Nie usunięto historii ani linków grupy.
+
+QA-20 — NAPRAWIONE BEZ FABRYKOWANIA REALIZACJI
+Usunięto dodatkowe przejście z dwóch inspiracji do ich powtórzenia.
+Istniejąca podstrona nazywa zawartość inspiracjami, nie realizacjami klientów.
+Nie dodano fikcyjnych zleceń ani nowych zdjęć bez uzasadnienia.
+
+QA-21 — NAPRAWIONE DLA KOMPATYBILNYCH STARYCH PROJEKTÓW
+Podsumowanie starego zapisu pokazuje aktualną torbę z nadrukiem, położeniem,
+kolorem i wybraną stroną, zamiast pustego zdjęcia. Sprawdzono własny tekst.
+Nowe projekty trafiają bezpośrednio do studia 2D/3D (QA-05).
+
+QA-22 — NAPRAWIONE
+Pola wymagane oznaczone gwiazdką i wyjaśnione. Błędy przy modelu, nakładzie
+i opisie są powiązane z polami; natywna walidacja pozostaje aktywna.
+Zmiana tematu kontaktu wyłącza niepotrzebne pola oraz ich błędy.
+
+QA-23 — UJEDNOLICONE W AKTYWNYCH MIEJSCACH
+Poprawiono „4 formaty”, odmianę zapisanych wariantów, znak ×, przecinek
+w wymiarach i jednostki na kartach. Dostępne nazwy podglądu mówią „produkt”
+także dla opakowań. Zapisanych wcześniej danych nie nadpisujemy masowo.
+
+WERYFIKACJA
+- node --test tests/*.test.mjs: 25/25.
+- Kontrola składni zmienionych modułów i git diff --check.
+- Przeglądarka: home 320/360/390/430; desktop 1440; menu, filtry, nakład 0,
+  kontakt cotton i nieznany model, wymagany opis, reset wyszukiwania,
+  porównanie, mobilny podgląd + suwaki, Pomoc, modal przykładowego napisu,
+  przekierowanie creator(cotton,150), zapis bez przykładu, stary podgląd.
+- Testowy nowy wariant usunięto z koszyka; wcześniejsze projekty zachowano.
+- Nie wykonywano wysyłki wiadomości, płatności ani zmiany danych produkcyjnych.

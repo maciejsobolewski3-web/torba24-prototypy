@@ -1,4 +1,4 @@
-import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=client-34';
+import {colorHex,resolveProduct,valuesFrom,backAllowed,linkedSides,printMode} from '../configuration/config.js?v=qa-41';
 import * as THREE from 'three';
 import {OrbitControls} from '../vendor/three/OrbitControls.js';
 import {createStudioEnvironment} from './environment.js?v=client-34';
@@ -15,7 +15,7 @@ export async function initStudio(configuration){
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));renderer.setClearColor(0x000000,0);
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
-  const canvas=renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Torba 3D. Przeciągnij, aby obrócić. Użyj przycisków Przód, Tył i Detal, aby zmienić widok.');host.append(canvas);
+  const canvas=renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Produkt 3D. Przeciągnij, aby obrócić. Użyj przycisków Przód, Tył i Detal, aby zmienić widok.');host.append(canvas);
   const scene=new THREE.Scene(),perspectiveCamera=new THREE.PerspectiveCamera(34,1,.1,60);
   const flatCamera=new THREE.OrthographicCamera(-2.5,2.5,2.5,-2.5,.1,60);
   let camera=perspectiveCamera;
@@ -106,14 +106,14 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
     controls.touches.ONE=mobile?null:THREE.TOUCH.ROTATE;
     $('.drag-tip').textContent=mode==='2d'?'Przeciągnij logo lub narożnik ramki. Możesz też użyć suwaków.':mobile?'Dopasuj położenie nadruku suwakami powyżej.':'Możesz też przeciągnąć nadruk bezpośrednio na torbie.';
     $('#scene-hint').textContent=mode==='2d'?(wide.matches?'Edytuj na wprost · podgląd 3D zmienia się na żywo':'Widok na wprost · ustaw logo i sprawdź efekt w 3D'):mobile?'Dwoma palcami obróć i przybliż · lub wybierz widok poniżej':'Przeciągnij, aby obrócić · przybliż kółkiem lub dwoma palcami';
-    canvas.setAttribute('aria-label',mode==='2d'?'Torba 2D, widok dokładnie na wprost. Strzałkami ustaw położenie nadruku.':'Torba 3D. Przeciągnij, aby obrócić. Strzałkami w lewo i w prawo obrócisz torbę.');
+    canvas.setAttribute('aria-label',mode==='2d'?'Produkt 2D, widok dokładnie na wprost. Strzałkami ustaw położenie nadruku.':'Produkt 3D. Przeciągnij, aby obrócić. Strzałkami w lewo i w prawo obrócisz produkt.');
   }
   function setMode(next){
     setRotation(false);tween=null;drag=null;mode=next;
     controls.enabled=mode==='3d';camera=mode==='2d'?flatCamera:perspectiveCamera;
     contact.visible=mode==='3d';
     $('.studio-stage').dataset.mode=mode;
-    $('.studio-stage').setAttribute('aria-label',`Podgląd torby w ${mode.toUpperCase()}`);
+    $('.studio-stage').setAttribute('aria-label',`Podgląd produktu w ${mode.toUpperCase()}`);
     $('#mode-label').textContent=mode==='2d'?'Projektuj na wprost':'Obejrzyj w przestrzeni';
     document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
     document.querySelectorAll('[data-only-3d]').forEach(el=>el.hidden=mode==='2d');
@@ -208,6 +208,7 @@ $('#duplex-state').textContent=sameSides()&&drafts.front.kind!=='none'?'Przód i
       colorControls.set(configuration.bodyColor);if(!canBack())side='front';
       draw('front');draw('back');syncPanel();alignFlatView();overlay?.update();invalidate();
     },
+    clearExamples(){for(const side of ['front','back']){if(drafts[side].kind==='example'){Object.assign(drafts[side],{kind:'none',name:''});draw(side);}}syncPanel();},
     details:()=>({configuration:configuration?{...configuration,bodyColor:color.body}:undefined,color:{...color},preset,faces:Object.fromEntries(['front','back'].map(s=>[s,{kind:printEnabled()&&(s==='front'||canBack())?renderDraft(s).kind:'none'}]))}),
     async snapshot(){
       if(pendingFiles)throw new Error('Poczekaj na przygotowanie pliku.');

@@ -5,13 +5,14 @@ const search=svg('<circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/>');
 const headset=svg('<path d="M4 13v-2a8 8 0 0 1 16 0v6a4 4 0 0 1-4 4h-3"/><rect x="3" y="11" width="4" height="7" rx="2"/><rect x="17" y="11" width="4" height="7" rx="2"/>');
 export function initClientFeedback(){
  if(document.querySelector('#client-feedback-css'))return;
- const css=document.createElement('link');css.id='client-feedback-css';css.rel='stylesheet';css.href=href('client-feedback.css?v=client-34');document.head.append(css);
+ const css=document.createElement('link');css.id='client-feedback-css';css.rel='stylesheet';css.href=href('client-feedback.css?v=qa-41');document.head.append(css);
  const header=document.querySelector('.site-nav');
  if(header){
   header.classList.add('shop-header');
   const form=document.createElement('form');form.className='shop-search';form.role='search';form.action=href('catalog/');
   form.innerHTML=`<label class="visually-hidden" for="shop-search">Szukaj produktów</label>${search}<input type="search" id="shop-search" name="q" placeholder="Szukaj torby, koloru, formatu…"><button aria-label="Szukaj" type="submit">Szukaj</button>`;
   header.querySelector('.ea-lockup')?.after(form);
+  form.elements.q.value=new URLSearchParams(location.search).get('q')||'';
   header.querySelector('.nav-actions a[aria-label="Szukaj produktów"]')?.remove();
   header.querySelectorAll('.shop-dropdown').forEach(el=>el.addEventListener('toggle',()=>{if(el.open)header.querySelectorAll('.shop-dropdown').forEach(other=>{if(other!==el)other.open=false;});}));
   document.addEventListener('click',e=>{if(!e.target.closest('.shop-dropdown'))header.querySelectorAll('.shop-dropdown').forEach(el=>el.open=false);});
@@ -31,7 +32,7 @@ export function initClientFeedback(){
   ['delivery','Dostawa i płatności',`Wysyłamy na terenie Polski. Sposób dostawy, jej koszt i termin otrzymasz w podsumowaniu oferty. <a href="${href('how-to/#dostawa')}">Informacje o dostawie</a>`],
   ['complaint','Reklamacja',`Przygotuj numer zamówienia, opis problemu i zdjęcia produktu. Skontaktuj się z obsługą, aby ustalić dalsze kroki. <a href="${href('contact/?topic=complaint')}">Kontakt w sprawie reklamacji</a>`]
  ];
- const help=document.createElement('div');help.className='shop-help';help.innerHTML=`<button type="button" class="help-launcher" aria-haspopup="dialog" aria-controls="shop-help-dialog" aria-expanded="false">${headset}<span>Pomoc</span></button><dialog id="shop-help-dialog" class="help-dialog" aria-labelledby="help-heading"><header><span>POMOC PRINTBAG24</span><h2 id="help-heading">W czym możemy pomóc?</h2><button type="button" class="help-close" aria-label="Zamknij pomoc">${svg('<path d="m6 6 12 12M18 6 6 18"/>')}</button></header><div class="help-body"><p>Wybierz temat. Najważniejsze odpowiedzi znajdziesz tutaj.</p>${topics.map(([id,title,text])=>`<details data-help-section="${id}"><summary>${title}</summary><p>${text}</p></details>`).join('')}<a class="help-contact" href="${href('contact/')}">Porozmawiaj z nami <span>17 230 54 10 · 600 090 253</span></a></div></dialog>`;document.body.append(help);
+ const help=document.createElement('div');help.className='shop-help';help.innerHTML=`<button type="button" class="help-launcher" aria-haspopup="dialog" aria-controls="shop-help-dialog" aria-expanded="false">${headset}<span>Pomoc</span></button><dialog id="shop-help-dialog" class="help-dialog" aria-labelledby="help-heading"><header><span>POMOC PRINTBAG24</span><h2 id="help-heading">W czym możemy pomóc?</h2><button type="button" class="help-close" aria-label="Zamknij pomoc">${svg('<path d="m6 6 12 12M18 6 6 18"/>')}</button></header><div class="help-body"><p>Wybierz temat. Najważniejsze odpowiedzi znajdziesz tutaj.</p>${topics.map(([id,title,text])=>`<details data-help-section="${id}"><summary>${title}</summary><p>${text}</p></details>`).join('')}<a class="help-contact" href="${href('contact/')}">Porozmawiaj z nami <span>17 230 54 10 · 600 090 253</span></a></div></dialog>`;(document.querySelector('.studio-panel')||document.body).append(help);
  const dialog=help.querySelector('dialog'),launcher=help.querySelector('.help-launcher');let previous;
  const open=topic=>{previous=document.activeElement;dialog.querySelectorAll('details').forEach(d=>d.open=d.dataset.helpSection===topic);if(!dialog.open)dialog.showModal();launcher.setAttribute('aria-expanded','true');dialog.querySelector('.help-close').focus();};
  launcher.addEventListener('click',()=>open());

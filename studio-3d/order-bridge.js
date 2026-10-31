@@ -1,13 +1,14 @@
-import {availabilityHTML} from '../configuration/inventory.js?v=client-34';
-import {productById} from '../configuration/config.js?v=client-34';
-import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=client-34';
+import {bindQuantity,polishCount} from '../store-ui.js?v=qa-41';
+import {availabilityHTML} from '../configuration/inventory.js?v=qa-41';
+import {productById} from '../configuration/config.js?v=qa-41';
+import {get,list,addToCart,id,price,money,validQuantity,esc} from '../order/store.js?v=qa-41';
 export async function initOrderBridge(studio){
   const $=s=>document.querySelector(s),params=new URLSearchParams(location.search);
   const projectId=params.get('project')||id(),quantity=$('#order-quantity'),button=$('#review-project'),status=$('#studio-status');
-  let ready=false;
+  let ready=false,checkingArtwork=false;
   const variantButton=$('#add-variant'),variants=await list('cart'),others=variants.filter(p=>p.id!==projectId);
   button.textContent=others.length?`Wyceń projekty (${others.length+1})`:'Wyceń projekt';
-  $('#variant-note').textContent=others.length?`W zapytaniu uwzględnimy też ${others.length} zapisane warianty. Możesz je sprawdzić w koszyku.`:'Jeden projekt? Przejdź od razu do danych kontaktowych.';
+  $('#variant-note').textContent=others.length?`W zapytaniu uwzględnimy też ${polishCount(others.length,'zapisany wariant','zapisane warianty','zapisanych wariantów')}. Możesz je sprawdzić w koszyku.`:'Jeden projekt? Przejdź od razu do danych kontaktowych.';
   const stock=document.createElement('div');stock.id='studio-stock';$('.order-config').append(stock);
   const update=()=>{
     const p={...studio.details(),quantity:Number(quantity.value)};stock.innerHTML=availabilityHTML(p.configuration,p.quantity);
@@ -27,18 +28,34 @@ export async function initOrderBridge(studio){
       status.textContent='Nie można odczytać zapisanego projektu. Wróć do koszyka lub otwórz nowe studio. Nie nadpisaliśmy Twojej torby.';
       button.disabled=true;variantButton.disabled=true;return;
     }
-  }else{quantity.value=validQuantity(params.get('quantity'),studio.details())?params.get('quantity'):100;ready=true;}
+  }else{quantity.value=params.has('quantity')?params.get('quantity'):100;ready=true;}
   if(studio.details().configuration){quantity.min=1;quantity.max=100000;}
+  const checkQuantity=bindQuantity(quantity);checkQuantity();
   update();quantity.addEventListener('input',update);
   window.addEventListener('pageshow',event=>{if(event.persisted&&ready){document.querySelector('.studio-layout').inert=false;button.disabled=false;status.textContent='Możesz kontynuować edycję projektu.';}});
   document.addEventListener('studio-project-change',update);
   // Changes to the second print can affect the illustrative unit price.
   document.querySelector('.studio-panel').addEventListener('click',()=>setTimeout(update,0));
+  function confirmExample(){
+    return new Promise(resolve=>{
+      const dialog=document.createElement('dialog');dialog.className='artwork-confirm';dialog.setAttribute('aria-labelledby','artwork-confirm-title');
+      dialog.innerHTML='<h2 id="artwork-confirm-title">To jeszcze przykładowy napis</h2><p>Na produkcie widnieje „Twoja marka.”. Wybierz, co dołączyć do zapytania.</p><button type="button" class="button primary" data-choice="edit">Wróć i dodaj własne logo</button><button type="button" class="button subtle" data-choice="blank">Kontynuuj bez przykładowego nadruku</button><button type="button" class="quiet-button" data-choice="keep">Świadomie zostawiam przykładowy napis</button><button type="button" class="quiet-button" data-choice="cancel">Wróć do projektu</button>';
+      const previous=document.activeElement;document.body.append(dialog);let choice='cancel';
+      dialog.addEventListener('click',e=>{const option=e.target.closest('[data-choice]');if(option){choice=option.dataset.choice;dialog.close();}});
+      dialog.addEventListener('close',()=>{dialog.remove();previous?.focus();resolve(choice);},{once:true});dialog.showModal();
+    });
+  }
   async function proceed(addVariant=false){
-    if(!ready||!quantity.reportValidity())return;
+    if(!ready||checkingArtwork)return;if(!checkQuantity()){quantity.reportValidity();return;}
     if(!productById(studio.details().configuration?.productId)){status.textContent='Wybierz bazę z aktualnej oferty przed wyceną.';return;}
     const invalid=document.querySelector('.custom-color [aria-invalid=true]');
     if(invalid){invalid.focus();status.textContent='Popraw kolor przed przejściem dalej.';return;}
+    if(Object.values(studio.details().faces).some(face=>face.kind==='example')){
+      checkingArtwork=true;const choice=await confirmExample();checkingArtwork=false;
+      if(choice==='edit'){document.querySelector('[data-panel="artwork"]').click();document.querySelector('#upload').focus();return;}
+      if(choice==='cancel')return;
+      if(choice==='blank')studio.clearExamples();
+    }
     button.disabled=true;document.querySelector('.studio-layout').inert=true;status.textContent='Zapisuję projekt i podglądy obu stron…';
     try{
       const project={...await studio.snapshot(),id:projectId,quantity:Number(quantity.value),updatedAt:Date.now()};

@@ -1,4 +1,4 @@
-import {initClientFeedback} from './client-feedback.js';
+import {initClientFeedback} from './client-feedback.js?v=qa-41';
 import {accountButton,initAccountUI} from './account-ui.js?v=nav-17';
 const base=new URL('./',import.meta.url);
 const link=path=>new URL(path,base).href;
@@ -33,7 +33,7 @@ export function mountStandaloneShell(){
     document.addEventListener('click',e=>{if(!header.contains(e.target))close();});
     header.addEventListener('keydown',e=>{if(e.key==='Escape'){close();toggle.focus();}});
     header.querySelector('.main-nav').addEventListener('click',e=>{if(e.target.closest('a'))close();});
-    import('./order/store.js?v=client-34').then(({list})=>list('cart')).then(items=>{header.querySelector('#cart-count').textContent=items.length||'';}).catch(()=>{});
+    import('./order/store.js?v=qa-41').then(({list})=>list('cart')).then(items=>{header.querySelector('#cart-count').textContent=items.length||'';}).catch(()=>{});
   }
   document.querySelector('.order-footer,.studio-footer')?.remove();
   if(!document.querySelector('.ea-footer'))document.body.insertAdjacentHTML('beforeend',groupFooter());

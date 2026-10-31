@@ -28,7 +28,7 @@ test('DTF differs from screen printing, bottle bags do not inherit unsupported s
 test('payload round trip keeps dimensions, cord, finish and custom requests; no supplier price',()=>{
  const p=byFamily('laminated'),v=defaults(p);v.size='24x9x26';v.cord='czerwony';v.finish='folia-mat';const c=configuration(p,v,'#164f3c',[{type:'finish',value:'Hot stamping'}]);
  const saved=JSON.parse(JSON.stringify(c));assert.deepEqual(valuesFrom(saved),v);assert.equal(saved.dimensions.width,24);assert.equal(saved.dimensions.depth,9);assert.equal(saved.dimensions.height,26);
- const project={configuration:saved,preset:'green',quantity:100};assert.equal(price(project),null);assert.equal(needsQuote(project),true);assert.equal(productFormat(project),'24x9x26 cm');assert.equal(productName(project),p.name);
+ const project={configuration:saved,preset:'green',quantity:100};assert.equal(price(project),null);assert.equal(needsQuote(project),true);assert.equal(productFormat(project),'24 × 9 × 26 cm');assert.equal(productName(project),p.name);
 });
 test('invalid option and quantity rejected, legacy project pricing still readable',()=>{
  const p=byFamily('laminated');assert.ok(validate(p,{...defaults(p),cord:'not-a-color'},100));assert.ok(validate(p,defaults(p),1.5));assert.ok(validate(p,defaults(p),0));assert.ok(validate(p,defaults(p),100001));assert.equal(validQuantity(1,{configuration:{}}),true);assert.equal(validQuantity(1,{}),false);

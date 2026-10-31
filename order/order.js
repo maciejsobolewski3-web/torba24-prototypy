@@ -1,7 +1,7 @@
-import {availabilityHTML,combinedQuantity} from '../configuration/inventory.js?v=client-34';
-import {mountStandaloneShell} from '../brand-shell.js?v=client-34';
+import {availabilityHTML,combinedQuantity} from '../configuration/inventory.js?v=qa-41';
+import {mountStandaloneShell} from '../brand-shell.js?v=qa-41';
 mountStandaloneShell();
-import {get,list,put,remove,id,addToCart,makeQuoteDraft,money,price,needsQuote,shipping,format,esc,validQuantity,productName,productFormat} from './store.js?v=client-34';
+import {get,list,put,remove,id,addToCart,makeQuoteDraft,money,price,needsQuote,shipping,format,esc,validQuantity,productName,productFormat} from './store.js?v=qa-41';
 const root=document.querySelector('#order-main'),status=document.querySelector('#order-status');
 const params=new URLSearchParams(location.search),step=params.get('step')||'cart';
 let cart=[],checkoutItems=[],receipt,busy=false,undoItem,quantitySaving=null;

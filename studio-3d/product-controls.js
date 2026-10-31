@@ -1,7 +1,8 @@
-import {enhanceOptions} from './option-picker.js?v=client-34';
-import {createBasePicker} from './base-picker.js?v=client-34';
+import {formatDimensions} from '../store-ui.js?v=qa-41';
+import {enhanceOptions} from './option-picker.js?v=qa-41';
+import {createBasePicker} from './base-picker.js?v=qa-41';
 import {catalogPhoto} from '../configuration/catalog-photos.js?v=client-34';
-import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,printingFor,escape as esc} from '../configuration/config.js?v=client-34';
+import {catalog,productById,resolveProduct,defaults,normalizeValues,valuesFrom,configuration,baseColor,activeFields,printingFor,escape as esc} from '../configuration/config.js?v=qa-41';
 export function studioDefaults(product){
  const values=defaults(product),print=product.fields.find(f=>f.id==='printMode');
  if(print)values.printMode=(print.options.find(o=>o.label.includes('DTF'))||print.options.find(o=>o.label!=='bez nadruku')||print.options[0]).id;
@@ -15,7 +16,7 @@ export function mountProductControls(studio){
  function render(){
   $('#current-base-photo').src=catalogPhoto(product);$('#current-base-name').textContent=product.name;
   $('#studio-facts').textContent=[product.fields.some(f=>f.id==='size')?studio.details().configuration?.dimensions.label:product.size,studio.details().configuration?.specs.Gramatura,product.specs.Uchwyt==='brak'?'':product.specs.Uchwyt].filter(Boolean).join(' · ');
-  $('#studio-options').innerHTML=activeFields(product,values).map(f=>`<label for="option-${f.id}">${esc(f.label)}</label><select id="option-${f.id}" data-option="${f.id}">${f.options.map(o=>`<option value="${esc(o.id)}" ${o.id===values[f.id]?'selected':''}>${esc(o.label)}</option>`).join('')}</select>`).join('');
+  $('#studio-options').innerHTML=activeFields(product,values).map(f=>`<label for="option-${f.id}">${esc(f.label)}</label><select id="option-${f.id}" data-option="${f.id}">${f.options.map(o=>`<option value="${esc(o.id)}" ${o.id===values[f.id]?'selected':''}>${esc(f.id==='size'?formatDimensions(o.label):o.label)}</option>`).join('')}</select>`).join('');
   $('#studio-special').hidden=true;
   const printing=printingFor(product,values);$('#printing-details').textContent=printing?(printing.label+(printing.status==='proposed'||printing.status==='to-confirm'?' · potwierdzimy przy wycenie.':'')):'Bez nadruku';
   $('#dimension-note').textContent=product.dimensionNote||'';
@@ -50,6 +51,8 @@ export function mountProductControls(studio){
  $('#choose-base').addEventListener('click',e=>picker.open(e.currentTarget));
  $('#studio-options').addEventListener('change',e=>{if(!e.target.dataset.option)return;const key=e.target.dataset.option,previous={...values};values[key]=e.target.value;apply();if(key==='size'&&(previous.stockColor!==values.stockColor||previous.weight!==values.weight))document.querySelector('#studio-status').textContent='Kolor lub gramatura zostały dopasowane do wybranego formatu.';$('#option-'+key+'-trigger')?.focus();});
  for(const type of ['finish','handle'])$('#request-'+type).addEventListener('change',e=>{requests=requests.filter(r=>r.type!==type);if(e.target.value)requests.push({type,value:e.target.value});apply();});
+  const mobileArtwork=document.createElement('button');mobileArtwork.type='button';mobileArtwork.className='mobile-artwork';mobileArtwork.textContent='Dodaj logo / edytuj nadruk';document.querySelector('.stage-top').append(mobileArtwork);
+  mobileArtwork.addEventListener('click',()=>{showPanel('artwork');document.querySelector('.logo-field').scrollIntoView({block:'start',behavior:'instant'});document.querySelector('#upload').focus({preventScroll:true});});
  function showPanel(name){
   root.hidden=name!=='product';document.querySelector('#open-artwork').hidden=name!=='product';document.querySelector('#artwork-panel').hidden=name!=='artwork';
   document.querySelectorAll('[data-panel]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.panel===name)));
@@ -58,4 +61,5 @@ export function mountProductControls(studio){
  document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>showPanel(b.dataset.panel)));
  document.querySelector('#open-artwork').addEventListener('click',()=>showPanel('artwork'));
  if(productById(product.id))apply();else render();
+  if(new URLSearchParams(location.search).get('panel')==='artwork')showPanel('artwork');
 }

@@ -1,7 +1,7 @@
-import {get} from '../order/store.js?v=client-34';
-import {resolveCurrentProduct,baseColor,normalizeValues,configuration as makeConfiguration} from '../configuration/config.js?v=client-34';
-import {mountProductControls,studioDefaults} from './product-controls.js?v=client-34';
-import {mountStandaloneShell} from '../brand-shell.js?v=client-34';
+import {get} from '../order/store.js?v=qa-41';
+import {resolveCurrentProduct,baseColor,normalizeValues,configuration as makeConfiguration} from '../configuration/config.js?v=qa-41';
+import {mountProductControls,studioDefaults} from './product-controls.js?v=qa-41';
+import {mountStandaloneShell} from '../brand-shell.js?v=qa-41';
 mountStandaloneShell();
 const panel = document.querySelector('.studio-panel');
 panel.classList.add('is-loading');
@@ -11,9 +11,9 @@ try {
   let configuration;
   if(params.has('project')){const saved=await get(params.get('from')==='cart'?'cart':'projects',params.get('project'));configuration=saved?.configuration;}
   else{const p=resolveCurrentProduct(params.get('sku')||params.get('id')||'premium');const values=studioDefaults(p);for(const key of ['stockColor','size'])if(params.has(key))values[key]=params.get(key);configuration=makeConfiguration(p,normalizeValues(p,values),baseColor(p));}
-  const {initStudio} = await import('./scene.js?v=client-34');
+  const {initStudio} = await import('./scene.js?v=qa-41');
   const studio = await initStudio(configuration);
-  const {initOrderBridge} = await import('./order-bridge.js?v=client-34');
+  const {initOrderBridge} = await import('./order-bridge.js?v=qa-41');
   await initOrderBridge(studio);
   mountProductControls(studio);
   panel.classList.remove('is-loading');

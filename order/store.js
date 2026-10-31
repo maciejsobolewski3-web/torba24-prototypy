@@ -1,5 +1,5 @@
 import {quotePrice} from '../configuration/pricing.js?v=client-34';
-import {productById,catalog} from '../configuration/config.js?v=client-34';
+import {productById,catalog} from '../configuration/config.js?v=qa-41';
 // Files and projects stay on this device. Never serialize temporary blob URLs.
 let database;
 function open(){

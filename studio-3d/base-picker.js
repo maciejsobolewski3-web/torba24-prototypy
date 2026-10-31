@@ -1,6 +1,6 @@
 import {catalogPriceLabel} from '../configuration/pricing.js?v=client-34';
-import {enhanceOptions} from './option-picker.js?v=client-34';
-import {catalog,escape as esc} from '../configuration/config.js?v=client-34';
+import {enhanceOptions} from './option-picker.js?v=qa-41';
+import {catalog,escape as esc} from '../configuration/config.js?v=qa-41';
 import {catalogPhoto} from '../configuration/catalog-photos.js?v=client-34';
 const normalize=value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ł/g,'l').toLowerCase().replace(/×/g,'x').replace(/\s*x\s*/g,'x').replace(/(\d)\s+(g|cm)/g,'$1$2');
 export function filterBases(products,{family='',query='',color=''}={}){
