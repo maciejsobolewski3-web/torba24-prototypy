@@ -1,9 +1,9 @@
 const chapters = [
   ['2000', 'Początek w garażu.', 'Małe studio poligraficzne w Rzeszowie. Pierwsze pomysły, pierwsze projekty i początek własnej drogi.'],
-  ['2001–2015', 'Firma zapuszcza korzenie.', 'Lokal przy ulicy Lwowskiej, stali klienci, druk cyfrowy i introligatornia. Kolejna, większa siedziba daje miejsce na nowe technologie.'],
+  ['2001–2015', 'Pierwszy lokal. Nowe możliwości.', 'Lokal przy ulicy Lwowskiej, stali klienci, druk cyfrowy i introligatornia. Kolejna, większa siedziba daje miejsce na nowe technologie.'],
   ['2016–2018', 'Własne miejsce. Większa skala.', 'Powstaje siedziba z zapleczem produkcyjno-biurowym. Rozwijamy druk rolowy i arkuszowy oraz park maszynowy.'],
   ['2019–2025', 'Rosną nowe specjalizacje.', 'Dołączają etykieton24.pl i printboxes24.pl. Rozbudowujemy produkcję: od wykańczania etykiet po biały druk, lakier 3D, złocenie i srebrzenie.'],
-  ['2026', 'Kolejna gałąź: Printbag24.', 'Rozwijamy druk DTF, zamowdruk.pl i zadruk papierowych toreb. Printbag24 łączy doświadczenie grupy z projektowaniem toreb online.']
+  ['2026', 'Kolejny etap: Printbag24.', 'Rozwijamy druk DTF, zamowdruk.pl i zadruk papierowych toreb. Printbag24 łączy doświadczenie grupy z projektowaniem toreb online.']
 ];
 
 export function initHistoryTree() {
@@ -76,6 +76,6 @@ export function initHistoryTree() {
   document.addEventListener('visibilitychange',sync);
   new IntersectionObserver(entries => {visible=entries[0].isIntersecting;sync();},{threshold:0.15}).observe(section);
   control.hidden=reduce.matches;
-  // Let the initial SVG geometry paint before the first branch is drawn.
+  // Let the initial SVG geometry paint before the first connection is drawn.
   requestAnimationFrame(() => requestAnimationFrame(paint));
 }

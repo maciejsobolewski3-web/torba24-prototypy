@@ -1,5 +1,5 @@
-import {initHistoryTree} from './history-tree.js?v=history-14';
-import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=history-14';
+import {initHistoryTree} from './history-tree.js?v=history-15';
+import {groupBar,groupBrand,groupFooter,historyPage} from './brand-shell.js?v=history-15';
 import {list as listStudioCart} from './order/store.js?v=brand-7';
 import * as pb from './printbag-content.js?v=editorial-12';
 import {heroUpload, initHeroUpload, initExampleReveals, initDimensions} from './product-interactions.js?v=brand-7';

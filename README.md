@@ -125,3 +125,6 @@ Motion-11: dekoracyjny kursor wybiera bawełnę (najazd, kliknięcie, impuls i z
 - Automatyczny pokaz trwa 16 sekund i kończy się w 2026 roku. Ręczny wybór okresu zatrzymuje pokaz; przycisk pozwala wznowić lub odtworzyć od początku. Zegar zatrzymuje się poza widokiem i w nieaktywnej karcie. Reduced motion pokazuje od razu całe drzewo i wyłącza przejścia. Wcześniejsze okresy można nadal wybierać.
 
 QA history-14: przeglądarka 1440 i 390 px; automatyczne zakończenie na 2026, ręczny powrót do 2000 i zatrzymanie, wybór 2019–2025 (dwie marki) oraz wznowienie do 2026 (sześć marek). Filtry kolekcji pokazują odpowiednio trzy, dwa i jeden model. Brak poziomego przepełnienia na telefonie i błędów konsoli. Tryb reduced motion obsłużony w CSS/JS; nie był osobno emulowany w przeglądarce.
+
+
+History-15: ilustrację dosłownego drzewa zastąpił schemat z połączeniami rysowanymi od góry do dołu. EASOLUTION u góry, marki w trzech rzędach, nowe połączenie Printbag24 wyróżnione zielenią. Bez pnia, liści i korzeni; dotychczasowe sterowanie i okresy zachowane.
